@@ -1,5 +1,11 @@
+// Development version
+const BASE_URL = 'http://10.0.2.2/instaart/';
+
+// Production version
+// const BASE_URL = 'https://instaart.cybertwenty.com/';
+
 const CONFIG = {
-  API_BASE_URL: 'http://10.0.2.2/instaart/api',
+  API_BASE_URL: `${BASE_URL}/api`,
   LOCATION_API_BASE_URL: 'https://dev.farizdotid.com/api/daerahindonesia',
   STORAGE_KEY: 'instaart/key',
   AUTH_ID_KEY: 'auth_id',
@@ -35,12 +41,12 @@ const CONFIG = {
     },
   },
   IMAGE_PATH: {
-    BASE: 'https://instaart.cybertwenty.com/public/images',
-    ILLUST: 'https://instaart.cybertwenty.com/public/images/illusts',
-    USER: 'https://instaart.cybertwenty.com/public/images/users',
-    POST: 'https://instaart.cybertwenty.com/public/images/posts',
+    BASE: `${BASE_URL}/public/images`,
+    ILLUST: `${BASE_URL}/public/images/illusts`,
+    USER: `${BASE_URL}/public/images/users`,
+    POST: `${BASE_URL}/public/images/posts`,
   },
-  POST_URL: 'https://instaart.cybertwenty.com/#/post',
+  POST_URL: `${BASE_URL}/#/post`,
 };
 
 export default CONFIG;

@@ -48,7 +48,7 @@ const Jobs = ({ navigation }) => {
             <ScrollView
                 contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={styles.mainBody}>
-                    {/* <TouchableOpacity onPress={() => navigation.navigate('PostJob')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('PostJob')}>
                         <View
                             style={{
                                 flexDirection: 'row',
@@ -66,6 +66,16 @@ const Jobs = ({ navigation }) => {
                     </TouchableOpacity>
 
                     <SearchContainer></SearchContainer>
+
+                    {/* <View style={{ marginTop: 150 }}>
+                        <FontAwesome5
+                            name='smile-wink'
+                            size={30}
+                            color='gray'
+                            style={{ alignSelf: 'center' }}
+                        />
+                        <Text style={{ fontSize: 20, textAlign: 'center', textAlignVertical: 'center' }}>Belum ada pekerjaan untuk saat ini</Text>
+                    </View> */}
 
                     <TouchableOpacity onPress={() => navigation.navigate('UserDetailJobs')}>
                         <View style={styles.container1}>
@@ -203,17 +213,7 @@ const Jobs = ({ navigation }) => {
                                 </View>
                             </View>
                         </View>
-                    </TouchableOpacity> */}
-
-                    <View style={{marginVertical: 300}}>
-                        <FontAwesome5
-                            name='smile-wink'
-                            size={30}
-                            color='gray'
-                            style={{ alignSelf: 'center' }}
-                        />
-                        <Text style={{ fontSize: 20, textAlign: 'center', textAlignVertical: 'center' }}>Belum ada pekerjaan untuk saat ini</Text>
-                    </View>
+                    </TouchableOpacity>
 
                 </View>
             </ScrollView>

@@ -1,17 +1,37 @@
-import React, { useState, createRef } from 'react'
-import { StyleSheet, Dimensions, TextInput, View, Text, ScrollView, Image, Keyboard, KeyboardAvoidingView } from 'react-native'
+import React, { useState, createRef, useEffect } from 'react'
+import { 
+    StyleSheet,
+    Dimensions,
+    TextInput,
+    View,
+    Text,
+    ScrollView,
+    Alert,
+    Keyboard,
+    KeyboardAvoidingView
+} from 'react-native'
 import { Button } from 'react-native-elements'
 import RNPickerSelect from 'react-native-picker-select'
 import { Chevron } from 'react-native-shapes'
+import Post from '../../data/post';
+import User from '../../data/user';
+import Colors from '../../data/colors';
+import Categories from '../../data/categories';
+import CONFIG from '../../global/config';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const EditPortfolio = ({ navigation }) => {
+const EditPortfolio = ({ navigation, route }) => {
+    const { postId } = route.params;
+    const [user, setUser] = useState(null);
+    const [post, setPost] = useState(null);
     const [userJudul, setUserJudul] = useState('');
     const [userCaption, setUserCaption] = useState('');
     const [userKategori, setUserKategori] = useState('');
     const [userWarna, setUserWarna] = useState('');
+    const [categories, setCategories] = useState([]);
+    const [colors, setColors] = useState([]);
     const [errortext, setErrortext] = useState('');
 
     const judulInputRef = createRef();
@@ -19,32 +39,107 @@ const EditPortfolio = ({ navigation }) => {
     const kategoriInputRef = createRef();
     const warnaInputRef = createRef();
 
-    const handleSubmitButton = () => {
-        setErrortext('');
-        if (!userJudul) {
-            alert('Mohon isi Judul');
-            return;
-        }
-        if (!userCaption) {
-            alert('Mohon isi Caption');
-            return;
-        }
-        if (!userKategori) {
-            alert('Mohon pilih Kategori');
-            return;
-        }
-        if (!userWarna) {
-            alert('Mohon Pilih Warna');
-            return;
-        }
+    const handleSubmitButton = async () => {
+        try {
+            if (!userJudul) {
+                alert('Mohon isi Judul');
+                return;
+            }
+            if (!userCaption) {
+                alert('Mohon isi Caption');
+                return;
+            }
+            if (!userKategori) {
+                alert('Mohon pilih Kategori');
+                return;
+            }
+            if (!userWarna) {
+                alert('Mohon Pilih Warna');
+                return;
+            }
 
-        navigation.navigate('detailPost');
-    }
+        await Post.updatePost({
+            post_id: post.id,
+            title: userJudul,
+            caption: userCaption,
+            color_id: userWarna,
+            category_id: userKategori,
+        });
+
+        navigation.navigate('detailPost', { postId, postData: post });
+        } catch (error) {
+            setErrortext(error.message);
+            
+        }
+    };
+
+    const handleDeleteButton = async () => {
+        Alert.alert(
+            'Apakah kamu yakin?',
+            'Desain yang dihapus tidak akan bisa dikembalikan.',
+            [
+                { text: "Cancel", style: "cancel" },
+                { 
+                    text: "OK", 
+                    onPress: async () => {
+                        try {
+                            await Post.deletePost(postId);
+                            await alert('Desain berhasil dihapus.');
+                            navigation.navigate('Home');
+                        } catch (error) {
+                            alert(error.message);
+                        }
+                    },
+                },
+            ],
+        );
+    };
+
     const placeholder = {
         label: 'Pilih masukan',
         value: null,
         color: 'blue',
     };
+
+    useEffect(() => {
+        const setDefaultValue = async () => {
+            const postData = await Post.getPost(postId);
+            const userData = await User.getUser();
+            setUser(userData);
+
+            if (userData.id !== postData.user_id) {
+                throw new Error('Anda tidak memiliki akses untuk mengedit portofolio ini.');
+            }
+
+            const colorList = await Colors.getColors();
+            const categoriesList = await Categories.getCategories();
+
+            setCategories(categoriesList.map((category) => (
+                { label: category.name, value: category.id }
+            )));
+            setColors(colorList.map((color) => (
+                { label: color.name, value: color.id }
+            )));
+
+            setPost(postData);
+
+            setUserJudul(postData.title);
+            setUserCaption(postData.caption);
+            setUserKategori(postData.category_id);
+            setUserWarna(postData.color_id);
+        };
+
+        const unsubscribe = navigation.addListener('focus', async (e) => {
+            try {
+                await setDefaultValue();
+            } catch (error) {
+                alert(error.message);
+                navigation.navigate('Login');
+            }
+        });
+
+        return unsubscribe;
+    }, [navigation])
 
     return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -75,6 +170,7 @@ const EditPortfolio = ({ navigation }) => {
                                     captionInputRef.current && captionInputRef.current.focus()
                                 }
                                 blurOnSubmit={false}
+                                value={userJudul}
                             />
                         </View>
 
@@ -93,6 +189,36 @@ const EditPortfolio = ({ navigation }) => {
                                 returnKeyType="next"
                                 onSubmitEditing={Keyboard.dismiss}
                                 blurOnSubmit={false}
+                                value={userCaption}
+                            />
+                        </View>
+
+                        <View style={styles.SectionStyle}>
+                            <Text>Warna Dasar</Text>
+                            <RNPickerSelect
+                                style={{
+                                    ...pickerSelectStyles,
+                                    placeholder: {
+                                        color: 'black',
+                                        fontSize: 14,
+                                        fontWeight: 'normal',
+                                        paddingLeft: 15
+                                    },
+                                    iconContainer: {
+                                        top: 15,
+                                        right: 15,
+                                    },
+                                }}
+                                Icon={() => {
+                                    return <Chevron size={1.5} color="gray" />;
+                                }}
+                                useNativeAndroidPickerStyle={false}
+                                placeholder={placeholder}
+                                onValueChange={(userWarna) => setUserWarna(userWarna)}
+                                ref={warnaInputRef}
+                                returnKeyType="next"
+                                items={colors}
+                                value={userWarna}
                             />
                         </View>
 
@@ -120,43 +246,8 @@ const EditPortfolio = ({ navigation }) => {
                                 onValueChange={(userKategori) => setUserKategori(userKategori)}
                                 ref={kategoriInputRef}
                                 returnKeyType="next"
-                                items={[
-                                    { label: 'Desain', value: 'Desain' },
-                                    { label: 'Programming', value: 'Programming' },
-                                    { label: 'Analys', value: 'Analys' },
-                                ]}
-                            />
-                        </View>
-
-                        <View style={styles.SectionStyle}>
-                            <Text>Warna</Text>
-                            <RNPickerSelect
-                                style={{
-                                    ...pickerSelectStyles,
-                                    placeholder: {
-                                        color: 'black',
-                                        fontSize: 14,
-                                        fontWeight: 'normal',
-                                        paddingLeft: 15
-                                    },
-                                    iconContainer: {
-                                        top: 15,
-                                        right: 15,
-                                    },
-                                }}
-                                Icon={() => {
-                                    return <Chevron size={1.5} color="gray" />;
-                                }}
-                                useNativeAndroidPickerStyle={false}
-                                placeholder={placeholder}
-                                onValueChange={(userWarna) => setUserWarna(userWarna)}
-                                ref={warnaInputRef}
-                                returnKeyType="next"
-                                items={[
-                                    { label: 'Red', value: 'Red' },
-                                    { label: 'Green', value: 'Green' },
-                                    { label: 'Blue', value: 'Blue' },
-                                ]}
+                                items={categories}
+                                value={userKategori}
                             />
                         </View>
 
@@ -187,7 +278,7 @@ const EditPortfolio = ({ navigation }) => {
                                     borderRadius: 8,
                                     marginTop: 15
                                 }}
-                                onPress={handleSubmitButton}
+                                onPress={handleDeleteButton}
                             />
                         </View>
                     </View>

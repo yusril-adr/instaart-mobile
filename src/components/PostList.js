@@ -184,23 +184,8 @@ const styles = StyleSheet.create({
       shadowOffset: { width: 2, height: 1 },
       shadowOpacity: 0.5,
       shadowRadius: 1,
-      elevation: 10
-  },
-  container2: {
-      borderColor: '#000',
-      backgroundColor: '#fff',
-      borderWidth: 1,
-      alignSelf: 'center',
-      alignContent: 'center',
-      width: 360,
-      height: 410,
-      marginTop: 30,
-      marginBottom: 50,
-      shadowColor: '#000',
-      shadowOffset: { width: 2, height: 1 },
-      shadowOpacity: 0.5,
-      shadowRadius: 1,
-      elevation: 10
+      elevation: 10,
+    //   overflow: 'hidden',
   },
   UserProfile: {
       width: 40,
@@ -214,9 +199,10 @@ const styles = StyleSheet.create({
       marginLeft: 10,
   },
   UserPost: {
-      width: 360,
+      width: '100%',
       height: 215,
-      marginTop: 15
+      marginTop: 15,
+      overflow: 'hidden',
   },
   dateBox: {
       alignSelf: 'center',
@@ -231,3 +217,4 @@ const styles = StyleSheet.create({
 });
 
 export default PostList;
+
