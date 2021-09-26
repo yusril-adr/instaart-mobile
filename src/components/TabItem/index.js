@@ -10,10 +10,12 @@ const TabItem = ({ isFocused, onLongPress, onPress, label, navigation }) => {
     useEffect(() => {
       const unsubscribe = navigation.addListener('state', async (e) => {
           try {
-              const user = await User.getUser();
-              setUserImage(user.image);
+              if (label === 'Akun') {
+                const user = await User.getUser();
+                setUserImage(user.image);
+              }
           } catch (error) {
-              alert(error.message);
+              console.log(error.message);
           }
       });
 

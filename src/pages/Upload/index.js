@@ -131,7 +131,7 @@ const Upload = ({ navigation }) => {
                 await setDefaultValue();
             } catch (error) {
                 alert(error.message);
-                navigation.navigate('Login');
+                navigation.goBack();
             }
         });
 

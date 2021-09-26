@@ -106,7 +106,7 @@ const EditPortfolio = ({ navigation, route }) => {
             const userData = await User.getUser();
             setUser(userData);
 
-            if (userData.id !== postData.user_id) {
+            if (userData.id !== postData?.user_id) {
                 throw new Error('Anda tidak memiliki akses untuk mengedit portofolio ini.');
             }
 
@@ -133,7 +133,7 @@ const EditPortfolio = ({ navigation, route }) => {
                 await setDefaultValue();
             } catch (error) {
                 alert(error.message);
-                navigation.navigate('Login');
+                navigation.goBack();
             }
         });
 

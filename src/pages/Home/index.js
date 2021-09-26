@@ -29,7 +29,7 @@ const Home = ({ navigation }) => {
                 await getPosts();
             } catch (error) {
                 alert(error.message);
-                navigation.navigate('Login');
+                navigation.goBack();
             }
         });
 
@@ -51,7 +51,7 @@ const Home = ({ navigation }) => {
                                 setPostList(newList);
                             } catch {
                                 alert(error.message);
-                                navigation.navigate('Login');
+                                navigation.goBack();
                             }
                         }}
                     />

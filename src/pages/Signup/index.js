@@ -116,7 +116,7 @@ const Signup = ({ navigation }) => {
   };
 
   useEffect(() => {
-    (async () => {
+    const unsubscribe = navigation.addListener('focus', async (e) => {
       try {
         const provinceList = await Location.getProvinces();
         const formatedList = provinceList.map((province) => (
@@ -125,10 +125,12 @@ const Signup = ({ navigation }) => {
         setProvinsiList(formatedList);
       } catch (error) {
         alert(error.message);
-        navigation.navigate('Login');
+        navigation.goBack();
       }
-    })();
-  }, []);
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const [password, setPassword] = useState('');
   let inputRef = null;
