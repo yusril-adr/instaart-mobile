@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, ScrollView, Dimensions, Image, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import User from '../../data/user';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -109,6 +110,15 @@ const ButtonFollow = () => {
 };
 
 const ProfilePage = ({ navigation }) => {
+    const handleSubmitPress = async () => {
+        try {
+            await User.signOut();
+            navigation.navigate('Login');
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+    
     return (
         <SafeAreaView>
             <ScrollView
@@ -209,9 +219,14 @@ const ProfilePage = ({ navigation }) => {
                             borderBottomEndRadius: 10,
                             borderBottomStartRadius: 10
                         }}>
-                            <TouchableOpacity
+                            {/* <TouchableOpacity
                                 style={{ backgroundColor: '#007bff', borderRadius: 50 }}>
                                 <Text style={{ color: 'white', marginHorizontal: 20, marginVertical: 5 }}>Ajak Kerjasama</Text>
+                            </TouchableOpacity> */}
+                            <TouchableOpacity
+                                style={{ backgroundColor: 'red', borderRadius: 50 }}
+                                onPress={handleSubmitPress}>
+                                <Text style={{ color: 'white', marginHorizontal: 20, marginVertical: 5 }}>Logout</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

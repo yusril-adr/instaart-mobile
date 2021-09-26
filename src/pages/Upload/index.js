@@ -114,7 +114,7 @@ const Upload = ({ navigation }) => {
     };
 
     useEffect(() => {
-        const setDefaultValue = async () => {
+        const initValue = async () => {
             const colorList = await Colors.getColors();
             const categoriesList = await Categories.getCategories();
 
@@ -128,7 +128,7 @@ const Upload = ({ navigation }) => {
 
         const unsubscribe = navigation.addListener('focus', async (e) => {
             try {
-                await setDefaultValue();
+                await initValue();
             } catch (error) {
                 alert(error.message);
                 navigation.goBack();

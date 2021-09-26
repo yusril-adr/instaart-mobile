@@ -251,10 +251,14 @@ const detailPost = ({ navigation, route }) => {
                             />
                         </View>
 
-                        <View style={styles.dateBox}>
+                        <View style={{
+                                ...styles.dateBox,
+                                paddingTop: 10,
+                            }}
+                        >
                             {post?.user_id === user?.id && (
                                 <TouchableOpacity onPress={() => navigation.navigate('EditPortfolio', { postId: post?.id })}>
-                                    <View style={{ alignSelf: 'flex-end', marginTop: 10, marginRight: 10 }}>
+                                    <View style={{ alignSelf: 'flex-end', marginRight: 10 }}>
                                         <Icon
                                             name='edit'
                                             type='font-awesome'

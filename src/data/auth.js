@@ -17,7 +17,6 @@ const Auth = {
     },
 
     async setAuth(id, token) {
-        console.log(id, token);
         await MMKVwithEncryption.setStringAsync(CONFIG.AUTH_ID_KEY, `${id}`);
         await MMKVwithEncryption.setStringAsync(CONFIG.AUTH_TOKEN_KEY, `${token}`);
     },

@@ -10,7 +10,7 @@ const TabItem = ({ isFocused, onLongPress, onPress, label, navigation }) => {
     useEffect(() => {
       const unsubscribe = navigation.addListener('state', async (e) => {
           try {
-              if (label === 'Akun') {
+              if (label === 'ProfilePage') {
                 const user = await User.getUser();
                 setUserImage(user.image);
               }
@@ -71,7 +71,7 @@ const TabItem = ({ isFocused, onLongPress, onPress, label, navigation }) => {
             size={30}
         />
 
-        if (label === "Akun") return (
+        if (label === "ProfilePage") return (
             <Image
                 source={{
                     uri: userImage ? 
