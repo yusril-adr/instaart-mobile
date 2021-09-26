@@ -1,15 +1,18 @@
-import React, { useEffect } from 'react'
-import { Image, StyleSheet, Text, View, Dimensions } from 'react-native'
+import React, { useEffect  } from 'react'
+import { Image, StyleSheet, Text, View, Dimensions,} from 'react-native';
+import NetworkConnectionHelper from '../../utils/network-connection-helper';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const Splash = ({ navigation }) => {
 
-    useEffect(() => {
-        setTimeout(() => {
-            navigation.replace('Login');
-        }, 3000)
+    useEffect(async () => {
+        if (await NetworkConnectionHelper.checkConnection({ exit: true })) {
+            setTimeout(() => {
+                navigation.replace('Login');
+            }, 3000)
+        }
     }, [navigation]);
 
     return (
