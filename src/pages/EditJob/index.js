@@ -55,7 +55,7 @@ const EditJob = ({ navigation }) => {
     const placeholder = {
         label: 'Pilih masukan',
         value: null,
-        color: 'blue',
+        color: '#007bff',
     };
 
     return (
@@ -232,7 +232,7 @@ const EditJob = ({ navigation }) => {
                             <Button
                                 title={'Simpan'}
                                 buttonStyle={{
-                                    backgroundColor: 'blue',
+                                    backgroundColor: '#007bff',
                                     width: 90,
                                     height: 40,
                                     borderRadius: 8,

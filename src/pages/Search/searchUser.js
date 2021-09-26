@@ -36,7 +36,7 @@ const SearchContainer = () => {
             searchIcon={() => <FontAwesome5
                 name='search'
                 size={30}
-                color='blue'
+                color='#007bff'
             />}
         />
     )
@@ -54,7 +54,7 @@ const ButtonLike = () => {
                 <FontAwesome5
                     name='thumbs-up'
                     size={23}
-                    color={Like ? 'blue' : 'gray'}
+                    color={Like ? '#007bff' : 'gray'}
                 />
             </TouchableOpacity>
         </View>
@@ -83,7 +83,7 @@ const ButtonViews = () => {
                 <FontAwesome5
                     name='eye'
                     size={25}
-                    color={Views ? 'blue' : 'gray'}
+                    color={Views ? '#007bff' : 'gray'}
                 />
             </TouchableOpacity>
         </View>
@@ -93,7 +93,7 @@ const ButtonViews = () => {
 const placeholder = {
     label: 'Pilih masukan',
     value: null,
-    color: 'blue',
+    color: '#007bff',
 };
 
 const searchUser = ({ navigation }) => {
@@ -116,23 +116,23 @@ const searchUser = ({ navigation }) => {
                 <TouchableOpacity onPress={() => Pressed()}>
                     <View style={{
                         flexDirection: 'row',
-                        backgroundColor: ClickFilter ? 'blue' : 'white',
+                        backgroundColor: ClickFilter ? '#007bff' : 'white',
                         width: 100,
                         height: 40,
                         alignItems: 'center',
                         borderRadius: 10,
                         borderWidth: 1,
-                        borderColor: 'blue',
+                        borderColor: '#007bff',
                         alignSelf: 'center',
                         justifyContent: 'center'
                     }}>
                         <FontAwesome5
                             name='filter'
                             size={18}
-                            color={ClickFilter ? 'white' : 'blue'}
+                            color={ClickFilter ? 'white' : '#007bff'}
                             style={{ marginRight: 10 }}
                         />
-                        <Text style={{ color: ClickFilter ? 'white' : 'blue', fontSize: 16 }}>Filter</Text>
+                        <Text style={{ color: ClickFilter ? 'white' : '#007bff', fontSize: 16 }}>Filter</Text>
                     </View>
                 </TouchableOpacity>
             </View >
@@ -155,31 +155,31 @@ const searchUser = ({ navigation }) => {
                 <TouchableOpacity onPress={() => Pressed1()}>
                     <View style={{
                         flexDirection: 'row',
-                        backgroundColor: Click1 ? 'blue' : 'white',
+                        backgroundColor: Click1 ? '#007bff' : 'white',
                         width: 100,
                         height: 40,
                         alignItems: 'center',
                         borderRadius: 10,
                         borderWidth: 1,
-                        borderColor: 'blue',
+                        borderColor: '#007bff',
                         justifyContent: 'center'
                     }}>
-                        <Text style={{ color: Click1 ? 'white' : 'blue', fontSize: 16 }}>Desain</Text>
+                        <Text style={{ color: Click1 ? 'white' : '#007bff', fontSize: 16 }}>Desain</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => Pressed2()}>
                     <View style={{
                         flexDirection: 'row',
-                        backgroundColor: Click2 ? 'blue' : 'white',
+                        backgroundColor: Click2 ? '#007bff' : 'white',
                         width: 100,
                         height: 40,
                         alignItems: 'center',
                         borderRadius: 10,
                         borderWidth: 1,
-                        borderColor: 'blue',
+                        borderColor: '#007bff',
                         justifyContent: 'center'
                     }}>
-                        <Text style={{ color: Click2 ? 'white' : 'blue', fontSize: 16 }}>Pengguna</Text>
+                        <Text style={{ color: Click2 ? 'white' : '#007bff', fontSize: 16 }}>Pengguna</Text>
                     </View>
                 </TouchableOpacity>
             </View >
@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
         color: 'red'
     },
     buttonStyleClicked: {
-        color: 'blue'
+        color: '#007bff'
     },
     container1: {
         borderColor: '#000',

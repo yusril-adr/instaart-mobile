@@ -91,7 +91,7 @@ const ImagePicker = () => {
                         style={{ width: 300, height: 300 }}
                     />
                     <TouchableOpacity style={{
-                        borderColor: 'blue',
+                        borderColor: '#007bff',
                         paddingHorizontal: 20,
                         paddingVertical: 7,
                         borderRadius: 10,
@@ -100,7 +100,7 @@ const ImagePicker = () => {
                         marginBottom: -36
                     }}
                         onPress={handleUploadPhoto}>
-                        <Text style={{ color: 'blue', fontSize: 16 }}>Upload</Text>
+                        <Text style={{ color: '#007bff', fontSize: 16 }}>Upload</Text>
                     </TouchableOpacity>
                 </>
             ) : null}

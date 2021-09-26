@@ -36,7 +36,7 @@ const SearchContainer = () => {
             searchIcon={() => <FontAwesome5
                 name='search'
                 size={30}
-                color='blue'
+                color='#007bff'
             />}
         />
     )
@@ -52,7 +52,7 @@ const Jobs = ({ navigation }) => {
                         <View
                             style={{
                                 flexDirection: 'row',
-                                backgroundColor: 'blue',
+                                backgroundColor: '#007bff',
                                 height: 45,
                                 alignItems: 'center',
                                 borderRadius: 50,
@@ -128,7 +128,7 @@ const Jobs = ({ navigation }) => {
                                         <View
                                             style={{
                                                 flexDirection: 'row',
-                                                backgroundColor: 'blue',
+                                                backgroundColor: '#007bff',
                                                 width: 100,
                                                 height: 45,
                                                 alignItems: 'center',
@@ -197,7 +197,7 @@ const Jobs = ({ navigation }) => {
                                         <View
                                             style={{
                                                 flexDirection: 'row',
-                                                backgroundColor: 'blue',
+                                                backgroundColor: '#007bff',
                                                 width: 100,
                                                 height: 45,
                                                 alignItems: 'center',

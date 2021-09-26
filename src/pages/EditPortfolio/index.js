@@ -58,18 +58,17 @@ const EditPortfolio = ({ navigation, route }) => {
                 return;
             }
 
-        await Post.updatePost({
-            post_id: post.id,
-            title: userJudul,
-            caption: userCaption,
-            color_id: userWarna,
-            category_id: userKategori,
-        });
+            await Post.updatePost({
+                post_id: post.id,
+                title: userJudul,
+                caption: userCaption,
+                color_id: userWarna,
+                category_id: userKategori,
+            });
 
-        navigation.navigate('detailPost', { postId, postData: post });
+            navigation.navigate('detailPost', { postId, postData: post });
         } catch (error) {
-            setErrortext(error.message);
-            
+            alert(error.message); 
         }
     };
 
@@ -98,7 +97,7 @@ const EditPortfolio = ({ navigation, route }) => {
     const placeholder = {
         label: 'Pilih masukan',
         value: null,
-        color: 'blue',
+        color: '#007bff',
     };
 
     useEffect(() => {
@@ -263,7 +262,7 @@ const EditPortfolio = ({ navigation, route }) => {
                             <Button
                                 title={'Simpan'}
                                 buttonStyle={{
-                                    backgroundColor: 'blue',
+                                    backgroundColor: '#007bff',
                                     width: 90,
                                     height: 40,
                                     borderRadius: 8,

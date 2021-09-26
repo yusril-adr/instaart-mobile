@@ -27,7 +27,7 @@ const ButtonLike = ({ post, user, onUpdate }) => {
                       name='thumbs-up'
                       solid
                       size={23}
-                      color='blue'
+                      color='#007bff'
                   /> :
                   <FontAwesome5
                       name='thumbs-up'

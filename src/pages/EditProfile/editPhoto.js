@@ -34,7 +34,7 @@ const SearchContainer = () => {
             searchIcon={() => <FontAwesome5
                 name='file-upload'
                 size={20}
-                color='blue'
+                color='#007bff'
             />}
         />
     )
@@ -115,7 +115,7 @@ const editPhoto = ({ navigation }) => {
                             <Button
                                 title={'Simpan'}
                                 buttonStyle={{
-                                    backgroundColor: 'blue',
+                                    backgroundColor: '#007bff',
                                     width: 90,
                                     height: 40,
                                     borderRadius: 8,

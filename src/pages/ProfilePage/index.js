@@ -18,7 +18,7 @@ const ButtonLike = () => {
                 <FontAwesome5
                     name='thumbs-up'
                     size={23}
-                    color={Like ? 'blue' : 'gray'}
+                    color={Like ? '#007bff' : 'gray'}
                 />
             </TouchableOpacity>
         </View>
@@ -47,7 +47,7 @@ const ButtonViews = () => {
                 <FontAwesome5
                     name='eye'
                     size={25}
-                    color={Views ? 'blue' : 'gray'}
+                    color={Views ? '#007bff' : 'gray'}
                 />
             </TouchableOpacity>
         </View>
@@ -72,12 +72,12 @@ const ButtonFollow = () => {
                         alignItems: 'center',
                         borderRadius: 10,
                         borderWidth: 1,
-                        borderColor: 'blue',
+                        borderColor: '#007bff',
                         marginTop: 20,
                         alignSelf: 'center',
                         justifyContent: 'center'
                     }}>
-                        <Text style={{ color: 'blue' }}>Follow</Text>
+                        <Text style={{ color: '#007bff' }}>Follow</Text>
                     </View>
                 </TouchableOpacity>
             </View >
@@ -88,13 +88,13 @@ const ButtonFollow = () => {
                 <TouchableOpacity onPress={() => Pressed()}>
                     <View style={{
                         flexDirection: 'row',
-                        backgroundColor: 'blue',
+                        backgroundColor: '#007bff',
                         width: 100,
                         height: 35,
                         alignItems: 'center',
                         borderRadius: 10,
                         borderWidth: 1,
-                        borderColor: 'blue',
+                        borderColor: '#007bff',
                         marginTop: 20,
                         alignSelf: 'center',
                         justifyContent: 'center'
@@ -210,7 +210,7 @@ const ProfilePage = ({ navigation }) => {
                             borderBottomStartRadius: 10
                         }}>
                             <TouchableOpacity
-                                style={{ backgroundColor: 'blue', borderRadius: 50 }}>
+                                style={{ backgroundColor: '#007bff', borderRadius: 50 }}>
                                 <Text style={{ color: 'white', marginHorizontal: 20, marginVertical: 5 }}>Ajak Kerjasama</Text>
                             </TouchableOpacity>
                         </View>

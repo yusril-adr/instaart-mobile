@@ -119,7 +119,7 @@ const Login = ({ navigation }) => {
                                 <Button
                                     title={'Masuk'}
                                     buttonStyle={{
-                                        backgroundColor: 'blue',
+                                        backgroundColor: '#007bff',
                                         width: 90,
                                         height: 40,
                                         alignSelf: 'center',
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
         fontSize: 14
     },
     daftar: {
-        color: 'blue',
+        color: '#007bff',
         fontSize: 14
     },
     errorTextStyle: {

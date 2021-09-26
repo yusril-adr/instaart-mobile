@@ -55,7 +55,7 @@ const PostJob = ({ navigation }) => {
     const placeholder = {
         label: 'Pilih masukan',
         value: null,
-        color: 'blue',
+        color: '#007bff',
     };
 
     return (
@@ -232,7 +232,7 @@ const PostJob = ({ navigation }) => {
                             <Button
                                 title={'Buat'}
                                 buttonStyle={{
-                                    backgroundColor: 'blue',
+                                    backgroundColor: '#007bff',
                                     width: 90,
                                     height: 40,
                                     borderRadius: 8,

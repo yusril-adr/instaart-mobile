@@ -7,7 +7,7 @@ const TabItem = ({ isFocused, onLongPress, onPress, label }) => {
         if (label === "Home") return isFocused ? <Icon
             name='home'
             type='font-awesome'
-            color='blue'
+            color='#007bff'
             size={33}
         /> : <Icon
             name='home'
@@ -19,7 +19,7 @@ const TabItem = ({ isFocused, onLongPress, onPress, label }) => {
         if (label === "Search") return isFocused ? <Icon
             name='search'
             type='font-awesome'
-            color='blue'
+            color='#007bff'
             size={30}
         /> : <Icon
             name='search'
@@ -31,7 +31,7 @@ const TabItem = ({ isFocused, onLongPress, onPress, label }) => {
         if (label === "Upload") return isFocused ? <Icon
             name='plus-circle'
             type='font-awesome'
-            color='blue'
+            color='#007bff'
             size={35}
         /> : <Icon
             name='plus-circle'
@@ -43,7 +43,7 @@ const TabItem = ({ isFocused, onLongPress, onPress, label }) => {
         if (label === "Jobs") return isFocused ? <Icon
             name='briefcase'
             type='font-awesome'
-            color='blue'
+            color='#007bff'
             size={30}
         /> : <Icon
             name='briefcase'
@@ -63,7 +63,7 @@ const TabItem = ({ isFocused, onLongPress, onPress, label }) => {
         return <Icon
             name='home'
             type='font-awesome'
-            color='blue'
+            color='#007bff'
             size={30}
         />
     }

@@ -72,7 +72,7 @@ const detailJobs = () => {
                             <View
                                 style={{
                                     flexDirection: 'row',
-                                    backgroundColor: 'blue',
+                                    backgroundColor: '#007bff',
                                     width: 100,
                                     height: 45,
                                     alignItems: 'center',

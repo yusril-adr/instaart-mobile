@@ -19,7 +19,7 @@ const ButtonLike = () => {
                 <FontAwesome5
                     name='thumbs-up'
                     size={23}
-                    color={Like ? 'blue' : 'gray'}
+                    color={Like ? '#007bff' : 'gray'}
                 />
             </TouchableOpacity>
         </View>
@@ -48,7 +48,7 @@ const ButtonViews = () => {
                 <FontAwesome5
                     name='eye'
                     size={25}
-                    color={Views ? 'blue' : 'gray'}
+                    color={Views ? '#007bff' : 'gray'}
                 />
             </TouchableOpacity>
         </View>
@@ -81,8 +81,8 @@ const Akun = ({ navigation }) => {
                             <Text style={styles.mainUsername}>Quinella</Text>
                             <Text style={{ textAlign: 'center' }}>Administrator-chan</Text>
                             <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
-                                <View style={{ flexDirection: 'row', backgroundColor: '#fff', width: 100, height: 35, alignItems: 'center', borderRadius: 10, borderWidth: 1, borderColor: 'blue', marginTop: 20, alignSelf: 'center', justifyContent: 'center' }}>
-                                    <Text style={{ color: 'blue' }}>Edit Profile</Text>
+                                <View style={{ flexDirection: 'row', backgroundColor: '#fff', width: 100, height: 35, alignItems: 'center', borderRadius: 10, borderWidth: 1, borderColor: '#007bff', marginTop: 20, alignSelf: 'center', justifyContent: 'center' }}>
+                                    <Text style={{ color: '#007bff' }}>Edit Profile</Text>
                                 </View>
                             </TouchableOpacity>
                             <Text style={{ paddingHorizontal: 10, marginVertical: 30, fontWeight: '100', fontSize: 20, textAlign: 'center' }}>Just a girl with a lot of kawaiiiii, call me administrator</Text>

@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
         borderColor: '#000',
     },
     UserName: {
-        color: 'blue',
+        color: '#007bff',
         fontWeight: 'bold',
         fontSize: 15,
         marginLeft: 10,

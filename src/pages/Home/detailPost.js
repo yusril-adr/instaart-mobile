@@ -96,7 +96,7 @@ const BookmarkButton = ({ isBookmarked, onPress }) => {
                         <Icon
                             name='bookmark'
                             type='font-awesome'
-                            color='blue'
+                            color='#007bff'
                             size={40}
                         />
                     ) : (

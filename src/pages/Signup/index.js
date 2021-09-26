@@ -112,7 +112,7 @@ const Signup = ({ navigation }) => {
   const placeholder = {
     label: 'Pilih masukan',
     value: null,
-    color: 'blue',
+    color: '#007bff',
   };
 
   useEffect(() => {
@@ -362,7 +362,7 @@ const Signup = ({ navigation }) => {
             <Button
               title={'Daftar'}
               buttonStyle={{
-                backgroundColor: 'blue',
+                backgroundColor: '#007bff',
                 width: 90,
                 height: 40,
                 alignSelf: 'center',
@@ -488,7 +488,7 @@ const styles = StyleSheet.create({
     fontSize: 14
   },
   masuk: {
-    color: 'blue',
+    color: '#007bff',
     fontSize: 14
   },
   errorTextStyle: {
