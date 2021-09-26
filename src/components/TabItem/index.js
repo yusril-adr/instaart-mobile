@@ -1,8 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, Image, View } from 'react-native'
-import { Icon } from 'react-native-elements'
+import { Icon } from 'react-native-elements';
+import CONFIG from '../../global/config';
+import User from '../../data/user';
 
-const TabItem = ({ isFocused, onLongPress, onPress, label }) => {
+const TabItem = ({ isFocused, onLongPress, onPress, label, navigation }) => {
+    const [userImage, setUserImage] = useState(null);
+
+    useEffect(() => {
+      const unsubscribe = navigation.addListener('state', async (e) => {
+          try {
+              const user = await User.getUser();
+              setUserImage(user.image);
+          } catch (error) {
+              alert(error.message);
+          }
+      });
+
+      return unsubscribe;
+    }, [navigation])
+
     const Icons = () => {
         if (label === "Home") return isFocused ? <Icon
             name='home'
@@ -52,13 +69,16 @@ const TabItem = ({ isFocused, onLongPress, onPress, label }) => {
             size={30}
         />
 
-        if (label === "Akun") return isFocused ? <Image
-            source={require('../../assets/images/user.jpg')}
-            style={styles.Image}
-        /> : <Image
-            source={require('../../assets/images/user.jpg')}
-            style={styles.Image}
-        />
+        if (label === "Akun") return (
+            <Image
+                source={{
+                    uri: userImage ? 
+                        `${CONFIG.IMAGE_PATH.USER}/${userImage}` : 
+                        `${CONFIG.IMAGE_PATH.USER}/default_user.png`,
+                }}
+                style={styles.Image}
+            />
+        );
 
         return <Icon
             name='home'

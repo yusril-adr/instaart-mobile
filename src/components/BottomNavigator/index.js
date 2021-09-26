@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Dimensions } from 'react-native'
 import TabItem from '../TabItem';
 
@@ -7,7 +7,6 @@ const windowHeight = Dimensions.get('window').height;
 
 const BottomNavigator = ({ state, descriptors, navigation }) => {
     return (
-      
         <View style={styles.container}>
           {state.routes.map((route, index) => {
             const { options } = descriptors[route.key];
@@ -42,11 +41,12 @@ const BottomNavigator = ({ state, descriptors, navigation }) => {
     
             return (
               <TabItem 
-                    key={index}
-                    label={label}
-                    isFocused={isFocused}
-                    onPress={onPress}
-                    onLongPress={onLongPress}
+                  key={index}
+                  label={label}
+                  isFocused={isFocused}
+                  onPress={onPress}
+                  onLongPress={onLongPress}
+                  navigation={navigation}
               />
             );
           })}
