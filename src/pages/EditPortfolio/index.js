@@ -138,7 +138,7 @@ const EditPortfolio = ({ navigation, route }) => {
         });
 
         return unsubscribe;
-    }, [navigation])
+    }, [navigation, route.params])
 
     return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>

@@ -108,11 +108,9 @@ const Post = {
   },
 
   async newPost(formData, formImage) {
-    
-
     const { authId, authToken } = await Auth.getAuth();
 
-    const responseImg = await fetch('./api/post-image.php', {
+    const responseImg = await fetch(API_ENDPOINT.POST_IMAGE, {
       method: 'POST',
       headers: {
         'X-Auth-Id': authId,

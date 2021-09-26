@@ -14,12 +14,12 @@ const windowHeight = Dimensions.get('window').height;
 const ButtonLike = ({ post, user, onUpdate }) => {
     const onPress = async () => {
         try {
-            if (post.likes.includes(user?.id)) {
-                await User.dislikePost(post.id);
+            if (post?.likes.includes(user?.id)) {
+                await User.dislikePost(post?.id);
                 alert('Desain batal disukai');
             }
             else {
-                await User.likePost(post.id);
+                await User.likePost(post?.id);
                 alert('Desain disukai');
             }
             
@@ -78,6 +78,8 @@ const ButtonShare = ({ postId }) => (
 );
 
 const PostDate = ({ postDate }) => {
+    if (!postDate) return (<></>);
+
     const { year, month, date } = DateHelper.parse(postDate);
 
     return (
@@ -158,9 +160,9 @@ const CommentItem = ({comment, navigation}) => {
 };
 
 const detailPost = ({ navigation, route }) => {
-    const { postId, postData } = route.params;
+    const { postId, postData = null } = route.params;
     const [user, setUser] = useState(null);
-    const [post, setPost] = useState(postData);
+    const [post, setPost] = useState(null);
     const [insight, setInsight] = useState(true);
     const [comments, setComments] = useState([]);
     const [bookmarkPosts, setBookmarkPosts] = useState([]);
@@ -175,7 +177,7 @@ const detailPost = ({ navigation, route }) => {
         const getPost = async () => {
             const newData = await Post.getPost(postId, { insight });
             setPost(newData);
-            setComments(newData.comments);
+            setComments(newData.comments || []);
             if (insight) setInsight(false);
         };
         const getUserInfo = async () => {
@@ -195,7 +197,7 @@ const detailPost = ({ navigation, route }) => {
         });
 
         return unsubscribe;
-    }, [navigation]);
+    }, [navigation, route.params]);
 
     return (
         <View>
@@ -212,24 +214,24 @@ const detailPost = ({ navigation, route }) => {
                                 style={styles.UserProfile}
                             />
                             <View style={{ flexDirection: 'column' }}>
-                                <Text style={styles.UserCaption}>{post.title}</Text>
-                                <Text style={styles.UserName}>{post.username}</Text>
+                                <Text style={styles.UserCaption}>{post?.title}</Text>
+                                <Text style={styles.UserName}>{post?.username}</Text>
                             </View>
                             <BookmarkButton 
                                 isBookmarked={
-                                    bookmarkPosts.find((boomarkPost) => (boomarkPost.id === post.id))
+                                    bookmarkPosts.find((boomarkPost) => (boomarkPost.id === post?.id))
                                 }
 
                                 onPress={async () => {
                                     try {
-                                        const isBookmarkPost = bookmarkPosts.find((boomarkPost) => (boomarkPost.id === post.id));
+                                        const isBookmarkPost = bookmarkPosts.find((boomarkPost) => (boomarkPost.id === post?.id));
 
                                         if (isBookmarkPost) {
-                                            await User.unBookmarkPost(post.id);
+                                            await User.unBookmarkPost(post?.id);
                                             alert('Desain dihapus dari daftar penyimpanan');
                                         }
                                         else {
-                                            await User.bookmarkPost(post.id);
+                                            await User.bookmarkPost(post?.id);
                                             alert('Desain berhasil disimpan');
                                         }
                                         await updateBookmark();
@@ -243,15 +245,15 @@ const detailPost = ({ navigation, route }) => {
                         <View>
                             <Image
                                 source={
-                                    { uri: `${CONFIG.IMAGE_PATH.POST}/${post.image}` }
+                                    { uri: `${CONFIG.IMAGE_PATH.POST}/${post?.image}` }
                                 }
                                 style={styles.UserPost}
                             />
                         </View>
 
                         <View style={styles.dateBox}>
-                            {post.user_id === user?.id && (
-                                <TouchableOpacity onPress={() => navigation.navigate('EditPortfolio', { postId: post.id })}>
+                            {post?.user_id === user?.id && (
+                                <TouchableOpacity onPress={() => navigation.navigate('EditPortfolio', { postId: post?.id })}>
                                     <View style={{ alignSelf: 'flex-end', marginTop: 10, marginRight: 10 }}>
                                         <Icon
                                             name='edit'
@@ -265,7 +267,7 @@ const detailPost = ({ navigation, route }) => {
 
                             <ButtonLike post={post} user={user} onUpdate={async () => {
                                 try {
-                                    const updatedPost = await Post.getPost(post.id);
+                                    const updatedPost = await Post.getPost(post?.id);
                                     setPost(updatedPost);
                                 } catch (error) {
                                     alert(error.message);
@@ -273,10 +275,10 @@ const detailPost = ({ navigation, route }) => {
                             }} />
                             
                             <View>
-                                <Text style={{ fontSize: 18, color: 'gray', alignSelf: 'center', marginTop: 10 }}>{post.title}</Text>
+                                <Text style={{ fontSize: 18, color: 'gray', alignSelf: 'center', marginTop: 10 }}>{post?.title}</Text>
                             </View>
                             <View>
-                               <PostDate postDate={post.date} />
+                               <PostDate postDate={post?.date} />
                             </View>
                             <View style={{ flexDirection: 'row', marginTop: 15, alignSelf: 'center', alignItems: 'center' }}>
                                 <View>
@@ -287,7 +289,7 @@ const detailPost = ({ navigation, route }) => {
                                     />
                                 </View>
                                 <View>
-                                    <Text style={{ marginLeft: 5, color: 'gray' }}>{post.likes.length}</Text>
+                                    <Text style={{ marginLeft: 5, color: 'gray' }}>{post?.likes?.length}</Text>
                                 </View>
                                 <View style={{ marginLeft: 15 }}>
                                     <FontAwesome5
@@ -297,7 +299,7 @@ const detailPost = ({ navigation, route }) => {
                                     />
                                 </View>
                                 <View>
-                                    <Text style={{ marginLeft: 5, color: 'gray' }}>{post.comments.length}</Text>
+                                    <Text style={{ marginLeft: 5, color: 'gray' }}>{post?.comments?.length}</Text>
                                 </View>
                                 <View style={{ marginLeft: 15 }}>
                                     <FontAwesome5
@@ -307,17 +309,17 @@ const detailPost = ({ navigation, route }) => {
                                     />
                                 </View>
                                 <View>
-                                    <Text style={{ marginLeft: 5, color: 'gray' }}>{post.insight}</Text>
+                                    <Text style={{ marginLeft: 5, color: 'gray' }}>{post?.insight}</Text>
                                 </View>
                             </View>
                             
-                            <ButtonShare postId={post.id} />
+                            <ButtonShare postId={post?.id} />
 
                         </View>
 
                         <View style={styles.deskripsi}>
                             <View>
-                                <Text style={{ fontSize: 20, marginTop: 20 }}>{post.caption}</Text>
+                                <Text style={{ fontSize: 20, marginTop: 20 }}>{post?.caption}</Text>
                             </View>
                         </View>
                     </View>
@@ -363,12 +365,12 @@ const detailPost = ({ navigation, route }) => {
                                         }
 
                                         const data = {
-                                            post_id: post.id,
+                                            post_id: post?.id,
                                             body: commentInput,
                                         }
                                         await User.commentPost(data)
 
-                                        const updatedPost = await Post.getPost(post.id);
+                                        const updatedPost = await Post.getPost(post?.id);
                                         setPost(updatedPost);
                                         setComments(updatedPost.comments);
 

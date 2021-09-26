@@ -1,61 +1,41 @@
-import React, { useState, createRef } from 'react'
-import { StyleSheet, Dimensions, TextInput, View, Text, ScrollView, Image, Keyboard, KeyboardAvoidingView } from 'react-native'
-import { Button, SearchBar } from 'react-native-elements'
+import React, { useState, useEffect, createRef } from 'react'
+import { Alert, StyleSheet, Dimensions, TextInput, View, Text, ScrollView, Image, Keyboard, KeyboardAvoidingView } from 'react-native'
+import { Button } from 'react-native-elements'
 import RNPickerSelect from 'react-native-picker-select'
 import { Chevron } from 'react-native-shapes'
 import { launchImageLibrary } from 'react-native-image-picker';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import Post from '../../data/post'
+import Colors from '../../data/colors'
+import Categories from '../../data/categories'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const SearchContainer = () => {
-    const [search, setSearch] = useState('');
-    const searchInputRef = createRef();
-    return (
-        <SearchBar
-            placeholder="Pilih file ..."
-            placeholderTextColor='#000'
-            containerStyle={{ backgroundColor: 'transparent', borderTopWidth: 0, borderBottomWidth: 0 }}
-            inputContainerStyle={{
-                backgroundColor: '#eee',
-                flexDirection: 'row-reverse',
-                borderWidth: 1,
-                borderRadius: 10,
-                paddingLeft: 10,
-                borderBottomWidth: 1,
-                marginTop: 20,
-                width: 310,
-                height: 35,
-                alignSelf: 'center'
-            }}
-            lightTheme
-            onChangeText={(search) => setSearch(search)}
-            value={search}
-            ref={searchInputRef}
-            searchIcon={() => <FontAwesome5
-                name='file-upload'
-                size={20}
-                color='#007bff'
-            />}
-        />
-    )
-}
-
 const Upload = ({ navigation }) => {
     const [userJudul, setUserJudul] = useState('');
     const [userCaption, setUserCaption] = useState('');
-    const [userKategori, setUserKategori] = useState('');
-    const [userWarna, setUserWarna] = useState('');
+    const [userKategori, setUserKategori] = useState(0);
+    const [userWarna, setUserWarna] = useState(0);
     const [errortext, setErrortext] = useState('');
-    const [postImage, setPostImage] = useState(null);
+    const [categories, setCategories] = useState([]);
+    const [colors, setColors] = useState([]);
+    const [postImage, setPostImage] = useState(null);    
+
 
     const judulInputRef = createRef();
     const captionInputRef = createRef();
     const kategoriInputRef = createRef();
     const warnaInputRef = createRef();
 
-    const handleSubmitButton = () => {
+    const setEmptyValue = async () => {
+        setUserJudul('');
+        setUserCaption('');
+        setUserWarna(0);
+        setUserKategori(0);
+        setPostImage(null);
+    };
+
+    const handleSubmitButton = async () => {
         setErrortext('');
         if (!userJudul) {
             alert('Mohon isi Judul');
@@ -73,8 +53,44 @@ const Upload = ({ navigation }) => {
             alert('Mohon Pilih Warna');
             return;
         }
+        if (!postImage) {
+            alert('Anda belum memilih desain yang ingin diunggah.');
+            return;
+        }
 
-        navigation.navigate('detailPost');
+        try {
+            const inputData = {
+                title: userJudul,
+                caption: userCaption,
+                color_id: userWarna,
+                category_id: userKategori,
+            };
+
+            const formImg = new FormData();
+            formImg.append('image', {
+                name: postImage.fileName,
+                type: postImage.type,
+                uri: Platform.OS === 'ios' ? postImage.uri.replace('file://', '') : postImage.uri,
+              });
+
+            const newPost = await Post.newPost(inputData, formImg);
+
+            Alert.alert(
+                'Berhasil !',
+                'Desain berhasil diunggah',
+                [
+                    { 
+                        text: "OK", 
+                        onPress: () => {
+                            setEmptyValue();
+                            navigation.navigate('detailPost', { postId: newPost.id });
+                        },  
+                    }
+                ],
+            );
+        } catch (error) {
+            alert(error.message);
+        }
     }
 
     const handleChooseFile = async () => {
@@ -96,6 +112,31 @@ const Upload = ({ navigation }) => {
         value: null,
         color: '#007bff',
     };
+
+    useEffect(() => {
+        const setDefaultValue = async () => {
+            const colorList = await Colors.getColors();
+            const categoriesList = await Categories.getCategories();
+
+            setCategories(categoriesList.map((category) => (
+                { label: category.name, value: category.id }
+            )));
+            setColors(colorList.map((color) => (
+                { label: color.name, value: color.id }
+            )));
+        };
+
+        const unsubscribe = navigation.addListener('focus', async (e) => {
+            try {
+                await setDefaultValue();
+            } catch (error) {
+                alert(error.message);
+                navigation.navigate('Login');
+            }
+        });
+
+        return unsubscribe;
+    }, [navigation])
 
     return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -126,6 +167,7 @@ const Upload = ({ navigation }) => {
                                     captionInputRef.current && captionInputRef.current.focus()
                                 }
                                 blurOnSubmit={false}
+                                value={userJudul}
                             />
                         </View>
 
@@ -146,38 +188,7 @@ const Upload = ({ navigation }) => {
                                 returnKeyType="next"
                                 onSubmitEditing={Keyboard.dismiss}
                                 blurOnSubmit={false}
-                            />
-                        </View>
-
-                        <View style={styles.SectionStyle}>
-                            <Text>Kategori</Text>
-                            <RNPickerSelect
-                                style={{
-                                    ...pickerSelectStyles,
-                                    placeholder: {
-                                        color: 'black',
-                                        fontSize: 14,
-                                        fontWeight: 'normal',
-                                        paddingLeft: 15
-                                    },
-                                    iconContainer: {
-                                        top: 15,
-                                        right: 15,
-                                    },
-                                }}
-                                Icon={() => {
-                                    return <Chevron size={1.5} color="gray" />;
-                                }}
-                                useNativeAndroidPickerStyle={false}
-                                placeholder={placeholder}
-                                onValueChange={(userKategori) => setUserKategori(userKategori)}
-                                ref={kategoriInputRef}
-                                returnKeyType="next"
-                                items={[
-                                    { label: 'Desain', value: 'Desain' },
-                                    { label: 'Programming', value: 'Programming' },
-                                    { label: 'Analys', value: 'Analys' },
-                                ]}
+                                value={userCaption}
                             />
                         </View>
 
@@ -205,15 +216,39 @@ const Upload = ({ navigation }) => {
                                 onValueChange={(userWarna) => setUserWarna(userWarna)}
                                 ref={warnaInputRef}
                                 returnKeyType="next"
-                                items={[
-                                    { label: 'Red', value: 'Red' },
-                                    { label: 'Green', value: 'Green' },
-                                    { label: '#007bff', value: '#007bff' },
-                                ]}
+                                items={colors}
+                                value={userWarna}
                             />
                         </View>
 
-                        {/* <SearchContainer></SearchContainer> */}
+                        <View style={styles.SectionStyle}>
+                            <Text>Kategori</Text>
+                            <RNPickerSelect
+                                style={{
+                                    ...pickerSelectStyles,
+                                    placeholder: {
+                                        color: 'black',
+                                        fontSize: 14,
+                                        fontWeight: 'normal',
+                                        paddingLeft: 15
+                                    },
+                                    iconContainer: {
+                                        top: 15,
+                                        right: 15,
+                                    },
+                                }}
+                                Icon={() => {
+                                    return <Chevron size={1.5} color="gray" />;
+                                }}
+                                useNativeAndroidPickerStyle={false}
+                                placeholder={placeholder}
+                                onValueChange={(userKategori) => setUserKategori(userKategori)}
+                                ref={kategoriInputRef}
+                                returnKeyType="next"
+                                items={categories}
+                                value={userKategori}
+                            />
+                        </View>
 
                         <View style={{
                                 flexDirection: 'column',
