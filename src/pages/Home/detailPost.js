@@ -192,7 +192,7 @@ const detailPost = ({ navigation, route }) => {
                 await updateBookmark();
             } catch (error) {
                 alert(error.message);
-                navigation.goBack();
+                navigation.navigate('Login');
             }
         });
 

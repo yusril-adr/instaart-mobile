@@ -1,13 +1,41 @@
-import React from 'react'
-import { StyleSheet, Text, View, ScrollView, Dimensions, Image, TouchableOpacity } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Icon } from 'react-native-elements'
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, ScrollView, Dimensions, Image, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Post from '../../data/post';
+import User from '../../data/user';
+import PostList from '../../components/PostList';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const Home = () => {
+const Bookmark = ({ navigation }) => {
+    const [user, setUser] = useState(null);
+    const [postList, setPostList] = useState([]);
+
+    useEffect(() => {
+        const getUserInfo = async () => {
+            const data = await User.getUser();
+            setUser(data);
+        };
+
+        const getPosts = async () => {
+            const data = await Post.getBookmarkPosts();
+            setPostList(data);
+        };
+
+        const unsubscribe = navigation.addListener('focus', async (e) => {
+            try {
+                await getUserInfo();
+                await getPosts();
+            } catch (error) {
+                alert(error.message);
+                navigation.navigate('Login');
+            }
+        });
+
+        return unsubscribe;
+    }, [navigation]);
+
     return (
         <SafeAreaView>
             <ScrollView
@@ -15,263 +43,20 @@ const Home = () => {
                 <View style={styles.mainBody}>
                     <Text style={{ alignSelf: 'center', marginTop: 20, fontSize: 20, fontWeight: 'bold' }}>Disimpan</Text>
 
-                    {/* <View style={styles.container1}>
-                        <View style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15 }}>
-                            <Image
-                                source={require('../../assets/images/user.jpg')}
-                                style={styles.UserProfile}
-                            />
-                            <Text style={styles.UserName}> Quinella </Text>
-                        </View>
-                        <View>
-                            <Image
-                                source={require('../../assets/images/post.jpg')}
-                                style={styles.UserPost}
-                            />
-                        </View>
-
-                        <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 15, alignItems: 'center' }}>
-                            <View>
-                                <Icon
-                                    name='thumbs-up'
-                                    size={23}
-                                    type='font-awesome'
-                                    color='gray'
-                                />
-                            </View>
-                            <View>
-                                <Text style={{ marginLeft: 5 }}>4</Text>
-                            </View>
-                            <View style={{ marginLeft: 15 }}>
-                                <Icon
-                                    name='comment'
-                                    size={25}
-                                    type='font-awesome'
-                                    color='gray'
-                                />
-                            </View>
-                            <View>
-                                <Text style={{ marginLeft: 5 }}>4</Text>
-                            </View>
-                            <View style={{ marginLeft: 15 }}>
-                                <Icon
-                                    name='eye'
-                                    size={28}
-                                    type='font-awesome'
-                                    color='gray'
-                                />
-                            </View>
-                            <View>
-                                <Text style={{ marginLeft: 5 }}>4</Text>
-                            </View>
-                        </View>
-
-                        <View>
-                            <Text style={{ fontSize: 18, alignSelf: 'center', marginTop: 10 }}>Konsep ruang kerja industry 4.0</Text>
-                        </View>
-
-                        <View style={styles.dateBox}>
-                            <View>
-                                <Text style={{ fontSize: 18, marginTop: 10 }}>9 September 2021</Text>
-                            </View>
-                        </View>
-                    </View>
-
-                    <View style={styles.container1}>
-                        <View style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15 }}>
-                            <Image
-                                source={require('../../assets/images/user.jpg')}
-                                style={styles.UserProfile}
-                            />
-                            <Text style={styles.UserName}> Quinella </Text>
-                        </View>
-                        <View>
-                            <Image
-                                source={require('../../assets/images/post.jpg')}
-                                style={styles.UserPost}
-                            />
-                        </View>
-
-                        <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 15, alignItems: 'center' }}>
-                            <View>
-                                <Icon
-                                    name='thumbs-up'
-                                    size={23}
-                                    type='font-awesome'
-                                    color='gray'
-                                />
-                            </View>
-                            <View>
-                                <Text style={{ marginLeft: 5 }}>4</Text>
-                            </View>
-                            <View style={{ marginLeft: 15 }}>
-                                <Icon
-                                    name='comment'
-                                    size={25}
-                                    type='font-awesome'
-                                    color='gray'
-                                />
-                            </View>
-                            <View>
-                                <Text style={{ marginLeft: 5 }}>4</Text>
-                            </View>
-                            <View style={{ marginLeft: 15 }}>
-                                <Icon
-                                    name='eye'
-                                    size={28}
-                                    type='font-awesome'
-                                    color='gray'
-                                />
-                            </View>
-                            <View>
-                                <Text style={{ marginLeft: 5 }}>4</Text>
-                            </View>
-                        </View>
-
-                        <View>
-                            <Text style={{ fontSize: 18, alignSelf: 'center', marginTop: 10 }}>Konsep ruang kerja industry 4.0</Text>
-                        </View>
-
-                        <View style={styles.dateBox}>
-                            <View>
-                                <Text style={{ fontSize: 18, marginTop: 10 }}>9 September 2021</Text>
-                            </View>
-                        </View>
-                    </View>
-
-                    <View style={styles.container1}>
-                        <View style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15 }}>
-                            <Image
-                                source={require('../../assets/images/user.jpg')}
-                                style={styles.UserProfile}
-                            />
-                            <Text style={styles.UserName}> Quinella </Text>
-                        </View>
-                        <View>
-                            <Image
-                                source={require('../../assets/images/post.jpg')}
-                                style={styles.UserPost}
-                            />
-                        </View>
-
-                        <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 15, alignItems: 'center' }}>
-                            <View>
-                                <Icon
-                                    name='thumbs-up'
-                                    size={23}
-                                    type='font-awesome'
-                                    color='gray'
-                                />
-                            </View>
-                            <View>
-                                <Text style={{ marginLeft: 5 }}>4</Text>
-                            </View>
-                            <View style={{ marginLeft: 15 }}>
-                                <Icon
-                                    name='comment'
-                                    size={25}
-                                    type='font-awesome'
-                                    color='gray'
-                                />
-                            </View>
-                            <View>
-                                <Text style={{ marginLeft: 5 }}>4</Text>
-                            </View>
-                            <View style={{ marginLeft: 15 }}>
-                                <Icon
-                                    name='eye'
-                                    size={28}
-                                    type='font-awesome'
-                                    color='gray'
-                                />
-                            </View>
-                            <View>
-                                <Text style={{ marginLeft: 5 }}>4</Text>
-                            </View>
-                        </View>
-
-                        <View>
-                            <Text style={{ fontSize: 18, alignSelf: 'center', marginTop: 10 }}>Konsep ruang kerja industry 4.0</Text>
-                        </View>
-
-                        <View style={styles.dateBox}>
-                            <View>
-                                <Text style={{ fontSize: 18, marginTop: 10 }}>9 September 2021</Text>
-                            </View>
-                        </View>
-                    </View>
-
-                    <View style={styles.container2}>
-                        <View style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15 }}>
-                            <Image
-                                source={require('../../assets/images/user.jpg')}
-                                style={styles.UserProfile}
-                            />
-                            <Text style={styles.UserName}> Quinella </Text>
-                        </View>
-                        <View>
-                            <Image
-                                source={require('../../assets/images/post.jpg')}
-                                style={styles.UserPost}
-                            />
-                        </View>
-
-                        <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 15, alignItems: 'center' }}>
-                            <View>
-                                <Icon
-                                    name='thumbs-up'
-                                    size={23}
-                                    type='font-awesome'
-                                    color='gray'
-                                />
-                            </View>
-                            <View>
-                                <Text style={{ marginLeft: 5 }}>4</Text>
-                            </View>
-                            <View style={{ marginLeft: 15 }}>
-                                <Icon
-                                    name='comment'
-                                    size={25}
-                                    type='font-awesome'
-                                    color='gray'
-                                />
-                            </View>
-                            <View>
-                                <Text style={{ marginLeft: 5 }}>4</Text>
-                            </View>
-                            <View style={{ marginLeft: 15 }}>
-                                <Icon
-                                    name='eye'
-                                    size={28}
-                                    type='font-awesome'
-                                    color='gray'
-                                />
-                            </View>
-                            <View>
-                                <Text style={{ marginLeft: 5 }}>4</Text>
-                            </View>
-                        </View>
-
-                        <View>
-                            <Text style={{ fontSize: 18, alignSelf: 'center', marginTop: 10 }}>Konsep ruang kerja industry 4.0</Text>
-                        </View>
-
-                        <View style={styles.dateBox}>
-                            <View>
-                                <Text style={{ fontSize: 18, marginTop: 10 }}>9 September 2021</Text>
-                            </View>
-                        </View>
-                    </View> */}
-
-                    <View style={{ marginVertical: 255, width: 250, alignSelf: 'center' }}>
-                        <FontAwesome5
-                            name='smile-wink'
-                            size={30}
-                            color='gray'
-                            style={{ alignSelf: 'center' }}
-                        />
-                        <Text style={{ fontSize: 20, textAlign: 'center', textAlignVertical: 'center' }}>Belum ada desain yang disimpan untuk saat ini</Text>
-                    </View>
+                    <PostList 
+                        navigation={navigation} 
+                        posts={postList} 
+                        user={user} 
+                        onUpdateList={async () => {
+                            try {
+                                const newList = await Post.getBookmarkPosts();
+                                setPostList(newList);
+                            } catch {
+                                alert(error.message);
+                                navigation.navigate('Login');
+                            }
+                        }}
+                    />
 
                 </View>
             </ScrollView>
@@ -279,7 +64,7 @@ const Home = () => {
     )
 }
 
-export default Home
+export default Bookmark
 
 const styles = StyleSheet.create({
     mainBody: {

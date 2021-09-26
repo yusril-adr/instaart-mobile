@@ -30,11 +30,11 @@ const Login = ({ navigation }) => {
         try {
             setErrortext('');
             if (!userEmail) {
-                alert('Mohon isi Email');
+                alert('Mohon isi Username atau Email anda');
                 return;
             }
             if (!userPassword) {
-                alert('Mohon isi password');
+                alert('Mohon isi password anda');
                 return;
             }
             await User.signIn(userEmail, userPassword);
@@ -75,7 +75,7 @@ const Login = ({ navigation }) => {
                                         onChangeText={(UserEmail) =>
                                             setUserEmail(UserEmail)
                                         }
-                                        placeholder="Masukkan email"
+                                        placeholder="Username atau Email"
                                         placeholderTextColor="#000"
                                         autoCapitalize="none"
                                         keyboardType="email-address"
@@ -99,7 +99,7 @@ const Login = ({ navigation }) => {
                                             getRef={(input) => (inputRef = input)}
                                             value={password}
                                             label=''
-                                            placeholder='Masukkan password'
+                                            placeholder='Password'
                                             placeholderTextColor="#000"
                                             onChangeText={(UserPassword) =>
                                                 setUserPassword(UserPassword)

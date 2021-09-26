@@ -60,8 +60,25 @@ const Jobs = ({ navigation }) => {
                                 paddingHorizontal: 10,
                                 alignSelf: 'center',
                             }}>
-                            <Text
-                                style={{ marginLeft: 10, marginRight: 10, fontSize: 20, color: '#fff' }}>Pekerjaan Baru</Text>
+                            <View
+                                style={{ 
+                                    flexDirection: 'row',
+                                    marginLeft: 10, 
+                                    marginRight: 10,
+                                    fontSize: 20, 
+                                    color: '#fff', 
+                                    alignItems:'center'
+
+                                }}
+                            >
+                                    <Icon
+                                        name='plus'
+                                        type='font-awesome'
+                                        color='#fff'
+                                        size={25}
+                                    />
+                                    <Text style={{ color: '#fff', marginLeft: 10 }}>Pekerjaan Baru</Text>
+                            </View>
                         </View>
                     </TouchableOpacity>
 
