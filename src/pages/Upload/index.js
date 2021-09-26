@@ -8,44 +8,12 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const SearchContainer = () => {
-    const [search, setSearch] = useState('');
-    const searchInputRef = createRef();
-    return (
-        <SearchBar
-            placeholder="Pilih file ..."
-            placeholderTextColor='#000'
-            containerStyle={{ backgroundColor: 'transparent', borderTopWidth: 0, borderBottomWidth: 0 }}
-            inputContainerStyle={{
-                backgroundColor: '#eee',
-                flexDirection: 'row-reverse',
-                borderWidth: 1,
-                borderRadius: 10,
-                paddingLeft: 10,
-                borderBottomWidth: 1,
-                marginTop: 20,
-                width: 310,
-                height: 35,
-                alignSelf: 'center'
-            }}
-            lightTheme
-            onChangeText={(search) => setSearch(search)}
-            value={search}
-            ref={searchInputRef}
-            searchIcon={() => <FontAwesome5
-                name='file-upload'
-                size={20}
-                color='blue'
-            />}
-        />
-    )
-}
-
 const Upload = ({ navigation }) => {
     const [userJudul, setUserJudul] = useState('');
     const [userCaption, setUserCaption] = useState('');
     const [userKategori, setUserKategori] = useState('');
     const [userWarna, setUserWarna] = useState('');
+    const [postImage, setPostImage] = useState(null);
     const [errortext, setErrortext] = useState('');
 
     const judulInputRef = createRef();
@@ -120,6 +88,8 @@ const Upload = ({ navigation }) => {
                                     setUserCaption(userCaption)
                                 }
                                 underlineColorAndroid="#f000"
+                                multiline={true}
+                                numberOfLines={4}
                                 placeholder="Masukkan caption anda"
                                 placeholderTextColor="#000"
                                 keyboardType='default'
@@ -194,7 +164,15 @@ const Upload = ({ navigation }) => {
                             />
                         </View>
 
-                        <SearchContainer></SearchContainer>
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                            {postImage && (
+                                <Image
+                                    source={{ uri: photo.uri }}
+                                    style={{ width: 300, height: 300 }}
+                                />
+                            )}
+                            <Button title="Browse" />
+                        </View>
 
                         {errortext != '' ? (
                             <Text style={styles.errorTextStyle}>
@@ -264,7 +242,7 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     SectionStyleForCaption: {
-        flexDirection: 'column',
+        // flexDirection: 'column',
         height: 120,
         marginTop: 5,
         alignSelf: 'center',
@@ -277,6 +255,7 @@ const styles = StyleSheet.create({
         height: 120,
         paddingLeft: 15,
         paddingRight: 15,
+        textAlignVertical: 'top',
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#000',

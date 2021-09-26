@@ -346,6 +346,8 @@ const EditProfile = ({ navigation }) => {
                                 onChangeText={(userBio) =>
                                     setUserBio(userBio)
                                 }
+                                multiline={true}
+                                numberOfLines={4}
                                 underlineColorAndroid="#f000"
                                 placeholder="Masukkan bio anda"
                                 placeholderTextColor="#000"
@@ -468,6 +470,7 @@ const styles = StyleSheet.create({
     inputStyle: {
         flex: 1,
         backgroundColor: '#fff',
+        textAlignVertical: 'top',
         width: 310,
         height: 100,
         paddingLeft: 15,

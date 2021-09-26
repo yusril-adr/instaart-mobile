@@ -185,6 +185,8 @@ const EditPortfolio = ({ navigation, route }) => {
                                 placeholder="Masukkan caption anda"
                                 placeholderTextColor="#000"
                                 keyboardType='default'
+                                multiline
+                                numberOfLines={4}
                                 ref={captionInputRef}
                                 returnKeyType="next"
                                 onSubmitEditing={Keyboard.dismiss}
@@ -344,6 +346,7 @@ const styles = StyleSheet.create({
         paddingRight: 15,
         borderRadius: 10,
         borderWidth: 1,
+        textAlignVertical: 'top',
         borderColor: '#000',
     },
     errorTextStyle: {

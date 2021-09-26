@@ -336,7 +336,7 @@ const Signup = ({ navigation }) => {
             <View style={styles.SectionStyleForBio}>
               <Text>Bio</Text>
               <TextInput
-                multiline
+                multiline={true}
                 numberOfLines={4}
                 style={styles.inputStyle}
                 onChangeText={(userBio) =>
@@ -464,6 +464,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     width: 310,
     height: 100,
+    textAlignVertical: 'top',
     paddingLeft: 10,
     paddingRight: 15,
     borderRadius: 10,
