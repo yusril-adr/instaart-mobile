@@ -72,7 +72,7 @@ const detailJobs = ({ navigation, route }) => {
                         <Text style={{ fontSize: 18, textAlign: 'center', marginTop: 10 }}>{job?.username}</Text>
                     </View>
 
-                    {job.user_id === user.id && (
+                    {job?.user_id === user?.id && (
                         <TouchableOpacity onPress={() => navigation.navigate('EditJob', { jobId: jobId })}>
                             <View 
                                 style={{ 

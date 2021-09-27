@@ -25,7 +25,10 @@ const LogoTitle = () => {
 
 const MainApp = () => {
     return (
-        <Tab.Navigator tabBar={props => <BottomNavigator {...props} state={{...props.state, routes: props.state.routes.slice(0,5)}} />}>
+        <Tab.Navigator 
+            tabBar={props => <BottomNavigator {...props} state={{...props.state, routes: props.state.routes.slice(0,5)}} />}
+            backBehavior="history"
+        >
             <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
             <Tab.Screen name="Search" component={Search} options={{ headerShown: false }} />
             <Tab.Screen name="Upload" component={Upload} options={{ headerShown: false }} />

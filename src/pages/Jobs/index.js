@@ -75,7 +75,10 @@ const JobItem = ({ navigation, job, }) => {
                             color='#000'
                             style={{ marginRight: 10, marginLeft: 3 }}
                         />
-                        <Text style={{ marginLeft: 2 }}>{job.city_name}, {job.province_name}</Text>
+                        <View>
+                            <Text style={{ marginLeft: 2 }}>{job.city_name}</Text>
+                            <Text style={{ marginLeft: 2 }}>{job.province_name}</Text>
+                        </View>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
                         <FontAwesome5
@@ -90,12 +93,13 @@ const JobItem = ({ navigation, job, }) => {
                         alignSelf: 'center',
                         flexDirection: 'row',
                         justifyContent: 'center',
+                        alignItems: 'center',
                         marginTop: 20,
                         width: 358,
                         height: 73,
                         borderBottomEndRadius: 5,
                         borderBottomStartRadius: 5,
-                        paddingVertical: 15,
+                        paddingBottom: 5,
                         backgroundColor: '#cacaca'
                     }}>
                         <TouchableOpacity onPress={() => navigation.navigate('detailJobs', { jobId: job.id })}>
@@ -141,6 +145,7 @@ const JobList = ({ navigation, jobs }) => {
 
             {jobs.map((job) => (
                 <JobItem 
+                    key={job.id}
                     navigation={navigation} 
                     job={job}
                 />
@@ -244,7 +249,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.9,
         shadowRadius: 5,
         elevation: 10,
-        borderRadius: 5
+        borderRadius: 5,
     },
     container2: {
         borderColor: '#000',
@@ -253,14 +258,15 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignContent: 'center',
         width: 360,
-        height: 291,
+        height: 300,
         marginTop: 30,
         shadowColor: '#000',
         shadowOffset: { width: 2, height: 5 },
         shadowOpacity: 0.9,
         shadowRadius: 5,
         elevation: 10,
-        borderRadius: 5
+        borderRadius: 5,
+        overflow: 'hidden',
     },
     JobProfile: {
         width: 50,

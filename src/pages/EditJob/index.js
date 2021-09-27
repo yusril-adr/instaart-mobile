@@ -1,14 +1,17 @@
-import React, { useState, createRef } from 'react'
-import { StyleSheet, Dimensions, TextInput, View, Text, ScrollView, Keyboard, KeyboardAvoidingView } from 'react-native'
+import React, { useState, useEffect, createRef } from 'react'
+import { Alert, StyleSheet, Dimensions, TextInput, View, Text, ScrollView, Keyboard, KeyboardAvoidingView } from 'react-native'
 import { Button } from 'react-native-elements'
 import RNPickerSelect from 'react-native-picker-select'
 import { Chevron } from 'react-native-shapes'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import Job from '../../data/job';
+import User from '../../data/user';
+import Location from '../../data/location';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const EditJob = ({ navigation }) => {
+const EditJob = ({ navigation, route }) => {
     const [jobTitle, setJobTitle] = useState('');
     const [jobDescription, setJobDescription] = useState('');
     const [waktuKerja, setWaktuKerja] = useState('');
@@ -16,14 +19,62 @@ const EditJob = ({ navigation }) => {
     const [kota, setKota] = useState('');
     const [jobLink, setJobLink] = useState('');
     const [errortext, setErrortext] = useState('');
+    const [job, setJob] = useState(null);
+    const [user, setUser] = useState(null);
+    const [cities, setCities] = useState([]);
+    const [provincies, setProvincies] = useState([]);
 
     const jobDescInputRef = createRef();
     const waktuInputRef = createRef();
     const provinsiInputRef = createRef();
     const kotaInputRef = createRef();
     const jobLinkInputRef = createRef();
+    
+    const { jobId } = route.params;
 
-    const handleSubmitButton = () => {
+    useEffect(() => {
+        const setDefaultValue = async () => {
+            const jobData = await Job.getJob(jobId);
+            const userData = await User.getUser();
+            setUser(userData);
+
+            if (userData.id !== jobData?.user_id) {
+                throw new Error('Anda tidak memiliki akses untuk mengedit portofolio ini.');
+            }
+
+            const provinciesList = await Location.getProvinces();
+            setProvincies(provinciesList.map((provincy) => (
+                { label: provincy.nama, value: provincy.id }
+            )));
+
+            const citiesList = await Location.getCitiesByProvinceId(jobData.province_id);
+            setCities(citiesList.map((city) => (
+                { label: city.nama, value: city.id }
+            )));
+
+            setJob(jobData);
+
+            setJobTitle(jobData.title);
+            setJobDescription(jobData.description);
+            setWaktuKerja(jobData.work_time);
+            setProvinsi(parseInt(jobData.province_id));
+            setKota(parseInt(jobData.city_id));
+            setJobLink(jobData.form_link);
+        };
+
+        const unsubscribe = navigation.addListener('focus', async (e) => {
+            try {
+                await setDefaultValue();
+            } catch (error) {
+                alert(error.message);
+                navigation.goBack();
+            }
+        });
+
+        return unsubscribe;
+    }, [navigation, route.params])
+
+    const handleSubmitButton = async () => {
         setErrortext('');
         if (!jobTitle) {
             alert('Mohon masukkan judul pekerjaan');
@@ -49,9 +100,66 @@ const EditJob = ({ navigation }) => {
             alert('Mohon masukkan link pekerjaan');
             return;
         }
+        if (!jobLink.startsWith('https://')) {
+            alert('Link tidak valid, link harus diawali dengan "https://"');
+            return;
+        }
 
-        navigation.navigate('Jobs');
+        try {
+            const inputData = {
+                job_id: jobId,
+                title: jobTitle,
+                description: jobDescription,
+                form_link: jobLink,
+                province_id: provinsi,
+                city_id: kota,
+                province_name: await Location.getProvince(provinsi),
+                city_name: await Location.getCity(kota),
+                work_time: waktuKerja,
+            };
+
+            await Job.updateJob(inputData);
+            setJobTitle('');
+            setJobDescription('');
+            setWaktuKerja('');
+            setProvinsi('');
+            setKota('');
+            setJobLink('');
+
+            navigation.navigate('Jobs');
+        } catch (error) {
+            alert(error.message);   
+        }
     };
+
+    const handleDeleteButton = async () => {
+        Alert.alert(
+            'Apakah kamu yakin?',
+            'Pekerjaan yang dihapus tidak akan bisa dikembalikan.',
+            [
+                { text: "Cancel", style: "cancel" },
+                { 
+                    text: "OK", 
+                    onPress: async () => {
+                        try {
+                            await Job.deleteJob(jobId);
+                            setJobTitle('');
+                            setJobDescription('');
+                            setWaktuKerja('');
+                            setProvinsi('');
+                            setKota('');
+                            setJobLink('');
+
+                            navigation.navigate('Jobs');
+                        } catch (error) {
+                            alert(error.message);
+                        }
+                    },
+                },
+            ],
+        );
+    };
+
     const placeholder = {
         label: 'Pilih masukan',
         value: null,
@@ -87,6 +195,7 @@ const EditJob = ({ navigation }) => {
                                     jobDescInputRef.current && jobDescInputRef.current.focus()
                                 }
                                 blurOnSubmit={false}
+                                value={jobTitle}
                             />
                         </View>
 
@@ -107,6 +216,7 @@ const EditJob = ({ navigation }) => {
                                     jobLinkInputRef.current && jobLinkInputRef.current.focus()
                                 }
                                 blurOnSubmit={false}
+                                value={jobDescription}
                             />
                         </View>
 
@@ -135,10 +245,10 @@ const EditJob = ({ navigation }) => {
                                 ref={waktuInputRef}
                                 returnKeyType="next"
                                 items={[
-                                    { label: 'Fulltime', value: 'Fulltime' },
-                                    { label: 'Parttime', value: 'Parttime' },
-                                    { label: 'Remote', value: 'Remote' },
+                                    { label: 'Full Time', value: 'Full Time' },
+                                    { label: 'Part Time', value: 'Part Time' },
                                 ]}
+                                value={waktuKerja}
                             />
                         </View>
 
@@ -163,14 +273,19 @@ const EditJob = ({ navigation }) => {
                                 }}
                                 useNativeAndroidPickerStyle={false}
                                 placeholder={placeholder}
-                                onValueChange={(provinsi) => setProvinsi(provinsi)}
+                                onValueChange={async (provinsiInput) => {
+                                    setProvinsi(provinsiInput);
+
+                                    const citiesList = await Location.getCitiesByProvinceId(provinsiInput);
+
+                                    setCities(citiesList.map((city) => (
+                                        { label: city.nama, value: city.id }
+                                    )));
+                                }}
                                 ref={provinsiInputRef}
                                 returnKeyType="next"
-                                items={[
-                                    { label: 'Jawa Timur', value: 'Jawa Timur' },
-                                    { label: 'Jawa Tengah', value: 'Jawa tengah' },
-                                    { label: 'Jawa Barat', value: 'Jawa Barat' },
-                                ]}
+                                items={provincies}
+                                value={provinsi}
                             />
                         </View>
 
@@ -198,11 +313,8 @@ const EditJob = ({ navigation }) => {
                                 onValueChange={(kota) => setKota(kota)}
                                 ref={kotaInputRef}
                                 returnKeyType="next"
-                                items={[
-                                    { label: 'Surabaya', value: 'Surabaya' },
-                                    { label: 'Solo', value: 'Solo' },
-                                    { label: 'Bandung', value: 'Bandung' },
-                                ]}
+                                value={kota}
+                                items={cities}
                             />
                         </View>
 
@@ -219,6 +331,7 @@ const EditJob = ({ navigation }) => {
                                 returnKeyType="next"
                                 onSubmitEditing={Keyboard.dismiss}
                                 blurOnSubmit={false}
+                                value={jobLink}
                             />
                         </View>
 
@@ -249,11 +362,10 @@ const EditJob = ({ navigation }) => {
                                     borderRadius: 8,
                                     marginTop: 15
                                 }}
-                                onPress={handleSubmitButton}
+                                onPress={handleDeleteButton}
                             />
                         </View>
                     </View>
-
                 </KeyboardAvoidingView>
             </ScrollView>
         </View>
