@@ -1,8 +1,10 @@
-import React, { useState, createRef } from 'react'
+import React, { useState, useEffect, createRef } from 'react'
 import { StyleSheet, Text, View, ScrollView, Dimensions, Image, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { SearchBar, Icon } from 'react-native-elements'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import Job from '../../data/job'
+import CONFIG from '../../global/config'
 
 const SearchContainer = () => {
     const [search, setSearch] = useState('');
@@ -42,7 +44,114 @@ const SearchContainer = () => {
     )
 }
 
+const JobItem = ({ navigation, job, }) => {
+    return (
+        <View>
+            <View style={styles.container2}>
+                <TouchableOpacity 
+                    style={{ width: 320, flexDirection: 'row', marginTop: 20, alignSelf: 'center', alignItems: 'center' }}
+                    onPress={() => navigation.navigate('ProfilePage', { userId: job.user_id })}
+                >
+                    <View>
+                        <Image
+                            source={{
+                                uri: `${CONFIG.IMAGE_PATH.USER}/${job.user_image}`,
+                            }}
+                            style={styles.JobProfile}
+                        />
+                    </View>
+                    <View>
+                        <Text style={styles.JobName}> {job.username} </Text>
+                    </View>
+                </TouchableOpacity>
+                <View style={styles.JobContainer}>
+                    <View>
+                        <Text style={{ fontSize: 25, fontWeight: 'bold' }}> {job.title} </Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
+                        <FontAwesome5
+                            name='map-marker-alt'
+                            size={25}
+                            color='#000'
+                            style={{ marginRight: 10, marginLeft: 3 }}
+                        />
+                        <Text style={{ marginLeft: 2 }}>{job.city_name} {job.province_name}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
+                        <FontAwesome5
+                            name='briefcase'
+                            size={23}
+                            color='#000'
+                            style={{ marginRight: 10 }}
+                        />
+                        <Text>{job.work_time}</Text>
+                    </View>
+                    <View style={{
+                        alignSelf: 'center',
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        marginTop: 20,
+                        width: 358,
+                        height: 73,
+                        borderBottomEndRadius: 5,
+                        borderBottomStartRadius: 5,
+                        paddingVertical: 15,
+                        backgroundColor: '#cacaca'
+                    }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('detailJobs', { jobId: job.id })}>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    backgroundColor: '#007bff',
+                                    width: 100,
+                                    height: 45,
+                                    alignItems: 'center',
+                                    borderRadius: 10,
+                                    justifyContent: 'center',
+                                    borderWidth: 1,
+                                    borderColor: 'white',
+                                }}>
+                                <Text
+                                    style={{ marginLeft: 10, marginRight: 10, fontSize: 20, color: '#fff' }}>Detail</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        </View>
+    );
+};
+
+const JobList = ({ navigation, jobs }) => {
+    return (
+        <>
+            {jobs.map((job) => (
+                <JobItem 
+                    navigation={navigation} 
+                    job={job}
+                />
+            ))}
+        </>
+    );
+};
+
 const Jobs = ({ navigation }) => {
+    const [jobs, setJobs] = useState([]);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', async (e) => {
+            try {
+                const jobsList = await Job.getJobs();
+                setJobs(jobsList);
+            } catch (error) {
+                alert(error.message);
+                navigation.goBack();
+            }
+        });
+
+        return unsubscribe;
+    }, [navigation]);
+
     return (
         <SafeAreaView>
             <ScrollView
@@ -94,143 +203,7 @@ const Jobs = ({ navigation }) => {
                         <Text style={{ fontSize: 20, textAlign: 'center', textAlignVertical: 'center' }}>Belum ada pekerjaan untuk saat ini</Text>
                     </View> */}
 
-                    <TouchableOpacity onPress={() => navigation.navigate('UserDetailJobs')}>
-                        <View style={styles.container1}>
-                            <View style={{ width: 320, flexDirection: 'row', marginTop: 20, alignSelf: 'center', alignItems: 'center' }}>
-                                <View>
-                                    <Image
-                                        source={require('../../assets/images/user.jpg')}
-                                        style={styles.JobProfile}
-                                    />
-                                </View>
-                                <View>
-                                    <Text style={styles.JobName}> Quinella </Text>
-                                </View>
-                            </View>
-                            <View style={styles.JobContainer}>
-                                <View>
-                                    <Text style={{ fontSize: 25, fontWeight: 'bold' }}> Programmer </Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
-                                    <FontAwesome5
-                                        name='map-marker-alt'
-                                        size={25}
-                                        color='#000'
-                                        style={{ marginRight: 10, marginLeft: 3 }}
-                                    />
-                                    <Text style={{ marginLeft: 2 }}>Kabupaten Klaten Jawa Tengah</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
-                                    <FontAwesome5
-                                        name='briefcase'
-                                        size={23}
-                                        color='#000'
-                                        style={{ marginRight: 10 }}
-                                    />
-                                    <Text>Part Time</Text>
-                                </View>
-                                <View style={{
-                                    alignSelf: 'center',
-                                    flexDirection: 'row',
-                                    justifyContent: 'center',
-                                    marginTop: 20,
-                                    width: 358,
-                                    height: 73,
-                                    borderBottomEndRadius: 5,
-                                    borderBottomStartRadius: 5,
-                                    paddingVertical: 15,
-                                    backgroundColor: '#cacaca'
-                                }}>
-                                    <TouchableOpacity onPress={() => navigation.navigate('UserDetailJobs')}>
-                                        <View
-                                            style={{
-                                                flexDirection: 'row',
-                                                backgroundColor: '#007bff',
-                                                width: 100,
-                                                height: 45,
-                                                alignItems: 'center',
-                                                borderRadius: 10,
-                                                justifyContent: 'center',
-                                                borderWidth: 1,
-                                                borderColor: 'white',
-                                            }}>
-                                            <Text
-                                                style={{ marginLeft: 10, marginRight: 10, fontSize: 20, color: '#fff' }}>Detail</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => navigation.navigate('detailJobs')}>
-                    <View style={styles.container2}>
-                            <View style={{ width: 320, flexDirection: 'row', marginTop: 20, alignSelf: 'center', alignItems: 'center' }}>
-                                <View>
-                                    <Image
-                                        source={require('../../assets/images/post.jpg')}
-                                        style={styles.JobProfile}
-                                    />
-                                </View>
-                                <View>
-                                    <Text style={styles.JobName}> Mine </Text>
-                                </View>
-                            </View>
-                            <View style={styles.JobContainer}>
-                                <View>
-                                    <Text style={{ fontSize: 25, fontWeight: 'bold' }}> Designer UI/UX </Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
-                                    <FontAwesome5
-                                        name='map-marker-alt'
-                                        size={25}
-                                        color='#000'
-                                        style={{ marginRight: 10, marginLeft: 3 }}
-                                    />
-                                    <Text style={{ marginLeft: 2 }}>Kabupaten Waru Jawa Timur</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
-                                    <FontAwesome5
-                                        name='briefcase'
-                                        size={23}
-                                        color='#000'
-                                        style={{ marginRight: 10 }}
-                                    />
-                                    <Text>Full Time</Text>
-                                </View>
-                                <View style={{
-                                    alignSelf: 'center',
-                                    flexDirection: 'row',
-                                    justifyContent: 'center',
-                                    marginTop: 20,
-                                    width: 358,
-                                    height: 73,
-                                    borderBottomEndRadius: 5,
-                                    borderBottomStartRadius: 5,
-                                    paddingVertical: 15,
-                                    backgroundColor: '#cacaca'
-                                }}>
-                                    <TouchableOpacity onPress={() => navigation.navigate('detailJobs')}>
-                                        <View
-                                            style={{
-                                                flexDirection: 'row',
-                                                backgroundColor: '#007bff',
-                                                width: 100,
-                                                height: 45,
-                                                alignItems: 'center',
-                                                borderRadius: 10,
-                                                justifyContent: 'center',
-                                                borderWidth: 1,
-                                                borderColor: 'white',
-                                            }}>
-                                            <Text
-                                                style={{ marginLeft: 10, marginRight: 10, fontSize: 20, color: '#fff' }}>Detail</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
+                    <JobList navigation={navigation} jobs={jobs} />
 
                 </View>
             </ScrollView>
@@ -286,6 +259,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         borderWidth: 1,
         borderColor: '#000',
+        marginLeft: 10,
         marginRight: 10
     },
     JobName: {
@@ -297,7 +271,7 @@ const styles = StyleSheet.create({
         width: 280,
         height: 150,
         flexDirection: 'column',
-        marginTop: 10,
+        marginTop: 15,
         alignSelf: 'center',
         alignItems: 'flex-start'
     }
