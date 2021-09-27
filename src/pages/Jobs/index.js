@@ -6,12 +6,12 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Job from '../../data/job'
 import CONFIG from '../../global/config'
 
-const SearchContainer = () => {
-    const [search, setSearch] = useState('');
+const SearchContainer = ({ search, setSearch }) => {
     const searchInputRef = createRef();
+
     return (
         <SearchBar
-            placeholder=" search jobs by keyword"
+            placeholder="Cari Pekerjaan ..."
             containerStyle={{ backgroundColor: 'transparent', borderTopWidth: 0, borderBottomWidth: 0 }}
             inputContainerStyle={{
                 backgroundColor: '#fff',
@@ -75,7 +75,7 @@ const JobItem = ({ navigation, job, }) => {
                             color='#000'
                             style={{ marginRight: 10, marginLeft: 3 }}
                         />
-                        <Text style={{ marginLeft: 2 }}>{job.city_name} {job.province_name}</Text>
+                        <Text style={{ marginLeft: 2 }}>{job.city_name}, {job.province_name}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
                         <FontAwesome5
@@ -125,6 +125,20 @@ const JobItem = ({ navigation, job, }) => {
 const JobList = ({ navigation, jobs }) => {
     return (
         <>
+            {jobs.length < 1 && (
+                <View style={{ marginTop: 150 }}>
+                    <FontAwesome5
+                        name='smile-wink'
+                        size={30}
+                        color='gray'
+                        style={{ alignSelf: 'center' }}
+                    />
+                    <Text style={{ fontSize: 20, textAlign: 'center', textAlignVertical: 'center' }}>
+                        Belum ada pekerjaan untuk saat ini
+                    </Text>
+                </View>
+            )}
+
             {jobs.map((job) => (
                 <JobItem 
                     navigation={navigation} 
@@ -137,6 +151,7 @@ const JobList = ({ navigation, jobs }) => {
 
 const Jobs = ({ navigation }) => {
     const [jobs, setJobs] = useState([]);
+    const [search, setSearch] = useState('');
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async (e) => {
@@ -191,19 +206,14 @@ const Jobs = ({ navigation }) => {
                         </View>
                     </TouchableOpacity>
 
-                    <SearchContainer></SearchContainer>
+                    {/* <SearchContainer
+                        search={search}
+                        setSearch={setSearch}
+                     /> */}
 
-                    {/* <View style={{ marginTop: 150 }}>
-                        <FontAwesome5
-                            name='smile-wink'
-                            size={30}
-                            color='gray'
-                            style={{ alignSelf: 'center' }}
-                        />
-                        <Text style={{ fontSize: 20, textAlign: 'center', textAlignVertical: 'center' }}>Belum ada pekerjaan untuk saat ini</Text>
-                    </View> */}
-
-                    <JobList navigation={navigation} jobs={jobs} />
+                    <View style={{ marginBottom: 50 }}>
+                        <JobList navigation={navigation} jobs={jobs} />
+                    </View>
 
                 </View>
             </ScrollView>
@@ -244,8 +254,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         width: 360,
         height: 291,
-        marginTop: 20,
-        marginBottom: 50,
+        marginTop: 30,
         shadowColor: '#000',
         shadowOffset: { width: 2, height: 5 },
         shadowOpacity: 0.9,

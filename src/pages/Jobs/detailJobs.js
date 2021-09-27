@@ -1,21 +1,59 @@
-import React from 'react'
-import { StyleSheet, Text, View, Image, Alert, ScrollView, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, Linking, Text, View, Image, Alert, ScrollView, TouchableOpacity } from 'react-native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import { Icon } from 'react-native-elements'
+import Job from '../../data/job';
+import User from '../../data/user';
+import CONFIG from '../../global/config';
 
-const detailJobs = () => {
-    const AlertJob = () =>
+const detailJobs = ({ navigation, route }) => {
+    const { jobId } = route.params;
+    const [job, setJob] = useState(null);
+    const [user, setUser] = useState(null);
+    
+    const AlertJob = () => {
         Alert.alert(
             "Peringatan !",
             "Kami menghimbau untuk berhati hati dalam memilih pekerjaan. Kami tidak menanggung segala bentuk penipuan",
             [
                 {
                     text: "Batal",
-                    onPress: () => console.log("Cancel Pressed"),
                     style: "cancel"
                 },
-                { text: "Mengerti", onPress: () => console.log("OK Pressed") }
+                { text: "Mengerti", onPress: async () => {
+                    const supported = await Linking.canOpenURL(job?.form_link);
+
+                    if (supported || job?.form_link.startsWith('https://')) {
+                        await Linking.openURL(job?.form_link);
+                    } 
+                } }
             ]
         );
+    };
+
+    useEffect(() => {
+        const getJob = async () => {
+            const newData = await Job.getJob(jobId);
+            setJob(newData);
+        };
+        const getUserInfo = async () => {
+            const data = await User.getUser();
+            setUser(data);
+        };
+
+        const unsubscribe = navigation.addListener('focus', async (e) => {
+            try {
+                await getUserInfo();
+                await getJob();
+            } catch (error) {
+                alert(error.message);
+                navigation.navigate('Login');
+            }
+        });
+
+        return unsubscribe;
+    }, [navigation, route.params]);
+
 
     return (
         <ScrollView>
@@ -23,14 +61,44 @@ const detailJobs = () => {
                 <View style={{ width: 320, flexDirection: 'column', marginTop: 20, alignSelf: 'center', alignItems: 'center' }}>
                     <View>
                         <Image
-                            source={require('../../assets/images/post.jpg')}
+                            source={{ 
+                                uri: `${CONFIG.IMAGE_PATH.USER}/${job?.user_image || 'default_user.png'}`
+                            }}
                             style={styles.JobProfile}
                         />
                     </View>
                     <View>
-                        <Text style={styles.JobName}>Designer UI/UX</Text>
-                        <Text style={{ fontSize: 18, textAlign: 'center', marginTop: 10 }}>Mine</Text>
+                        <Text style={styles.JobName}>{job?.title}</Text>
+                        <Text style={{ fontSize: 18, textAlign: 'center', marginTop: 10 }}>{job?.username}</Text>
                     </View>
+
+                    {job.user_id === user.id && (
+                        <TouchableOpacity onPress={() => navigation.navigate('EditJob', { jobId: jobId })}>
+                            <View 
+                                style={{ 
+                                    flexDirection: 'row', 
+                                    backgroundColor: '#fff', 
+                                    height: 40, 
+                                    alignItems: 'center',
+                                    alignContent: 'center',
+                                    borderRadius: 5, 
+                                    borderWidth: 1, 
+                                    borderColor: '#007bff', 
+                                    marginTop: 20, 
+                                    alignSelf: 'center',
+                                    paddingHorizontal: 10,
+                                }}
+                            >
+                                <Icon name='edit'
+                                    type='font-awesome'
+                                    color='#007bff'
+                                    size={20}
+                                    style={{ marginRight: 7 }} />
+                                <Text style={{ color: '#007bff', fontSize: 18 }}>Edit Pekerjaan</Text>
+                            </View>
+                        </TouchableOpacity>
+                    )}
+
                     <View>
                         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
                             <FontAwesome5
@@ -39,7 +107,7 @@ const detailJobs = () => {
                                 color='#000'
                                 style={{ marginRight: 10, marginLeft: 3 }}
                             />
-                            <Text style={{ marginLeft: 2 }}>Kabupaten Waru Jawa Timur</Text>
+                            <Text style={{ marginLeft: 2 }}>{job?.city_name}, {job?.province_name}</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
                             <FontAwesome5
@@ -48,12 +116,12 @@ const detailJobs = () => {
                                 color='#000'
                                 style={{ marginRight: 10 }}
                             />
-                            <Text>Full Time</Text>
+                            <Text>{job?.work_time}</Text>
                         </View>
                     </View>
                     <View>
                         <Text style={styles.JobInfo}>
-                            Yappy Pets was founded with a dream to provide the best nutrition to pet dogs living in the region. Over the years, Yappy Pets has expanded its business across Asia and is currently thriving globally. We represent a wide variety of brands ranging from pet food, treats, hygiene care, accessories and grooming equipment. As animal lovers, we know the importance of a pet’s health and happiness to their owners. At Yappy Pets, our wide range of in-house and distributor brands produce only the very best products for your pets so they can live stronger and love longer.
+                            {job?.description}
                         </Text>
                     </View>
                     <View style={{
@@ -63,8 +131,6 @@ const detailJobs = () => {
                         marginTop: 20,
                         width: 348,
                         height: 73,
-                        borderBottomEndRadius: 20,
-                        borderBottomStartRadius: 20,
                         paddingVertical: 15,
                         backgroundColor: '#cacaca'
                     }}>
@@ -82,7 +148,15 @@ const detailJobs = () => {
                                     borderColor: 'white',
                                 }}>
                                 <Text
-                                    style={{ marginLeft: 10, marginRight: 10, fontSize: 20, color: '#fff' }}>Daftar</Text>
+                                    style={{ 
+                                        marginLeft: 10,
+                                        marginRight: 10, 
+                                        fontSize: 20, 
+                                        color: '#fff'
+                                    }}
+                                >
+                                    Lamar
+                                </Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -109,7 +183,8 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 5, height: 1 },
         shadowOpacity: 0.5,
         shadowRadius: 1,
-        elevation: 15
+        elevation: 15,
+        overflow: 'hidden',
     },
     JobProfile: {
         width: 80,
@@ -124,6 +199,7 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: 27,
         fontWeight: 'bold',
+        textAlign: 'center',
     },
     JobInfo: {
         fontSize: 18,
