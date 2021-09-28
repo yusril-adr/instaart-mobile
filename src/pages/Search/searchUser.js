@@ -1,4 +1,4 @@
-import React, { useState, createRef } from 'react'
+import React, { useState, useEffect, createRef } from 'react'
 import { StyleSheet, Text, View, ScrollView, Dimensions, Image, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { SearchBar, Button } from 'react-native-elements'
@@ -6,117 +6,137 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { useNavigation } from '@react-navigation/native'
 import RNPickerSelect from 'react-native-picker-select'
 import { Chevron } from 'react-native-shapes'
+import UserList from '../../components/UserList'
+import Location from '../../data/location';
+import User from '../../data/user';
+import History from '../../data/history';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const SearchContainer = () => {
-    const [search, setSearch] = useState('');
-    const searchInputRef = createRef();
+const KeywordList = ({ history, setShouldShow, setSearch }) => {
     return (
-        <SearchBar
-            placeholder="Cari ..."
-            containerStyle={{ backgroundColor: 'transparent', borderTopWidth: 0, borderBottomWidth: 0 }}
-            inputContainerStyle={{
-                backgroundColor: '#fff',
-                flexDirection: 'row-reverse',
+        <View
+            style={{
+                position: 'relative',
+                backgroundColor: 'white',
+                marginHorizontal: 24,
+                top: -9,
                 borderWidth: 1,
-                borderRadius: 5,
-                paddingLeft: 10,
-                borderBottomWidth: 1,
-                marginTop: 15,
-                marginBottom: 10,
-                width: 345,
-                alignSelf: 'center',
             }}
-            lightTheme
-            onChangeText={(search) => setSearch(search)}
-            value={search}
-            ref={searchInputRef}
-            searchIcon={() => <FontAwesome5
-                name='search'
-                size={30}
-                color='#007bff'
-            />}
-        />
+        >
+            {history.map((keyword) => (
+                <TouchableOpacity
+                    key={keyword}
+                    onPress={async () => {
+                        setSearch(keyword)
+                        setShouldShow(false)
+                    }}
+                >
+                    <Text
+                        style={{
+                            fontSize: 20,
+                            paddingLeft: 10,
+                            borderBottomWidth: 1
+                        }}
+                    >
+                        {keyword}
+                    </Text>
+                </TouchableOpacity>
+            ))}
+        </View>
+    );
+};
+
+const SearchContainer = ({ history, updateHistory, search, setSearch, shouldShow, setShouldShow, onSearch }) => {
+    const searchInputRef = createRef();
+
+    return (
+        <View>
+            <SearchBar
+                clearIcon={false}
+                placeholder="Cari ..."
+                containerStyle={{ 
+                    backgroundColor: 'transparent', 
+                    borderTopWidth: 0, 
+                    borderBottomWidth: 0 
+                }}
+                inputContainerStyle={{
+                    backgroundColor: '#fff',
+                    flexDirection: 'row-reverse',
+                    borderWidth: 1,
+                    borderRadius: 5,
+                    paddingLeft: 10,
+                    borderBottomWidth: 1,
+                    marginTop: 15,
+                    width: 345,
+                    alignSelf: 'center',
+                }}
+                lightTheme
+                onChangeText={(search) => setSearch(search)}
+                value={search}
+                ref={searchInputRef}
+                onFocus={() => {
+                    // if (search.trim()) {
+                        setShouldShow(true)
+                    // }
+                }}
+                // onBlur={() => {
+                //     setShouldShow(false)
+                // }}
+                searchIcon={() => <FontAwesome5
+                    onPress={async () => {
+                        setShouldShow(false)
+                        await History.newHistory(search);
+                        await updateHistory();
+                        await onSearch();
+                    }}
+                    name='search'
+                    size={30}
+                    color='#007bff'
+                />}
+                onSubmitEditing={async () => {
+                    setShouldShow(false)
+                    await History.newHistory(search);
+                    await updateHistory();
+                    await onSearch();
+                }}
+            />
+
+            {shouldShow && (
+                <KeywordList history={history} setShouldShow={setShouldShow} setSearch={setSearch} />
+            )}
+        </View>
     )
 }
 
-const ButtonLike = () => {
-    const [Like, setLike] = useState(false);
-    const Pressed = () => {
-        setLike(!Like);
-        alert('Anda menekan Tombol Like');
-    };
-    return (
-        <View>
-            <TouchableOpacity onPress={() => Pressed()}>
-                <FontAwesome5
-                    name='thumbs-up'
-                    size={23}
-                    color={Like ? '#007bff' : 'gray'}
-                />
-            </TouchableOpacity>
-        </View>
-    );
-};
-
-const ButtonComment = () => {
-    return (
-        <FontAwesome5
-            name='comment'
-            size={25}
-            color='gray'
-        />
-    );
-};
-
-const ButtonViews = () => {
-    const [Views, setViews] = useState(false);
-    const Pressed = () => {
-        setViews(!Views);
-        alert('Anda menekan Tombol View');
-    };
-    return (
-        <View>
-            <TouchableOpacity onPress={() => Pressed()}>
-                <FontAwesome5
-                    name='eye'
-                    size={25}
-                    color={Views ? '#007bff' : 'gray'}
-                />
-            </TouchableOpacity>
-        </View>
-    );
-};
-
-const placeholder = {
-    label: 'Pilih masukan',
-    value: null,
-    color: '#007bff',
-};
-
-const searchUser = ({ navigation }) => {
-    const [shouldShow, setShouldShow] = useState(false);
-    const [ClickFilter, setClickFilter] = useState('');
+const searchUser = ({ navigation, route }) => {
+    const { keyword = '', provinsiParam = '', kotaParam = '', show = false } = route?.params || {};
+    const [search, setSearch] = useState('');
+    const [user, setUser] = useState(false);
+    const [shouldKeyShow, setShouldKeyShow] = useState(false);
+    const [shouldShow, setShouldShow] = useState(show);
     const [Click1, setClick1] = useState(false);
     const [Click2, setClick2] = useState(true);
     const [userProvinsi, setUserProvinsi] = useState('');
     const [userKota, setUserKota] = useState('');
+    const [history, setHistory] = useState([]);
+    const [cities, setCities] = useState([]);
+    const [provincies, setProvincies] = useState([]);
+    const [resultUser, setResultUser] = useState([]);
     const provInputRef = createRef();
     const kotaInputRef = createRef();
 
     const Filter = () => {
         const Pressed = () => {
-            setClickFilter(!ClickFilter);
             setShouldShow(!shouldShow);
         };
         return (
-            < View >
+            <View>
                 <TouchableOpacity onPress={() => Pressed()}>
                     <View style={{
                         flexDirection: 'row',
-                        backgroundColor: ClickFilter ? '#007bff' : 'white',
+                        backgroundColor: shouldShow ? '#007bff' : 'white',
                         width: 100,
                         height: 40,
                         alignItems: 'center',
@@ -129,13 +149,13 @@ const searchUser = ({ navigation }) => {
                         <FontAwesome5
                             name='filter'
                             size={18}
-                            color={ClickFilter ? 'white' : '#007bff'}
+                            color={shouldShow ? 'white' : '#007bff'}
                             style={{ marginRight: 10 }}
                         />
-                        <Text style={{ color: ClickFilter ? 'white' : '#007bff', fontSize: 16 }}>Filter</Text>
+                        <Text style={{ color: shouldShow ? 'white' : '#007bff', fontSize: 16 }}>Filter</Text>
                     </View>
                 </TouchableOpacity>
-            </View >
+            </View>
         );
     };
 
@@ -143,15 +163,15 @@ const searchUser = ({ navigation }) => {
         const Pressed1 = () => {
             setClick1(false);
             setClick2(true);
-            navigation.navigate('Search');
+            navigation.navigate('Search', { keyword: search });
         };
         const Pressed2 = () => {
             setClick2(false);
             setClick1(true);
-            navigation.navigate('searchUser');
+            navigation.navigate('searchUser', { keyword: search });
         };
         return (
-            < View style={{ width: 222, flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={{ width: 222, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <TouchableOpacity onPress={() => Pressed1()}>
                     <View style={{
                         flexDirection: 'row',
@@ -182,23 +202,101 @@ const searchUser = ({ navigation }) => {
                         <Text style={{ color: Click2 ? 'white' : '#007bff', fontSize: 16 }}>Pengguna</Text>
                     </View>
                 </TouchableOpacity>
-            </View >
+            </View>
         );
     };
+
+    const updateHistory = async () => {
+        const historyData = await History.getHistory();
+        setHistory(historyData);
+    };
+
+    const updateResultUser = async () => {
+        const newList = await User.searchUser(keyword, {
+            province: provinsiParam !== '' ? provinsiParam : null,
+            city: kotaParam !== '' ? kotaParam : null,
+        });
+
+        setResultUser(newList);
+    };
+
+    useEffect(async () => {
+        const initValue = async () => {
+            const provinceList = await Location.getProvinces();
+
+            setProvincies(provinceList.map((provincy) => (
+                { label: provincy.nama, value: provincy.id }
+            )));
+
+            if (provinsiParam !== '') {
+                const citiesList = await Location.getCitiesByProvinceId(provinsiParam);
+                setCities(citiesList.map((city) => (
+                    { label: city.nama, value: city.id }
+                )));
+            }
+
+            await updateHistory();
+
+            await updateResultUser();
+        };
+
+        const getUserInfo = async () => {
+            const data = await User.getUser();
+            setUser(data);
+        };
+
+        const unsubscribe = navigation.addListener('focus', async (e) => {
+            try {
+                setSearch(keyword);
+                setShouldKeyShow(false);
+                setShouldShow(false)
+                await getUserInfo();
+                await initValue();
+            } catch (error) {
+                alert(error.message);
+                navigation.goBack();
+            }
+        });
+
+        try {
+            setSearch(keyword);
+            await getUserInfo();
+            await initValue();
+        } catch (error) {
+            alert(error.message);
+        }
+
+        return unsubscribe;
+    }, [navigation, route?.params])
 
     return (
         <SafeAreaView>
             <ScrollView
                 contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={styles.mainBody}>
-                    <SearchContainer></SearchContainer>
+                    <SearchContainer search={search} 
+                        history={history} 
+                        updateHistory={updateHistory} 
+                        search={search} 
+                        setSearch={setSearch} 
+                        shouldShow={shouldKeyShow}
+                        setShouldShow={setShouldKeyShow}
+                        onSearch={async () => {
+                            navigation.setParams({
+                                keyword: search,
+                                provinsiParam,
+                                kotaParam,
+                                show: shouldShow,
+                            })
+                        }}
+                    />
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                        <SearchDesain></SearchDesain>
-                        <Filter></Filter>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 10 }}>
+                        <SearchDesain />
+                        <Filter />
                     </View>
 
-                    {shouldShow ? (
+                    {shouldShow && (
                         <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 20 }}>
                             <View style={styles.SectionStyle}>
                                 <Text style={{ fontSize: 18 }}>Provinsi</Text>
@@ -220,14 +318,21 @@ const searchUser = ({ navigation }) => {
                                         return <Chevron size={1.5} color="gray" />;
                                     }}
                                     useNativeAndroidPickerStyle={false}
-                                    placeholder={placeholder}
-                                    onValueChange={(userProvinsi) => setUserProvinsi(userProvinsi)}
+                                    placeholder={{}}
+                                    onValueChange={(userProvinsi) => {
+                                        navigation.setParams({
+                                            keyword: search,
+                                            provinsiParam: userProvinsi,
+                                            kotaParam,
+                                            show: shouldShow,
+                                        })
+                                    }}
                                     ref={provInputRef}
                                     returnKeyType="next"
+                                    value={provinsiParam !== '' ? parseInt(provinsiParam) : provinsiParam}
                                     items={[
-                                        { label: 'Jawa Timur', value: 'Jawa Timur' },
-                                        { label: 'Jawa Barat', value: 'Jawa Barat' },
-                                        { label: 'Jawa Tengah', value: 'Jawa Tengah' },
+                                        { label: 'Semua', value: '' },
+                                        ...provincies
                                     ]}
                                 />
                             </View>
@@ -252,66 +357,44 @@ const searchUser = ({ navigation }) => {
                                         return <Chevron size={1.5} color="gray" />;
                                     }}
                                     useNativeAndroidPickerStyle={false}
-                                    placeholder={placeholder}
-                                    onValueChange={(userKota) => setUserKota(userKota)}
+                                    placeholder={{}}
+                                    onValueChange={(userKota) => {
+                                        navigation.setParams({
+                                            keyword: search,
+                                            provinsiParam,
+                                            kotaParam: userKota,
+                                            show: shouldShow,
+                                        })
+                                    }}
                                     ref={kotaInputRef}
                                     returnKeyType="next"
+                                    value={kotaParam !== '' ? parseInt(kotaParam) : kotaParam}
                                     items={[
-                                        { label: 'Surabaya', value: 'Surabaya' },
-                                        { label: 'Bandung', value: 'Bandung' },
-                                        { label: 'Solo', value: 'Solo' },
+                                        { label: 'Semua', value: '' },
+                                        ...cities,
                                     ]}
                                 />
                             </View>
                         </View>
-                    ) : null}
+                    )}
 
-                    {/* <TouchableOpacity
-                        onPress={() => navigation.navigate('ProfilePage')}>
-                        <View style={styles.container1}>
-                            <TouchableOpacity
-                                style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15 }}
-                                onPress={() => navigation.navigate('ProfilePage')}>
-                                <Image
-                                    source={require('../../assets/images/user.jpg')}
-                                    style={styles.UserProfile}
-                                />
-                                <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-                                    <Text style={styles.UserName}> Quinella </Text>
-                                    <Text style={styles.UserKota}> Surabaya </Text>
-                                    <Text style={styles.UserProvinsi}> Jawa Timur </Text>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('ProfilePage')}>
-                        <View style={styles.container1}>
-                            <TouchableOpacity
-                                style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15 }}
-                                onPress={() => navigation.navigate('ProfilePage')}>
-                                <Image
-                                    source={require('../../assets/images/user.jpg')}
-                                    style={styles.UserProfile}
-                                />
-                                <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-                                    <Text style={styles.UserName}> Quinella </Text>
-                                    <Text style={styles.UserKota}> Surabaya </Text>
-                                    <Text style={styles.UserProvinsi}> Jawa Timur </Text>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                    </TouchableOpacity> */}
-
-                    <View style={{flexDirection: 'column', height: 400, justifyContent: 'center', alignItems: 'center', alignSelf: 'center'}}>
-                        <FontAwesome5
-                            name='search'
-                            size={30}
-                            color='gray'
+                    {resultUser.length > 0 && keyword !== '' && (
+                        <UserList 
+                            navigation={navigation} 
+                            users={resultUser} 
                         />
-                        <Text style={{fontSize: 20}}>Hasil pencarian tidak ditemukan</Text>
-                    </View>
+                    )}
+
+                    {(resultUser.length < 1 || keyword === '') && (
+                        <View style={{ flexDirection: 'column', height: 400, justifyContent: 'center', alignItems: 'center', alignSelf: 'center' }}>
+                            <FontAwesome5
+                                name='search'
+                                size={30}
+                                color='gray'
+                            />
+                            <Text style={{ fontSize: 20 }}>Hasil pencarian tidak ditemukan</Text>
+                        </View>
+                    ) }
 
                 </View>
             </ScrollView>
@@ -333,46 +416,6 @@ const styles = StyleSheet.create({
     },
     buttonStyleClicked: {
         color: '#007bff'
-    },
-    container1: {
-        borderColor: '#000',
-        backgroundColor: '#fff',
-        borderWidth: 1,
-        alignSelf: 'center',
-        alignContent: 'center',
-        width: 340,
-        height: 110,
-        borderRadius: 5,
-        marginTop: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 2, height: 1 },
-        shadowOpacity: 0.5,
-        shadowRadius: 1,
-        elevation: 10
-    },
-    UserProfile: {
-        width: 80,
-        height: 80,
-        borderRadius: 50,
-        borderWidth: 1,
-        borderColor: '#000',
-        marginLeft: 15
-    },
-    UserName: {
-        color: '#000',
-        fontSize: 17,
-        fontWeight: 'bold',
-        marginLeft: 15
-    },
-    UserKota: {
-        color: '#000',
-        fontSize: 16,
-        marginLeft: 15
-    },
-    UserProvinsi: {
-        color: '#000',
-        fontSize: 16,
-        marginLeft: 15
     },
     SectionStyle: {
         flexDirection: 'column',

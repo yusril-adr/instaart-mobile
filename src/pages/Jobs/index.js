@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     JobName: {
         color: '#000',
         fontSize: 18,
-        fontWeight: '100',
+        fontWeight: '300',
     },
     JobContainer: {
         width: 280,

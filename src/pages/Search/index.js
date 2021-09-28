@@ -116,7 +116,6 @@ const Search = ({ navigation, route }) => {
     const { keyword = '', kategoriParam = '', warnaParam = '' } = route?.params || {};
     const [shouldKeyShow, setShouldKeyShow] = useState(false);
     const [shouldShow, setShouldShow] = useState(false);
-    const [ClickFilter, setClickFilter] = useState('');
     const [history, setHistory] = useState([]);
     const [search, setSearch] = useState('');
     const [Click1, setClick1] = useState(true);
@@ -133,7 +132,6 @@ const Search = ({ navigation, route }) => {
 
     const Filter = () => {
         const Pressed = () => {
-            setClickFilter(!ClickFilter);
             setShouldShow(!shouldShow);
         };
         return (
@@ -141,7 +139,7 @@ const Search = ({ navigation, route }) => {
                 <TouchableOpacity onPress={() => Pressed()}>
                     <View style={{
                         flexDirection: 'row',
-                        backgroundColor: ClickFilter ? '#007bff' : 'white',
+                        backgroundColor: shouldShow ? '#007bff' : 'white',
                         width: 100,
                         height: 40,
                         alignItems: 'center',
@@ -154,10 +152,10 @@ const Search = ({ navigation, route }) => {
                         <FontAwesome5
                             name='filter'
                             size={18}
-                            color={ClickFilter ? 'white' : '#007bff'}
+                            color={shouldShow ? 'white' : '#007bff'}
                             style={{ marginRight: 10 }}
                         />
-                        <Text style={{ color: ClickFilter ? 'white' : '#007bff', fontSize: 16 }}>Filter</Text>
+                        <Text style={{ color: shouldShow ? 'white' : '#007bff', fontSize: 16 }}>Filter</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -224,7 +222,7 @@ const Search = ({ navigation, route }) => {
         setResultPost(newList);
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         const initValue = async () => {
             const colorList = await Colors.getColors();
             const categoriesList = await Categories.getCategories();
@@ -264,6 +262,14 @@ const Search = ({ navigation, route }) => {
                 navigation.goBack();
             }
         });
+
+        try {
+            setSearch(keyword);
+            await getUserInfo();
+            await initValue();
+        } catch (error) {
+            alert(error.message);
+        }
 
         return unsubscribe;
     }, [navigation, route.params])
