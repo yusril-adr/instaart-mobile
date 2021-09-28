@@ -347,6 +347,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         textAlignVertical: 'top',
         borderColor: '#000',
+        color: '#000',
     },
     errorTextStyle: {
         color: 'red',

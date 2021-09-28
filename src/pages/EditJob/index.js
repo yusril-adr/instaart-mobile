@@ -429,6 +429,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#000',
+        color: '#000',
     },
     errorTextStyle: {
         color: 'red',

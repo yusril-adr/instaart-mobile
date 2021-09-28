@@ -478,7 +478,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#000',
-        fontSize: 16
+        fontSize: 16,
+        color: '#000',
     },
     textmasuk: {
         color: '#000',
