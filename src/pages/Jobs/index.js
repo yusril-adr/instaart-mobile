@@ -52,7 +52,7 @@ const JobItem = ({ navigation, job, }) => {
             <View style={styles.container2}>
                 <TouchableOpacity 
                     style={{ width: 320, flexDirection: 'row', marginTop: 20, alignSelf: 'center', alignItems: 'center' }}
-                    onPress={() => navigation.navigate('ProfilePage', { userId: job.user_id })}
+                    onPress={() => navigation.navigate('ProfilePage', { username: job.username })}
                 >
                     <View>
                         <Image

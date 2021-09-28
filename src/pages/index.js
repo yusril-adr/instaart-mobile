@@ -1,4 +1,3 @@
-import Akun from './Akun'
 import Home from './Home'
 import Jobs from './Jobs'
 import Login from './Login'
@@ -21,4 +20,4 @@ import Activity from './ActivityPage'
 import UserDetailJobs from './Jobs/UserDetailJobs'
 import EditJob from './EditJob'
 
-export {Akun, Home, Jobs, Login, Search, Signup, Splash, Upload, detailPost, ProfilePage, LikePages, BookmarkPages, EditPortfolio, PostJob, detailJobs, EditProfile, editPhoto, editPassword, searchUser, Activity, UserDetailJobs, EditJob}
+export { Home, Jobs, Login, Search, Signup, Splash, Upload, detailPost, ProfilePage, LikePages, BookmarkPages, EditPortfolio, PostJob, detailJobs, EditProfile, editPhoto, editPassword, searchUser, Activity, UserDetailJobs, EditJob}

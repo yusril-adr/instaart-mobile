@@ -1,116 +1,19 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, View, ScrollView, Dimensions, Image, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import { Icon } from 'react-native-elements'
 import User from '../../data/user';
+import CONFIG from '../../global/config';
+import PostList from '../../components/PostList';
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const ProfilePage = ({ navigation, route }) => {
+    const { username = null } = route?.params || {};
+    const [currentUsername, setCurrentUsername] = useState(username);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [targetUser, setTargetUser] = useState(null);
 
-const ButtonLike = () => {
-    const [Like, setLike] = useState(false);
-    const Pressed = () => {
-        setLike(!Like);
-        alert('Anda menekan Tombol Like');
-    };
-    return (
-        <View>
-            <TouchableOpacity onPress={() => Pressed()}>
-                <FontAwesome5
-                    name='thumbs-up'
-                    size={23}
-                    color={Like ? '#007bff' : 'gray'}
-                />
-            </TouchableOpacity>
-        </View>
-    );
-};
-
-const ButtonComment = () => {
-    return (
-        <FontAwesome5
-            name='comment'
-            size={25}
-            color='gray'
-        />
-    );
-};
-
-const ButtonViews = () => {
-    const [Views, setViews] = useState(false);
-    const Pressed = () => {
-        setViews(!Views);
-        alert('Anda menekan Tombol View');
-    };
-    return (
-        <View>
-            <TouchableOpacity onPress={() => Pressed()}>
-                <FontAwesome5
-                    name='eye'
-                    size={25}
-                    color={Views ? '#007bff' : 'gray'}
-                />
-            </TouchableOpacity>
-        </View>
-    );
-};
-
-const ButtonFollow = () => {
-    const [Follow, setFollow] = useState(false);
-    const Pressed = () => {
-        setFollow(!Follow);
-        console.log('Anda menekan Tombol Follow');
-    };
-    if (!Follow) {
-        return (
-            < View >
-                <TouchableOpacity onPress={() => Pressed()}>
-                    <View style={{
-                        flexDirection: 'row',
-                        backgroundColor: '#fff',
-                        width: 100,
-                        height: 35,
-                        alignItems: 'center',
-                        borderRadius: 10,
-                        borderWidth: 1,
-                        borderColor: '#007bff',
-                        marginTop: 20,
-                        alignSelf: 'center',
-                        justifyContent: 'center'
-                    }}>
-                        <Text style={{ color: '#007bff' }}>Follow</Text>
-                    </View>
-                </TouchableOpacity>
-            </View >
-        );
-    } else {
-        return (
-            < View >
-                <TouchableOpacity onPress={() => Pressed()}>
-                    <View style={{
-                        flexDirection: 'row',
-                        backgroundColor: '#007bff',
-                        width: 100,
-                        height: 35,
-                        alignItems: 'center',
-                        borderRadius: 10,
-                        borderWidth: 1,
-                        borderColor: '#007bff',
-                        marginTop: 20,
-                        alignSelf: 'center',
-                        justifyContent: 'center'
-                    }}>
-                        <Text style={{ color: 'white' }}>Unfollow</Text>
-                    </View>
-                </TouchableOpacity>
-            </View >
-        );
-    }
-
-};
-
-const ProfilePage = ({ navigation }) => {
-    const handleSubmitPress = async () => {
+    const logOutHandler = async () => {
         try {
             await User.signOut();
             navigation.navigate('Login');
@@ -118,6 +21,121 @@ const ProfilePage = ({ navigation }) => {
             alert(error.message);
         }
     };
+
+    const ProfileButton = () => {
+        if ((targetUser?.id === currentUser?.id) && targetUser?.id) {
+            return (
+                <TouchableOpacity onPress={() => navigation.navigate('EditProfile', { username: currentUsername, })}>
+                    <View 
+                        style={{ 
+                            flexDirection: 'row', 
+                            backgroundColor: '#fff', 
+                            width: 100, 
+                            height: 35, 
+                            alignItems: 'center', 
+                            borderRadius: 10, 
+                            borderWidth: 1, 
+                            borderColor: 'blue', 
+                            marginTop: 20, 
+                            alignSelf: 'center', 
+                            justifyContent: 'center' 
+                        }}
+                    >
+                        {/* <Icon 
+                            name='edit'
+                            type='font-awesome'
+                            color='#007bff'
+                            size={20}
+                            style={{ marginRight: 7 }} 
+                        /> */}
+
+                        <Text style={{ color: '#007bff' }}>Edit Profile</Text>
+                    </View>
+                </TouchableOpacity>
+
+            );
+        } else if (targetUser?.followers.includes(currentUser.id)) {
+            return (
+                <View>
+                    <TouchableOpacity 
+                        // onPress={() => Pressed()}
+                    >
+                        <View style={{
+                            flexDirection: 'row',
+                            backgroundColor: '#007bff',
+                            width: 100,
+                            height: 35,
+                            alignItems: 'center',
+                            borderRadius: 10,
+                            borderWidth: 1,
+                            borderColor: '#007bff',
+                            marginTop: 20,
+                            alignSelf: 'center',
+                            justifyContent: 'center'
+                        }}>
+                            <Text style={{ color: 'white' }}>Unfollow</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            );
+        } else {
+            return (
+                <View>
+                    <TouchableOpacity 
+                        // onPress={() => Pressed()}
+                    >
+                        <View style={{
+                            flexDirection: 'row',
+                            backgroundColor: '#fff',
+                            width: 100,
+                            height: 35,
+                            alignItems: 'center',
+                            borderRadius: 10,
+                            borderWidth: 1,
+                            borderColor: '#007bff',
+                            marginTop: 20,
+                            alignSelf: 'center',
+                            justifyContent: 'center'
+                        }}>
+                            <Text style={{ color: '#007bff' }}>Follow</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
+    
+    };
+
+    const updateCurrentUserInfo = async () => {
+        const data = await User.getUser();
+        if (username === null) {
+            navigation.setParams({
+                username: data?.username,
+            });
+
+            setCurrentUsername(data?.username);
+        }
+        setCurrentUser(data);
+    };
+
+    const updateTargetUserInfo = async () => {
+        const data = await User.getUserByUsername(currentUsername);
+        setTargetUser(data);
+    };
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', async (e) => {
+            try {
+                await updateCurrentUserInfo();
+                await updateTargetUserInfo();
+            } catch (error) {
+                alert(error.message);
+                navigation.navigate('Login');
+            }
+        });
+
+        return unsubscribe;
+    }, [navigation, route?.params, currentUsername]);
     
     return (
         <SafeAreaView>
@@ -128,13 +146,20 @@ const ProfilePage = ({ navigation }) => {
                         <View
                             style={{ flexDirection: 'column' }}>
                             <Image
-                                source={require('../../assets/images/user2.jpg')}
+                                source={ 
+                                    { 
+                                        uri: `${CONFIG.IMAGE_PATH.USER}/${targetUser?.image}`
+                                            || `${CONFIG.IMAGE_PATH.USER}/default_user.png`,
+                                    } 
+                                }
                                 style={styles.mainProfile}
                             />
-                            <Text style={styles.mainUsername}>Mine</Text>
-                            <Text style={{ textAlign: 'center' }}>Mine Pumpkin</Text>
-                            <ButtonFollow></ButtonFollow>
-                            <Text style={{ paddingHorizontal: 10, marginVertical: 30, fontWeight: '100', fontSize: 20, textAlign: 'center' }}>NightRaid Girl Lets Bummm Kill Everyone</Text>
+                            <Text style={styles.mainUsername}>{targetUser?.username}</Text>
+                            <Text style={{ textAlign: 'center' }}>{targetUser?.display_name}</Text>
+                            <ProfileButton />
+                            <Text style={{ paddingHorizontal: 10, marginVertical: 30, fontWeight: '100', fontSize: 20, textAlign: 'center' }}>
+                                {targetUser?.biodata}
+                            </Text>
                         </View>
                     </View>
 
@@ -153,7 +178,7 @@ const ProfilePage = ({ navigation }) => {
                             justifyContent: 'space-between'
                         }}>
                             <Text style={{ fontSize: 15 }}>Pengikut</Text>
-                            <Text style={{ fontSize: 15 }}>4</Text>
+                            <Text style={{ fontSize: 15 }}>{targetUser?.followers?.length || 0}</Text>
                         </View>
                         <View style={{
                             flexDirection: 'row',
@@ -166,7 +191,7 @@ const ProfilePage = ({ navigation }) => {
                             justifyContent: 'space-between'
                         }}>
                             <Text style={{ fontSize: 15 }}>Mengikuti</Text>
-                            <Text style={{ fontSize: 15 }}>2</Text>
+                            <Text style={{ fontSize: 15 }}>{targetUser?.following?.length || 0}</Text>
                         </View>
                         <View style={{
                             flexDirection: 'row',
@@ -179,7 +204,7 @@ const ProfilePage = ({ navigation }) => {
                             justifyContent: 'space-between'
                         }}>
                             <Text style={{ fontSize: 15 }}>Telepon</Text>
-                            <Text style={{ fontSize: 15 }}>081234567890</Text>
+                            <Text style={{ fontSize: 15 }}>{targetUser?.phone_number || 0}</Text>
                         </View>
                         <View style={{
                             flexDirection: 'row',
@@ -192,7 +217,7 @@ const ProfilePage = ({ navigation }) => {
                             justifyContent: 'space-between'
                         }}>
                             <Text style={{ fontSize: 15 }}>Provinsi</Text>
-                            <Text style={{ fontSize: 15 }}>Jawa Timur</Text>
+                            <Text style={{ fontSize: 15 }}>{targetUser?.province_name}</Text>
                         </View>
                         <View style={{
                             flexDirection: 'row',
@@ -205,7 +230,7 @@ const ProfilePage = ({ navigation }) => {
                             justifyContent: 'space-between'
                         }}>
                             <Text style={{ fontSize: 15 }}>Kota</Text>
-                            <Text style={{ fontSize: 15 }}>Surabaya</Text>
+                            <Text style={{ fontSize: 15 }}>{targetUser?.city_name.split(' ').slice(1).join(' ') || '' }</Text>
                         </View>
                         <View style={{
                             flexDirection: 'row',
@@ -219,133 +244,35 @@ const ProfilePage = ({ navigation }) => {
                             borderBottomEndRadius: 10,
                             borderBottomStartRadius: 10
                         }}>
-                            {/* <TouchableOpacity
-                                style={{ backgroundColor: '#007bff', borderRadius: 50 }}>
-                                <Text style={{ color: 'white', marginHorizontal: 20, marginVertical: 5 }}>Ajak Kerjasama</Text>
-                            </TouchableOpacity> */}
+
+                        {currentUser?.id === targetUser?.id ? (
                             <TouchableOpacity
                                 style={{ backgroundColor: 'red', borderRadius: 50 }}
-                                onPress={handleSubmitPress}>
+                                onPress={logOutHandler}>
                                 <Text style={{ color: 'white', marginHorizontal: 20, marginVertical: 5 }}>Logout</Text>
                             </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity
+                                style={{ backgroundColor: '#007bff', borderRadius: 50 }}>
+                                <Text style={{ color: 'white', marginHorizontal: 20, marginVertical: 5 }}>Ajak Kerjasama</Text>
+                            </TouchableOpacity>
+                        )}
+                            
                         </View>
                     </View>
 
-                    {/* <TouchableOpacity
-                        onPress={() => navigation.navigate('detailPost')}>
-                        <View style={styles.container1}>
-                            <TouchableOpacity
-                                style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15 }}
-                                onPress={() => navigation.navigate('ProfilePage')}>
-                                <Image
-                                    source={require('../../assets/images/user.jpg')}
-                                    style={styles.UserProfile}
-                                />
-                                <Text style={styles.UserName}> Quinella </Text>
-                            </TouchableOpacity>
-
-                            <View>
-                                <Image
-                                    source={require('../../assets/images/post.jpg')}
-                                    style={styles.UserPost}
-                                />
-                            </View>
-
-                            <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 15, alignItems: 'center' }}>
-                                <View>
-                                    <ButtonLike />
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                                <View style={{ marginLeft: 15 }}>
-                                    <ButtonComment />
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                                <View style={{ marginLeft: 15 }}>
-                                    <ButtonViews />
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                            </View>
-
-                            <View>
-                                <Text style={{ fontSize: 18, alignSelf: 'center', marginTop: 10 }}>Konsep ruang kerja industry 4.0</Text>
-                            </View>
-
-                            <View style={styles.dateBox}>
-                                <View>
-                                    <Text style={{ fontSize: 18, marginTop: 10 }}>9 September 2021</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('detailPost')}>
-                        <View style={styles.container2}>
-                            <TouchableOpacity
-                                style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15 }}
-                                onPress={() => navigation.navigate('ProfilePage')}>
-                                <Image
-                                    source={require('../../assets/images/user.jpg')}
-                                    style={styles.UserProfile}
-                                />
-                                <Text style={styles.UserName}> Quinella </Text>
-                            </TouchableOpacity>
-
-                            <View>
-                                <Image
-                                    source={require('../../assets/images/post.jpg')}
-                                    style={styles.UserPost}
-                                />
-                            </View>
-
-                            <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 15, alignItems: 'center' }}>
-                                <View>
-                                    <ButtonLike></ButtonLike>
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                                <View style={{ marginLeft: 15 }}>
-                                    <ButtonComment></ButtonComment>
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                                <View style={{ marginLeft: 15 }}>
-                                    <ButtonViews></ButtonViews>
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                            </View>
-
-                            <View>
-                                <Text style={{ fontSize: 18, alignSelf: 'center', marginTop: 10 }}>Konsep ruang kerja industry 4.0</Text>
-                            </View>
-
-                            <View style={styles.dateBox}>
-                                <View>
-                                    <Text style={{ fontSize: 18, marginTop: 10 }}>9 September 2021</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </TouchableOpacity> */}
-
-                    <View style={{ marginVertical: 100, width: 250, alignSelf: 'center' }}>
-                        <FontAwesome5
-                            name='smile-wink'
-                            size={30}
-                            color='gray'
-                            style={{ alignSelf: 'center' }}
-                        />
-                        <Text style={{ fontSize: 20, textAlign: 'center', textAlignVertical: 'center' }}>Belum ada desain yang diunggah untuk saat ini</Text>
-                    </View>
+                    <PostList
+                        navigation={navigation} 
+                        posts={targetUser?.posts || []} 
+                        user={currentUser} 
+                        onUpdateList={async () => {
+                            try {
+                                await updateTargetUserInfo();
+                            } catch {
+                                alert(error.message);
+                            }
+                        }}
+                     />
 
                 </View>
             </ScrollView>

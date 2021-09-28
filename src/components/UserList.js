@@ -8,11 +8,11 @@ const windowHeight = Dimensions.get('window').height;
 
 const ResultItem = ({ targetUser, navigation }) => (
     <TouchableOpacity
-        onPress={() => navigation.navigate('ProfilePage', { userId: targetUser.id })}>
+        onPress={() => navigation.navigate('ProfilePage', { username: targetUser.username })}>
         <View style={styles.container1}>
             <TouchableOpacity
                 style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15 }}
-                onPress={() => navigation.navigate('ProfilePage', { userId: targetUser.id })}>
+                onPress={() => navigation.navigate('ProfilePage', { username: targetUser.username })}>
                 <Image
                     source={
                         { uri: `${CONFIG.IMAGE_PATH.USER}/${targetUser.image}` }

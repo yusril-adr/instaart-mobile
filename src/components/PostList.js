@@ -90,7 +90,7 @@ const PostItem = ({ post, user, onUpdate, navigation }) => (
           <TouchableOpacity
               style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15 }}
               onPress={() => {
-                navigation.navigate('ProfilePage', { userId: post.user_id });
+                navigation.navigate('ProfilePage', { username: post.username });
               }}>
               <Image
                   source={{

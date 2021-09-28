@@ -123,7 +123,7 @@ const CommentItem = ({comment, navigation}) => {
             style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15, alignItems: 'center' }}>
             <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate('ProfilePage', { userId: comment.user_id });
+                    navigation.navigate('ProfilePage', { username: comment.username });
                 }}
             >
                 <Image
@@ -143,7 +143,7 @@ const CommentItem = ({comment, navigation}) => {
                 <View style={{ flexDirection: 'row' }}>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('ProfilePage', { userId: comment.user_id });
+                            navigation.navigate('ProfilePage', { userName: comment.username });
                         }}
                     >
                         <Text style={{ fontSize: 13, fontWeight: 'bold' }}>{comment.username} |</Text>
