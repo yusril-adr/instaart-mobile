@@ -399,6 +399,24 @@ const detailPost = ({ navigation, route }) => {
 
                             <View style={{ paddingBottom: 10, }}>
                                 {comments.map((comment) => ( <CommentItem key={comment.id} comment={comment} navigation={navigation} /> ))}
+
+                                {comments.length < 1 && (
+                                    <View style={{ 
+                                        marginTop: 55,
+                                        // marginBottom: windowHeight * 0.5,
+                                        width: 250, 
+                                        alignSelf: 'center' 
+                                        }}
+                                        >
+                                        <FontAwesome5
+                                            name='smile-wink'
+                                            size={30}
+                                            color='gray'
+                                            style={{ alignSelf: 'center' }}
+                                        />
+                                        <Text style={{ fontSize: 20, textAlign: 'center', textAlignVertical: 'center' }}>Belum ada komentar untuk saat ini</Text>
+                                    </View>
+                                )}
                             </View>
                         </View> 
 
