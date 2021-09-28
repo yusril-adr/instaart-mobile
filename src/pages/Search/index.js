@@ -1,4 +1,4 @@
-import React, { useState, createRef } from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 import { StyleSheet, Text, View, ScrollView, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SearchBar, Button } from 'react-native-elements';
@@ -6,103 +6,128 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
+import PostList from '../../components/PostList';
+import Colors from '../../data/colors';
+import Categories from '../../data/categories';
+import Post from '../../data/post';
+import User from '../../data/user';
+import History from '../../data/history';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const SearchContainer = () => {
-    const [search, setSearch] = useState('');
-    const searchInputRef = createRef();
+const KeywordList = ({ history, setShouldShow, setSearch }) => {
     return (
-        <SearchBar
-            placeholder="Cari ..."
-            containerStyle={{ backgroundColor: 'transparent', borderTopWidth: 0, borderBottomWidth: 0 }}
-            inputContainerStyle={{
-                backgroundColor: '#fff',
-                flexDirection: 'row-reverse',
+        <View
+            style={{
+                position: 'relative',
+                backgroundColor: 'white',
+                marginHorizontal: 24,
+                top: -9,
                 borderWidth: 1,
-                borderRadius: 5,
-                paddingLeft: 10,
-                borderBottomWidth: 1,
-                marginTop: 15,
-                marginBottom: 10,
-                width: 345,
-                alignSelf: 'center',
             }}
-            lightTheme
-            onChangeText={(search) => setSearch(search)}
-            value={search}
-            ref={searchInputRef}
-            searchIcon={() => <FontAwesome5
-                name='search'
-                size={30}
-                color='#007bff'
-            />}
-        />
+        >
+            {history.map((keyword) => (
+                <TouchableOpacity
+                    key={keyword}
+                    onPress={async () => {
+                        setSearch(keyword)
+                        setShouldShow(false)
+                    }}
+                >
+                    <Text
+                        style={{
+                            fontSize: 20,
+                            paddingLeft: 10,
+                            borderBottomWidth: 1
+                        }}
+                    >
+                        {keyword}
+                    </Text>
+                </TouchableOpacity>
+            ))}
+        </View>
+    );
+};
+
+const SearchContainer = ({ history, updateHistory, search, setSearch, shouldShow, setShouldShow, onSearch }) => {
+    const searchInputRef = createRef();
+
+    return (
+        <View>
+            <SearchBar
+                clearIcon={false}
+                placeholder="Cari ..."
+                containerStyle={{ 
+                    backgroundColor: 'transparent', 
+                    borderTopWidth: 0, 
+                    borderBottomWidth: 0 
+                }}
+                inputContainerStyle={{
+                    backgroundColor: '#fff',
+                    flexDirection: 'row-reverse',
+                    borderWidth: 1,
+                    borderRadius: 5,
+                    paddingLeft: 10,
+                    borderBottomWidth: 1,
+                    marginTop: 15,
+                    width: 345,
+                    alignSelf: 'center',
+                }}
+                lightTheme
+                onChangeText={(search) => setSearch(search)}
+                value={search}
+                ref={searchInputRef}
+                onFocus={() => {
+                    // if (search.trim()) {
+                        setShouldShow(true)
+                    // }
+                }}
+                // onBlur={() => {
+                //     setShouldShow(false)
+                // }}
+                searchIcon={() => <FontAwesome5
+                    onPress={async () => {
+                        setShouldShow(false)
+                        await History.newHistory(search);
+                        await updateHistory();
+                        await onSearch();
+                    }}
+                    name='search'
+                    size={30}
+                    color='#007bff'
+                />}
+                onSubmitEditing={async () => {
+                    setShouldShow(false)
+                    await History.newHistory(search);
+                    await updateHistory();
+                    await onSearch();
+                }}
+            />
+
+            {shouldShow && (
+                <KeywordList history={history} setShouldShow={setShouldShow} setSearch={setSearch} />
+            )}
+        </View>
     )
 }
 
-const ButtonLike = () => {
-    const [Like, setLike] = useState(false);
-    const Pressed = () => {
-        setLike(!Like);
-        alert('Anda menekan Tombol Like');
-    };
-    return (
-        <View>
-            <TouchableOpacity onPress={() => Pressed()}>
-                <FontAwesome5
-                    name='thumbs-up'
-                    size={23}
-                    color={Like ? '#007bff' : 'gray'}
-                />
-            </TouchableOpacity>
-        </View>
-    );
-};
-
-const ButtonComment = () => {
-    return (
-        <FontAwesome5
-            name='comment'
-            size={25}
-            color='gray'
-        />
-    );
-};
-
-const ButtonViews = () => {
-    const [Views, setViews] = useState(false);
-    const Pressed = () => {
-        setViews(!Views);
-        alert('Anda menekan Tombol View');
-    };
-    return (
-        <View>
-            <TouchableOpacity onPress={() => Pressed()}>
-                <FontAwesome5
-                    name='eye'
-                    size={25}
-                    color={Views ? '#007bff' : 'gray'}
-                />
-            </TouchableOpacity>
-        </View>
-    );
-};
-
-const placeholder = {
-    label: 'Pilih masukan',
-    value: null,
-    color: '#007bff',
-};
-
-const Search = ({ navigation }) => {
+const Search = ({ navigation, route }) => {
+    const { keyword = '', kategoriParam = '', warnaParam = '' } = route?.params || {};
+    const [shouldKeyShow, setShouldKeyShow] = useState(false);
     const [shouldShow, setShouldShow] = useState(false);
     const [ClickFilter, setClickFilter] = useState('');
+    const [history, setHistory] = useState([]);
+    const [search, setSearch] = useState('');
     const [Click1, setClick1] = useState(true);
     const [Click2, setClick2] = useState(false);
-    const [userProvinsi, setUserProvinsi] = useState('');
-    const [userKota, setUserKota] = useState('');
+    // const [userKategori, setUserKategori] = useState('');
+    // const [userWarna, setUserWarna] = useState('');
+    const [categories, setCategories] = useState([]);
+    const [colors, setColors] = useState([]);
+    const [user, setUser] = useState(null);
+    const [popularPost, setPopularPost] = useState([]);
+    const [resultPost, setResultPost] = useState([]);
     const provInputRef = createRef();
     const kotaInputRef = createRef();
 
@@ -112,7 +137,7 @@ const Search = ({ navigation }) => {
             setShouldShow(!shouldShow);
         };
         return (
-            < View >
+            <View>
                 <TouchableOpacity onPress={() => Pressed()}>
                     <View style={{
                         flexDirection: 'row',
@@ -135,7 +160,7 @@ const Search = ({ navigation }) => {
                         <Text style={{ color: ClickFilter ? 'white' : '#007bff', fontSize: 16 }}>Filter</Text>
                     </View>
                 </TouchableOpacity>
-            </View >
+            </View>
         );
     };
 
@@ -143,15 +168,15 @@ const Search = ({ navigation }) => {
         const Pressed1 = () => {
             setClick1(false);
             setClick2(true);
-            navigation.navigate('Search');
+            navigation.navigate('Search', { keyword: search });
         };
         const Pressed2 = () => {
             setClick2(false);
             setClick1(true);
-            navigation.navigate('searchUser');
+            navigation.navigate('searchUser', { keyword: search });
         };
         return (
-            < View style={{ width: 222, flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={{ width: 222, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <TouchableOpacity onPress={() => Pressed1()}>
                     <View style={{
                         flexDirection: 'row',
@@ -182,26 +207,97 @@ const Search = ({ navigation }) => {
                         <Text style={{ color: Click2 ? 'white' : '#007bff', fontSize: 16 }}>Pengguna</Text>
                     </View>
                 </TouchableOpacity>
-            </View >
+            </View>
         );
     };
+
+    const updateHistory = async () => {
+        const historyData = await History.getHistory();
+        setHistory(historyData);
+    };
+
+    const updateResultPost = async () => {
+        const newList = await Post.searchPost(keyword, {
+            color: warnaParam !== '' ? warnaParam : null,
+            category: kategoriParam !== '' ? kategoriParam : null,
+        });
+        setResultPost(newList);
+    };
+
+    useEffect(() => {
+        const initValue = async () => {
+            const colorList = await Colors.getColors();
+            const categoriesList = await Categories.getCategories();
+
+            setCategories(categoriesList.map((category) => (
+                { label: category.name, value: category.id }
+            )));
+            setColors(colorList.map((color) => (
+                { label: color.name, value: color.id }
+            )));
+
+            await updateHistory();
+
+            if (keyword.trim() === '') {
+                const popular = await Post.getMostLikes();
+                setPopularPost(popular);
+            } else {
+                await updateResultPost();
+            }
+
+        };
+
+        const getUserInfo = async () => {
+            const data = await User.getUser();
+            setUser(data);
+        };
+
+        const unsubscribe = navigation.addListener('focus', async (e) => {
+            try {
+                setSearch(keyword);
+                setShouldKeyShow(false);
+                setShouldShow(false)
+                await getUserInfo();
+                await initValue();
+            } catch (error) {
+                alert(error.message);
+                navigation.goBack();
+            }
+        });
+
+        return unsubscribe;
+    }, [navigation, route.params])
 
     return (
         <SafeAreaView>
             <ScrollView
                 contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={styles.mainBody}>
-                    <SearchContainer></SearchContainer>
+                    <SearchContainer 
+                        history={history} 
+                        updateHistory={updateHistory} 
+                        search={search} 
+                        setSearch={setSearch} 
+                        shouldShow={shouldKeyShow}
+                        setShouldShow={setShouldKeyShow}
+                        onSearch={async () => {
+                            navigation.setParams({
+                                keyword: search,
+                                kategoriParam,
+                                warnaParam,
+                            })
+                        }}
+                    />
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                        <SearchDesain></SearchDesain>
-                        <Filter></Filter>
+                    <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                        <SearchDesain />
+                        <Filter />
                     </View>
 
-                    {shouldShow ? (
+                    {shouldShow && (
                         <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 20 }}>
                             <View style={styles.SectionStyle}>
-                                <Text style={{ fontSize: 18 }}>Provinsi</Text>
+                                <Text style={{ fontSize: 18 }}>Kategori</Text>
                                 <RNPickerSelect
                                     style={{
                                         ...pickerSelectStyles,
@@ -220,20 +316,26 @@ const Search = ({ navigation }) => {
                                         return <Chevron size={1.5} color="gray" />;
                                     }}
                                     useNativeAndroidPickerStyle={false}
-                                    placeholder={placeholder}
-                                    onValueChange={(userProvinsi) => setUserProvinsi(userProvinsi)}
+                                    onValueChange={async (userKategori) => {
+                                        navigation.setParams({
+                                            keyword: search,
+                                            kategoriParam: userKategori,
+                                            warnaParam,
+                                        })
+                                    }}
                                     ref={provInputRef}
+                                    placeholder={{}}
                                     returnKeyType="next"
                                     items={[
-                                        { label: 'Jawa Timur', value: 'Jawa Timur' },
-                                        { label: 'Jawa Barat', value: 'Jawa Barat' },
-                                        { label: 'Jawa Tengah', value: 'Jawa Tengah' },
+                                        { label: 'Semua', value: '' },
+                                        ...categories,
                                     ]}
+                                    value={kategoriParam}
                                 />
                             </View>
 
                             <View style={styles.SectionStyle}>
-                                <Text style={{ fontSize: 18 }}>Kota</Text>
+                                <Text style={{ fontSize: 18 }}>Warna</Text>
                                 <RNPickerSelect
                                     style={{
                                         ...pickerSelectStyles,
@@ -252,134 +354,79 @@ const Search = ({ navigation }) => {
                                         return <Chevron size={1.5} color="gray" />;
                                     }}
                                     useNativeAndroidPickerStyle={false}
-                                    placeholder={placeholder}
-                                    onValueChange={(userKota) => setUserKota(userKota)}
+                                    onValueChange={async (userWarna) => {
+                                        navigation.setParams({
+                                            keyword: search,
+                                            kategoriParam,
+                                            warnaParam: userWarna,
+                                        })
+                                    }}
                                     ref={kotaInputRef}
                                     returnKeyType="next"
+                                    placeholder={{}}
                                     items={[
-                                        { label: 'Surabaya', value: 'Surabaya' },
-                                        { label: 'Bandung', value: 'Bandung' },
-                                        { label: 'Solo', value: 'Solo' },
+                                        { label: 'Semua', value: '' },
+                                        ...colors
                                     ]}
+                                    value={warnaParam}
                                 />
                             </View>
                         </View>
-                    ) : null}
+                    )}
 
-                    {/* <TouchableOpacity
-                        onPress={() => navigation.navigate('detailPost')}>
-                        <View style={styles.container1}>
-                            <TouchableOpacity
-                                style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15 }}
-                                onPress={() => navigation.navigate('ProfilePage')}>
-                                <Image
-                                    source={require('../../assets/images/user.jpg')}
-                                    style={styles.UserProfile}
-                                />
-                                <Text style={styles.UserName}> Quinella </Text>
-                            </TouchableOpacity>
-
-                            <View>
-                                <Image
-                                    source={require('../../assets/images/post.jpg')}
-                                    style={styles.UserPost}
-                                />
-                            </View>
-
-                            <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 15, alignItems: 'center' }}>
-                                <View>
-                                    <ButtonLike />
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                                <View style={{ marginLeft: 15 }}>
-                                    <ButtonComment />
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                                <View style={{ marginLeft: 15 }}>
-                                    <ButtonViews />
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                            </View>
-
-                            <View>
-                                <Text style={{ fontSize: 18, alignSelf: 'center', marginTop: 10 }}>Konsep ruang kerja industry 4.0</Text>
-                            </View>
-
-                            <View style={styles.dateBox}>
-                                <View>
-                                    <Text style={{ fontSize: 18, marginTop: 10 }}>9 September 2021</Text>
-                                </View>
-                            </View>
+                    {keyword.trim() === '' && (
+                        <>
+                            <Text
+                                style={{
+                                    fontSize: 20,
+                                    fontWeight: '700',
+                                    marginLeft: 20,
+                                    marginTop: 20
+                                }}
+                            >
+                                Paling Disukai
+                            </Text>
+                            <PostList 
+                                navigation={navigation} 
+                                posts={popularPost} 
+                                user={user} 
+                                onUpdateList={async () => {
+                                    try {
+                                        const newList = await Post.getMostLikes();
+                                        setPopularPost(newList);
+                                    } catch {
+                                        alert(error.message);
+                                    }
+                                }}
+                            />
+                        </>
+                    )}
+                    
+                    {resultPost.length < 1 && keyword.trim() !== '' && (
+                        <View style={{ flexDirection: 'column', height: 400, justifyContent: 'center', alignItems: 'center', alignSelf: 'center' }}>
+                            <FontAwesome5
+                                name='search'
+                                size={30}
+                                color='gray'
+                            />
+                            <Text style={{ fontSize: 20 }}>Hasil pencarian tidak ditemukan</Text>
                         </View>
-                    </TouchableOpacity>
+                    ) }
 
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('detailPost')}>
-                        <View style={styles.container2}>
-                            <TouchableOpacity
-                                style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15 }}
-                                onPress={() => navigation.navigate('ProfilePage')}>
-                                <Image
-                                    source={require('../../assets/images/user.jpg')}
-                                    style={styles.UserProfile}
-                                />
-                                <Text style={styles.UserName}> Quinella </Text>
-                            </TouchableOpacity>
-
-                            <View>
-                                <Image
-                                    source={require('../../assets/images/post.jpg')}
-                                    style={styles.UserPost}
-                                />
-                            </View>
-
-                            <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 15, alignItems: 'center' }}>
-                                <View>
-                                    <ButtonLike></ButtonLike>
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                                <View style={{ marginLeft: 15 }}>
-                                    <ButtonComment></ButtonComment>
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                                <View style={{ marginLeft: 15 }}>
-                                    <ButtonViews></ButtonViews>
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                            </View>
-
-                            <View>
-                                <Text style={{ fontSize: 18, alignSelf: 'center', marginTop: 10 }}>Konsep ruang kerja industry 4.0</Text>
-                            </View>
-
-                            <View style={styles.dateBox}>
-                                <View>
-                                    <Text style={{ fontSize: 18, marginTop: 10 }}>9 September 2021</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </TouchableOpacity> */}
-
-                    <View style={{ flexDirection: 'column', height: 400, justifyContent: 'center', alignItems: 'center', alignSelf: 'center' }}>
-                        <FontAwesome5
-                            name='search'
-                            size={30}
-                            color='gray'
+                    {resultPost.length > 0 && keyword.trim() !== '' && (
+                        <PostList 
+                            navigation={navigation} 
+                            posts={resultPost} 
+                            user={user} 
+                            onUpdateList={async () => {
+                                try {
+                                    await updateResultPost();
+                                } catch {
+                                    alert(error.message);
+                                }
+                            }}
                         />
-                        <Text style={{ fontSize: 20 }}>Hasil pencarian tidak ditemukan</Text>
-                    </View>
+                    )}
 
                 </View>
             </ScrollView>

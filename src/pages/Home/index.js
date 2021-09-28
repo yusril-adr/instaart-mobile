@@ -37,9 +37,14 @@ const Home = ({ navigation }) => {
     }, [navigation]);
 
     return (
-        <SafeAreaView>
-            <ScrollView
-                contentContainerStyle={{ flexGrow: 1 }}>
+        <SafeAreaView 
+            style={{
+                backgroundColor: 'white',
+                minHeight: windowHeight,
+                paddingBottom: 120,
+            }}
+        >
+            <ScrollView>
                 <View style={styles.mainBody}>
                     <PostList 
                         navigation={navigation} 

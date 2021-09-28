@@ -6,6 +6,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Job from '../../data/job'
 import CONFIG from '../../global/config'
 
+const windowHeight = Dimensions.get('window').height;
+
 const SearchContainer = ({ search, setSearch }) => {
     const searchInputRef = createRef();
 
@@ -173,9 +175,14 @@ const Jobs = ({ navigation }) => {
     }, [navigation]);
 
     return (
-        <SafeAreaView>
-            <ScrollView
-                contentContainerStyle={{ flexGrow: 1 }}>
+        <SafeAreaView
+            style={{
+                backgroundColor: 'white',
+                minHeight: windowHeight,
+                paddingBottom: 100,
+            }}
+        >
+            <ScrollView>
                 <View style={styles.mainBody}>
                     <TouchableOpacity onPress={() => navigation.navigate('PostJob')}>
                         <View

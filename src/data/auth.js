@@ -1,9 +1,5 @@
 import CONFIG from '../global/config';
-import MMKVStorage from 'react-native-mmkv-storage';
-
-const MMKVwithEncryption = new MMKVStorage.Loader()
-    .withEncryption()
-    .initialize();
+import MMKVwithEncryption from './MMKVwithEncryption';
 
 const Auth = {
     async getAuth() {

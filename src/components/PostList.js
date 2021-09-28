@@ -1,10 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Dimensions, Text, View, Image, TouchableOpacity } from 'react-native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Link } from '@react-navigation/native';
+
 import User from '../data/user';
 import CONFIG from '../global/config';
 import DateHelper from '../utils/date-helper';
+
+const windowHeight = Dimensions.get('window').height;
+
 
 const ButtonLike = ({ post, user, onUpdate }) => {
   const onPress = async () => {
@@ -142,7 +146,13 @@ const PostItem = ({ post, user, onUpdate, navigation }) => (
 );
 
 const EmptyPostItem = () => (
-  <View style={{ marginVertical: 255, width: 250, alignSelf: 'center' }}>
+  <View style={{ 
+      marginTop: 155,
+      marginBottom: windowHeight * 0.5,
+      width: 250, 
+      alignSelf: 'center' 
+      }}
+    >
       <FontAwesome5
           name='smile-wink'
           size={30}
