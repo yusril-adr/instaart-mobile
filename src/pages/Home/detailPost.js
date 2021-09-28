@@ -115,7 +115,7 @@ const BookmarkButton = ({ isBookmarked, onPress }) => {
     );
 };
 
-const CommentItem = ({comment, navigation}) => {
+const CommentItem = ({currentUser, comment, navigation}) => {
     const { year, month, date } = DateHelper.parse(comment.date);
 
     return (
@@ -123,7 +123,10 @@ const CommentItem = ({comment, navigation}) => {
             style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15, alignItems: 'center' }}>
             <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate('ProfilePage', { username: comment.username });
+                    if (comment.username === currentUser.username) {
+                        navigation.navigate('Akun');
+                    }
+                    else navigation.navigate('ProfilePage', { username: comment.username });
                 }}
             >
                 <Image
@@ -143,7 +146,10 @@ const CommentItem = ({comment, navigation}) => {
                 <View style={{ flexDirection: 'row' }}>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('ProfilePage', { userName: comment.username });
+                            if (comment.username === currentUser.username) {
+                                navigation.navigate('Akun');
+                            }
+                            else navigation.navigate('ProfilePage', { username: comment.username });
                         }}
                     >
                         <Text style={{ fontSize: 13, fontWeight: 'bold' }}>{comment.username} |</Text>
@@ -212,10 +218,26 @@ const detailPost = ({ navigation, route }) => {
                                     uri: `${CONFIG.IMAGE_PATH.USER}/${post?.user_image}`
                                 }}
                                 style={styles.UserProfile}
+                                onPress={ () => {
+                                    if (post.username === user.username) {
+                                        navigation.navigate('Akun');
+                                    }
+                                    else navigation.navigate('ProfilePage', { username: post.username });
+                                }}
                             />
                             <View style={{ flexDirection: 'column' }}>
                                 <Text style={styles.UserCaption}>{post?.title}</Text>
-                                <Text style={styles.UserName}>{post?.username}</Text>
+                                <Text 
+                                    style={styles.UserName}
+                                    onPress={ () => {
+                                    if (post.username === user.username) {
+                                        navigation.navigate('Akun');
+                                    }
+                                    else navigation.navigate('ProfilePage', { username: post.username });
+                                }}
+                                >
+                                    {post?.username}
+                                </Text>
                             </View>
                             <BookmarkButton 
                                 isBookmarked={
@@ -398,7 +420,14 @@ const detailPost = ({ navigation, route }) => {
                             </View>
 
                             <View style={{ paddingBottom: 10, }}>
-                                {comments.map((comment) => ( <CommentItem key={comment.id} comment={comment} navigation={navigation} /> ))}
+                                {comments.map((comment) => ( 
+                                    <CommentItem 
+                                        key={comment.id} 
+                                        comment={comment} 
+                                        currentUser={user}
+                                        navigation={navigation} 
+                                    /> 
+                                ))}
 
                                 {comments.length < 1 && (
                                     <View style={{ 

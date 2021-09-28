@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { CommonActions } from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { Icon } from 'react-native-elements'
 import User from '../../data/user';
@@ -9,7 +10,6 @@ import PostList from '../../components/PostList';
 
 const ProfilePage = ({ navigation, route }) => {
     const { username = null } = route?.params || {};
-    const [currentUsername, setCurrentUsername] = useState(username);
     const [currentUser, setCurrentUser] = useState(null);
     const [targetUser, setTargetUser] = useState(null);
 
@@ -22,10 +22,10 @@ const ProfilePage = ({ navigation, route }) => {
         }
     };
 
-    const ProfileButton = () => {
+    const ProfileButton = ({ onUpdate }) => {
         if ((targetUser?.id === currentUser?.id) && targetUser?.id) {
             return (
-                <TouchableOpacity onPress={() => navigation.navigate('EditProfile', { username: currentUsername, })}>
+                <TouchableOpacity onPress={() => navigation.navigate('EditProfile', { username, })}>
                     <View 
                         style={{ 
                             flexDirection: 'row', 
@@ -54,11 +54,18 @@ const ProfilePage = ({ navigation, route }) => {
                 </TouchableOpacity>
 
             );
-        } else if (targetUser?.followers.includes(currentUser.id)) {
+        } else if (targetUser?.followers.includes(currentUser?.id)) {
             return (
                 <View>
                     <TouchableOpacity 
-                        // onPress={() => Pressed()}
+                        onPress={async () => {
+                            try {
+                                await User.unFollowUser(targetUser.id);
+                                await onUpdate();
+                            } catch (error) {
+                                alert(error.message)
+                            }
+                        }}
                     >
                         <View style={{
                             flexDirection: 'row',
@@ -82,7 +89,14 @@ const ProfilePage = ({ navigation, route }) => {
             return (
                 <View>
                     <TouchableOpacity 
-                        // onPress={() => Pressed()}
+                        onPress={async () => {
+                            try {
+                                await User.followUser(targetUser.id);
+                                await onUpdate();
+                            } catch (error) {
+                                alert(error.message)
+                            }
+                        }}
                     >
                         <View style={{
                             flexDirection: 'row',
@@ -108,22 +122,15 @@ const ProfilePage = ({ navigation, route }) => {
 
     const updateCurrentUserInfo = async () => {
         const data = await User.getUser();
-        if (username === null) {
-            navigation.setParams({
-                username: data?.username,
-            });
-
-            setCurrentUsername(data?.username);
-        }
         setCurrentUser(data);
     };
 
     const updateTargetUserInfo = async () => {
-        const data = await User.getUserByUsername(currentUsername);
+        const data = await User.getUserByUsername(username);
         setTargetUser(data);
     };
 
-    useEffect(() => {
+    useEffect(useCallback(() => {
         const unsubscribe = navigation.addListener('focus', async (e) => {
             try {
                 await updateCurrentUserInfo();
@@ -135,7 +142,7 @@ const ProfilePage = ({ navigation, route }) => {
         });
 
         return unsubscribe;
-    }, [navigation, route?.params, currentUsername]);
+    }, [navigation, route?.params]));
     
     return (
         <SafeAreaView>
@@ -156,7 +163,11 @@ const ProfilePage = ({ navigation, route }) => {
                             />
                             <Text style={styles.mainUsername}>{targetUser?.username}</Text>
                             <Text style={{ textAlign: 'center' }}>{targetUser?.display_name}</Text>
-                            <ProfileButton />
+                            <ProfileButton 
+                                onUpdate={async () => {
+                                    await updateTargetUserInfo();
+                                }}
+                            />
                             <Text style={{ paddingHorizontal: 10, marginVertical: 30, fontWeight: '100', fontSize: 20, textAlign: 'center' }}>
                                 {targetUser?.biodata}
                             </Text>
@@ -244,20 +255,10 @@ const ProfilePage = ({ navigation, route }) => {
                             borderBottomEndRadius: 10,
                             borderBottomStartRadius: 10
                         }}>
-
-                        {currentUser?.id === targetUser?.id ? (
-                            <TouchableOpacity
-                                style={{ backgroundColor: 'red', borderRadius: 50 }}
-                                onPress={logOutHandler}>
-                                <Text style={{ color: 'white', marginHorizontal: 20, marginVertical: 5 }}>Logout</Text>
-                            </TouchableOpacity>
-                        ) : (
                             <TouchableOpacity
                                 style={{ backgroundColor: '#007bff', borderRadius: 50 }}>
                                 <Text style={{ color: 'white', marginHorizontal: 20, marginVertical: 5 }}>Ajak Kerjasama</Text>
                             </TouchableOpacity>
-                        )}
-                            
                         </View>
                     </View>
 

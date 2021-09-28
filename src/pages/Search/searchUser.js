@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef } from 'react'
+import React, { useState, useEffect, useCallback, createRef } from 'react'
 import { StyleSheet, Text, View, ScrollView, Dimensions, Image, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { SearchBar, Button } from 'react-native-elements'
@@ -220,32 +220,45 @@ const searchUser = ({ navigation, route }) => {
         setResultUser(newList);
     };
 
-    useEffect(async () => {
-        const initValue = async () => {
-            const provinceList = await Location.getProvinces();
-
-            setProvincies(provinceList.map((provincy) => (
-                { label: provincy.nama, value: provincy.id }
-            )));
-
-            if (provinsiParam !== '') {
-                const citiesList = await Location.getCitiesByProvinceId(provinsiParam);
-                setCities(citiesList.map((city) => (
-                    { label: city.nama, value: city.id }
+    useEffect(useCallback(
+        async () => {
+            const initValue = async () => {
+                const provinceList = await Location.getProvinces();
+    
+                setProvincies(provinceList.map((provincy) => (
+                    { label: provincy.nama, value: provincy.id }
                 )));
-            }
+    
+                if (provinsiParam !== '') {
+                    const citiesList = await Location.getCitiesByProvinceId(provinsiParam);
+                    setCities(citiesList.map((city) => (
+                        { label: city.nama, value: city.id }
+                    )));
+                }
+    
+                await updateHistory();
+    
+                await updateResultUser();
+            };
+    
+            const getUserInfo = async () => {
+                const data = await User.getUser();
+                setUser(data);
+            };
+    
+            const unsubscribe = navigation.addListener('focus', async (e) => {
+                try {
+                    setSearch(keyword);
+                    setShouldKeyShow(false);
+                    setShouldShow(false)
+                    await getUserInfo();
+                    await initValue();
+                } catch (error) {
+                    alert(error.message);
+                    navigation.goBack();
+                }
+            });
 
-            await updateHistory();
-
-            await updateResultUser();
-        };
-
-        const getUserInfo = async () => {
-            const data = await User.getUser();
-            setUser(data);
-        };
-
-        const unsubscribe = navigation.addListener('focus', async (e) => {
             try {
                 setSearch(keyword);
                 setShouldKeyShow(false);
@@ -256,18 +269,10 @@ const searchUser = ({ navigation, route }) => {
                 alert(error.message);
                 navigation.goBack();
             }
-        });
-
-        try {
-            setSearch(keyword);
-            await getUserInfo();
-            await initValue();
-        } catch (error) {
-            alert(error.message);
-        }
-
-        return unsubscribe;
-    }, [navigation, route?.params])
+    
+            return unsubscribe;
+        }, [navigation, route?.params]
+    ), [navigation, route?.params]);
 
     return (
         <SafeAreaView>
@@ -382,6 +387,7 @@ const searchUser = ({ navigation, route }) => {
                         <UserList 
                             navigation={navigation} 
                             users={resultUser} 
+                            currentUser={user}
                         />
                     )}
 

@@ -6,13 +6,23 @@ import CONFIG from '../global/config';
 
 const windowHeight = Dimensions.get('window').height;
 
-const ResultItem = ({ targetUser, navigation }) => (
+const ResultItem = ({ currentUser, targetUser, navigation }) => (
     <TouchableOpacity
-        onPress={() => navigation.navigate('ProfilePage', { username: targetUser.username })}>
+        onPress={() =>  {
+            if (targetUser.username === currentUser.username) {
+                navigation.navigate('Akun')
+            }
+            else navigation.navigate('ProfilePage', { username: targetUser.username })
+        }}>
         <View style={styles.container1}>
             <TouchableOpacity
                 style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15 }}
-                onPress={() => navigation.navigate('ProfilePage', { username: targetUser.username })}>
+                onPress={() =>  {
+                    if (targetUser.username === currentUser.username) {
+                        navigation.navigate('Akun')
+                    }
+                    else navigation.navigate('ProfilePage', { username: targetUser.username })
+                }}>
                 <Image
                     source={
                         { uri: `${CONFIG.IMAGE_PATH.USER}/${targetUser.image}` }
@@ -51,7 +61,7 @@ const EmptyResultItem = () => (
   </View>
 );
 
-const UserList = (({ navigation, users }) => (
+const UserList = (({ navigation, users, currentUser }) => (
   <>
       {users.length < 1 && <EmptyResultItem />}
 
@@ -60,6 +70,7 @@ const UserList = (({ navigation, users }) => (
               key={targetUser.id}
               navigation={navigation}
               targetUser={targetUser} 
+              currentUser={currentUser}
           />
       ))}
   </>

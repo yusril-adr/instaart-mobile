@@ -41,6 +41,7 @@ const MainApp = () => {
             <Tab.Screen name="Search" component={Search} options={{ headerShown: false }} />
             <Tab.Screen name="Upload" component={Upload} options={{ headerShown: false }} />
             <Tab.Screen name="Jobs" component={Jobs} options={{ headerShown: false }} />
+            <Tab.Screen name="Akun" component={Akun} options={{ headerShown: false }} />
             <Tab.Screen name="ProfilePage" component={ProfilePage} options={{ headerShown: false }} />
             <Tab.Screen name="detailPost" component={detailPost} options={{ headerShown: false }} />
             <Tab.Screen name="LikePages" component={LikePages} options={{ headerShown: false }} />

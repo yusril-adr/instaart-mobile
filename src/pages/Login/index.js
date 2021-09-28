@@ -220,6 +220,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#000',
         fontSize: 16,
+        color: '#000',
     },
     inputStyleForPwd: {
         width: 310,

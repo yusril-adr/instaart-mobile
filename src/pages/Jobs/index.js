@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { SearchBar, Icon } from 'react-native-elements'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Job from '../../data/job'
+import User from '../../data/user'
 import CONFIG from '../../global/config'
 
 const windowHeight = Dimensions.get('window').height;
@@ -46,13 +47,18 @@ const SearchContainer = ({ search, setSearch }) => {
     )
 }
 
-const JobItem = ({ navigation, job, }) => {
+const JobItem = ({ navigation, currentUser, job, }) => {
     return (
         <View>
             <View style={styles.container2}>
                 <TouchableOpacity 
                     style={{ width: 320, flexDirection: 'row', marginTop: 20, alignSelf: 'center', alignItems: 'center' }}
-                    onPress={() => navigation.navigate('ProfilePage', { username: job.username })}
+                    onPress={() => {
+                        if (job.username === currentUser.username) {
+                            navigation.navigate('Akun', { username: job.username })
+                        }
+                        else navigation.navigate('ProfilePage', { username: job.username })
+                    }}
                 >
                     <View>
                         <Image
@@ -128,7 +134,7 @@ const JobItem = ({ navigation, job, }) => {
     );
 };
 
-const JobList = ({ navigation, jobs }) => {
+const JobList = ({ navigation, currentUser, jobs }) => {
     return (
         <>
             {jobs.length < 1 && (
@@ -148,6 +154,7 @@ const JobList = ({ navigation, jobs }) => {
             {jobs.map((job) => (
                 <JobItem 
                     key={job.id}
+                    currentUser={currentUser}
                     navigation={navigation} 
                     job={job}
                 />
@@ -158,11 +165,18 @@ const JobList = ({ navigation, jobs }) => {
 
 const Jobs = ({ navigation }) => {
     const [jobs, setJobs] = useState([]);
+    const [user, setUser] = useState(null);
     const [search, setSearch] = useState('');
 
     useEffect(() => {
+        const getUserInfo = async () => {
+            const data = await User.getUser();
+            setUser(data);
+        };
+
         const unsubscribe = navigation.addListener('focus', async (e) => {
             try {
+                await getUserInfo();
                 const jobsList = await Job.getJobs();
                 setJobs(jobsList);
             } catch (error) {
@@ -224,7 +238,7 @@ const Jobs = ({ navigation }) => {
                      /> */}
 
                     <View style={{ marginBottom: 50 }}>
-                        <JobList navigation={navigation} jobs={jobs} />
+                        <JobList currentUser={user} navigation={navigation} jobs={jobs} />
                     </View>
 
                 </View>

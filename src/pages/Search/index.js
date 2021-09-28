@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef } from 'react';
+import React, { useState, useEffect, createRef, useCallback } from 'react';
 import { StyleSheet, Text, View, ScrollView, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SearchBar, Button } from 'react-native-elements';
@@ -222,57 +222,59 @@ const Search = ({ navigation, route }) => {
         setResultPost(newList);
     };
 
-    useEffect(async () => {
-        const initValue = async () => {
-            const colorList = await Colors.getColors();
-            const categoriesList = await Categories.getCategories();
-
-            setCategories(categoriesList.map((category) => (
-                { label: category.name, value: category.id }
-            )));
-            setColors(colorList.map((color) => (
-                { label: color.name, value: color.id }
-            )));
-
-            await updateHistory();
-
-            if (keyword.trim() === '') {
-                const popular = await Post.getMostLikes();
-                setPopularPost(popular);
-            } else {
-                await updateResultPost();
-            }
-
-        };
-
-        const getUserInfo = async () => {
-            const data = await User.getUser();
-            setUser(data);
-        };
-
-        const unsubscribe = navigation.addListener('focus', async (e) => {
+    useEffect(useCallback(
+        async () => {
+            const initValue = async () => {
+                const colorList = await Colors.getColors();
+                const categoriesList = await Categories.getCategories();
+    
+                setCategories(categoriesList.map((category) => (
+                    { label: category.name, value: category.id }
+                )));
+                setColors(colorList.map((color) => (
+                    { label: color.name, value: color.id }
+                )));
+    
+                await updateHistory();
+    
+                if (keyword.trim() === '') {
+                    const popular = await Post.getMostLikes();
+                    setPopularPost(popular);
+                } else {
+                    await updateResultPost();
+                }
+    
+            };
+    
+            const getUserInfo = async () => {
+                const data = await User.getUser();
+                setUser(data);
+            };
+    
+            const unsubscribe = navigation.addListener('focus', async (e) => {
+                try {
+                    setSearch(keyword);
+                    setShouldKeyShow(false);
+                    setShouldShow(false)
+                    await getUserInfo();
+                    await initValue();
+                } catch (error) {
+                    alert(error.message);
+                    navigation.goBack();
+                }
+            });
+    
             try {
                 setSearch(keyword);
-                setShouldKeyShow(false);
-                setShouldShow(false)
                 await getUserInfo();
                 await initValue();
             } catch (error) {
                 alert(error.message);
-                navigation.goBack();
             }
-        });
-
-        try {
-            setSearch(keyword);
-            await getUserInfo();
-            await initValue();
-        } catch (error) {
-            alert(error.message);
-        }
-
-        return unsubscribe;
-    }, [navigation, route.params])
+    
+            return unsubscribe;
+        }, [navigation, route.params])
+        , [navigation, route.params])
 
     return (
         <SafeAreaView>

@@ -47,7 +47,7 @@ const ButtonLike = ({ post, user, onUpdate }) => {
 const ButtonComment = ({ navigation, postId, postData }) => {
   return (
     <TouchableOpacity onPress={() => {
-      navigation.navigate('detailPost', { id: postId, postData })
+      navigation.navigate('detailPost', { postId: postId, postData })
     }}>
         <FontAwesome5
             name='comment'
@@ -90,7 +90,10 @@ const PostItem = ({ post, user, onUpdate, navigation }) => (
           <TouchableOpacity
               style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15 }}
               onPress={() => {
-                navigation.navigate('ProfilePage', { username: post.username });
+                if (post.username === user.username) {
+                    navigation.navigate('Akun');
+                }
+                else navigation.navigate('ProfilePage', { username: post.username });
               }}>
               <Image
                   source={{
