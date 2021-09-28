@@ -1,15 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Akun, Home, Jobs, Login, Search, Signup, Splash, Upload, detailPost, ProfilePage, LikePages, BookmarkPages, EditPortfolio, PostJob, detailJobs, EditProfile, editPassword, editPhoto, searchUser, Activity, UserDetailJobs, EditJob } from '../pages'
-import { BottomNavigator } from '../components/'
+import BottomNavigator from '../components/BottomNavigator'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import { HeaderButtons, HeaderButton, Item, HiddenItem, OverflowMenu } from 'react-navigation-header-buttons';
+import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
 
-const FontAwesomeHeaderButton = (props) => (
-    <HeaderButton IconComponent={FontAwesome5} color="gray" pressColor="blue" iconSize={23} {...props} />
-);
+const FontAwesomeHeaderButton = (props) => {    
+    return (
+        <HeaderButton 
+            IconComponent={FontAwesome5} 
+            color="gray"
+            pressColor="#007bff" 
+            iconSize={23} 
+            {...props}
+        />
+    );
+};
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -44,7 +52,10 @@ const MainApp = () => {
             <Tab.Screen name="editPhoto" component={editPhoto} options={{ headerShown: false }} />
             <Tab.Screen name="editPassword" component={editPassword} options={{ headerShown: false }} />
             <Tab.Screen name="searchUser" component={searchUser} options={{ headerShown: false }} />
-            <Tab.Screen name="Activity" component={Activity} options={{ headerShown: false }} />
+            <Tab.Screen name="Activity" 
+                component={Activity}
+                options={{ headerShown: false }} 
+            />
             <Tab.Screen name="UserDetailJobs" component={UserDetailJobs} options={{ headerShown: false }} />
             <Tab.Screen name="EditJob" component={EditJob} options={{ headerShown: false }} />
         </Tab.Navigator>
@@ -57,7 +68,7 @@ const Router = () => {
             <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
             <Stack.Screen name="Signup" component={Signup} options={{
                 headerTitle: (props) => (
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row', alignContent: 'center' }}>
                         <LogoTitle {...props} />
                         <Text style={styles.teks}>Instaart</Text>
                     </View>
@@ -74,7 +85,7 @@ const Router = () => {
                 ),
                 headerTitleAlign: 'center'
             }} />
-            <Stack.Screen name="MainApp" component={MainApp} options={({ navigation }) => ({
+            <Stack.Screen name="MainApp" component={MainApp} options={({ navigation, route }) => ({
                 headerTitle: (props) => (
                     <View style={{ flexDirection: 'row' }}>
                         <LogoTitle {...props} />
@@ -83,13 +94,21 @@ const Router = () => {
                 ),
                 headerBackVisible: false,
                 headerTitleAlign: 'left',
-                headerRight: () => (
-                    <HeaderButtons HeaderButtonComponent={FontAwesomeHeaderButton}>
-                        <Item title="like" iconName="compass" onPress={() => navigation.navigate('Activity')} />
-                        <Item title="like" iconName="heart" onPress={() => navigation.navigate('LikePages')} />
-                        <Item title="bookmark" iconName="bookmark" onPress={() => navigation.navigate('BookmarkPages')} />
-                    </HeaderButtons>
-                ),
+                headerRight: () => {
+                    return (
+                        <HeaderButtons HeaderButtonComponent={FontAwesomeHeaderButton}>
+                            <Item 
+                                title="activity" 
+                                iconName="compass" 
+                                onPress={() => {
+                                    navigation.navigate('Activity')
+                                }} 
+                            />
+                            <Item title="like" iconName="heart" onPress={() => navigation.navigate('LikePages')} />
+                            <Item title="bookmark" iconName="bookmark" onPress={() => navigation.navigate('BookmarkPages')} />
+                        </HeaderButtons>
+                    )
+                },
             })} />
         </Stack.Navigator>
     )
