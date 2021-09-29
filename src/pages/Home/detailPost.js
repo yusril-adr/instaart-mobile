@@ -275,12 +275,12 @@ const detailPost = ({ navigation, route }) => {
 
                         <View style={{
                                 ...styles.dateBox,
-                                paddingTop: 10,
+                                // paddingTop: 20,
                             }}
                         >
                             {post?.user_id === user?.id && (
                                 <TouchableOpacity onPress={() => navigation.navigate('EditPortfolio', { postId: post?.id })}>
-                                    <View style={{ alignSelf: 'flex-end', marginRight: 10 }}>
+                                    <View style={{ alignSelf: 'flex-end', marginRight: 10, marginBottom: 20 }}>
                                         <Icon
                                             name='edit'
                                             type='font-awesome'
@@ -524,9 +524,10 @@ const styles = StyleSheet.create({
         marginLeft: 15
     },
     dateBox: {
+        justifyContent: 'center',
         alignSelf: 'center',
         width: 350,
-        height: 345,
+        minHeight: 345,
         backgroundColor: '#333',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },

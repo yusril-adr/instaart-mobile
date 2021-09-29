@@ -1,9 +1,10 @@
-import React, { useState, createRef } from 'react'
-import { StyleSheet, Dimensions, TextInput, View, Text, ScrollView, TouchableOpacity, Keyboard, KeyboardAvoidingView } from 'react-native'
+import React, { useState, useEffect, useCallback, createRef } from 'react'
+import { Alert, StyleSheet, Dimensions, TextInput, View, Text, ScrollView, TouchableOpacity, Keyboard, KeyboardAvoidingView } from 'react-native'
 import { Button } from 'react-native-elements'
 import RNPickerSelect from 'react-native-picker-select'
 import { Chevron } from 'react-native-shapes'
 import User from '../../data/user'
+import Location from '../../data/location'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -17,8 +18,9 @@ const EditProfile = ({ navigation }) => {
     const [userTelepon, setUserTelepon] = useState('');
     const [userBio, setUserBio] = useState('');
     const [errortext, setErrortext] = useState('');
-    const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
-    const [selectedValue, setSelectedValue] = useState('');
+    const [user, setUser] = useState(null);
+    const [cities, setCities] = useState([]);
+    const [provincies, setProvincies] = useState([]);
 
     const emailInputRef = createRef();
     const passwordInputRef = createRef();
@@ -29,109 +31,77 @@ const EditProfile = ({ navigation }) => {
     const teleponInputRef = createRef();
     const bioInputRef = createRef();
 
-    const handleSubmitButton = () => {
-        setErrortext('');
-        if (!userName) {
-            alert('Mohon isi Nama');
-            return;
-        }
-        if (!userCompleteName) {
-            alert('Mohon Isi Nama Lengkap');
-            return;
-        }
-        if (!userEmail) {
-            alert('Mohon isi Email');
-            return;
-        }
-        if (!userTelepon) {
-            alert('Mohon Isi Nomor Telepon');
-            return;
-        }
-        if (!userProvinsi) {
-            alert('Mohon Pilih Provinsi');
-            return;
-        }
-        if (!userKota) {
-            alert('Mohon Pilih Kota');
-            return;
-        }
-        if (!userBio) {
-            alert('Mohon Isi Bio');
-            return;
-        }
+    const logOutHandler = () => {
+        Alert.alert(
+            "Apakah Anda yakin ingin keluar ?",
+            "Anda dapat masuk kembali dengan username dan password yang sama.",
+            [
+                {
+                    text: "Tidak",
+                    style: "cancel"
+                },
+                { text: "Ya", onPress: async () => {
+                    try {
+                        await User.signOut();
+                        navigation.navigate('Login');
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                } }
+            ]
+        );
+    };
 
-        navigation.replace('Login');
-        //   //Show Loader
-        //   var dataToSend = {
-        //     name: userName,
-        //     email: userEmail,
-        //     age: userAge,
-        //     address: userAddress,
-        //     password: userPassword,
-        //   };
-        //   var formBody = [];
-        //   for (var key in dataToSend) {
-        //     var encodedKey = encodeURIComponent(key);
-        //     var encodedValue = encodeURIComponent(dataToSend[key]);
-        //     formBody.push(encodedKey + '=' + encodedValue);
-        //   }
-        //   formBody = formBody.join('&');
+    const handleSubmitButton = async () => {
+        try {
+            setErrortext('');
+            if (!userName) {
+                alert('Mohon isi Nama');
+                return;
+            }
+            if (!userCompleteName) {
+                alert('Mohon Isi Nama Lengkap');
+                return;
+            }
+            if (!userEmail) {
+                alert('Mohon isi Email');
+                return;
+            }
+            if (!userTelepon) {
+                alert('Mohon Isi Nomor Telepon');
+                return;
+            }
+            if (!userProvinsi) {
+                alert('Mohon Pilih Provinsi');
+                return;
+            }
+            if (!userKota) {
+                alert('Mohon Pilih Kota');
+                return;
+            }
+            // if (!userBio) {
+            //     alert('Mohon Isi Bio');
+            //     return;
+            // }
 
-        //   fetch('http://localhost:3000/api/user/register', {
-        //     method: 'POST',
-        //     body: formBody,
-        //     headers: {
-        //       //Header Defination
-        //       'Content-Type':
-        //       'application/x-www-form-urlencoded;charset=UTF-8',
-        //     },
-        //   })
-        //     .then((response) => response.json())
-        //     .then((responseJson) => {
-        //       //Hide Loader
-        //       console.log(responseJson);
-        //       // If server response message same as Data Matched
-        //       if (responseJson.status === 'success') {
-        //         setIsRegistraionSuccess(true);
-        //         console.log(
-        //           'Registration Successful. Please Login to proceed'
-        //         );
-        //       } else {
-        //         setErrortext(responseJson.msg);
-        //       }
-        //     })
-        //     .catch((error) => {
-        //       //Hide Loader
-        //       console.error(error);
-        //     });
-        // };
-        // if (isRegistraionSuccess) {
-        //   return (
-        //     <View
-        //       style={{
-        //         flex: 1,
-        //         backgroundColor: '#307ecc',
-        //         justifyContent: 'center',
-        //       }}>
-        //       <Image
-        //         source={require('../../assets/images/facebook.png')}
-        //         style={{
-        //           height: 150,
-        //           resizeMode: 'contain',
-        //           alignSelf: 'center'
-        //         }}
-        //       />
-        //       <Text style={styles.successTextStyle}>
-        //         Registration Successful
-        //       </Text>
-        //       <TouchableOpacity
-        //         style={styles.buttonStyle}
-        //         activeOpacity={0.5}
-        //         onPress={() => props.navigation.navigate('LoginScreen')}>
-        //         <Text style={styles.buttonTextStyle}>Login Now</Text>
-        //       </TouchableOpacity>
-        //     </View>
-        //   );
+            const inputData = {
+                username: userName,
+                email: userEmail,
+                display_name: userCompleteName,
+                phone_number: userTelepon,
+                province_id: userProvinsi,
+                city_id: userKota,
+                province_name: await Location.getProvince(userProvinsi),
+                city_name: await Location.getCity(userKota),
+                biodata: userBio,
+            };
+
+            await User.update(inputData);
+
+            navigation.navigate('Akun');
+        } catch (error) {
+            alert(error.message)
+        }
     }
 
     const placeholder = {
@@ -139,6 +109,46 @@ const EditProfile = ({ navigation }) => {
         value: null,
         color: '#007bff',
     };
+
+    const getUserInfo = async () => {
+        const data = await User.getUser();
+        setUser(data);
+    };
+
+    const setDefaultValue = async () => {
+
+        const provinciesList = await Location.getProvinces();
+        setProvincies(provinciesList.map((provincy) => (
+            { label: provincy.nama, value: provincy.id }
+        )));
+
+        const citiesList = await Location.getCitiesByProvinceId(user?.province_id);
+        setCities(citiesList.map((city) => (
+            { label: city.nama, value: city.id }
+        )));
+
+        setUserName(user?.username);
+        setUserCompleteName(user?.display_name);
+        setUserEmail(user?.email);
+        setUserTelepon(user?.phone_number);
+        setUserProvinsi(parseInt(user?.province_id));
+        setUserKota(parseInt(user?.city_id));
+        setUserBio(user?.biodata);
+    };
+
+    useEffect(useCallback(() => {
+        const unsubscribe = navigation.addListener('focus', async (e) => {
+            try {
+                await getUserInfo();
+                await setDefaultValue();
+            } catch (error) {
+                alert(error.message);
+                navigation.goBack();
+            }
+        });
+
+        return unsubscribe;
+    }));
 
     return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -216,6 +226,7 @@ const EditProfile = ({ navigation }) => {
                                     cNameInputRef.current && cNameInputRef.current.focus()
                                 }
                                 blurOnSubmit={false}
+                                value={userName}
                             />
                         </View>
 
@@ -235,6 +246,7 @@ const EditProfile = ({ navigation }) => {
                                     emailInputRef.current && emailInputRef.current.focus()
                                 }
                                 blurOnSubmit={false}
+                                value={userCompleteName}
                             />
                         </View>
 
@@ -254,6 +266,7 @@ const EditProfile = ({ navigation }) => {
                                     teleponInputRef.current.focus()
                                 }
                                 blurOnSubmit={false}
+                                value={userEmail}
                             />
                         </View>
 
@@ -272,6 +285,7 @@ const EditProfile = ({ navigation }) => {
                                 returnKeyType="next"
                                 onSubmitEditing={Keyboard.dismiss}
                                 blurOnSubmit={false}
+                                value={userTelepon}
                             />
                         </View>
 
@@ -296,14 +310,19 @@ const EditProfile = ({ navigation }) => {
                                 }}
                                 useNativeAndroidPickerStyle={false}
                                 placeholder={placeholder}
-                                onValueChange={(userProvinsi) => setUserProvinsi(userProvinsi)}
+                                onValueChange={async (provinsiInput) => {
+                                    setUserProvinsi(provinsiInput);
+
+                                    const citiesList = await Location.getCitiesByProvinceId(provinsiInput);
+
+                                    setCities(citiesList.map((city) => (
+                                        { label: city.nama, value: city.id }
+                                    )));
+                                }}
                                 ref={provInputRef}
                                 returnKeyType="next"
-                                items={[
-                                    { label: 'Jawa Timur', value: 'Jawa Timur' },
-                                    { label: 'Jawa Barat', value: 'Jawa Barat' },
-                                    { label: 'Jawa Tengah', value: 'Jawa Tengah' },
-                                ]}
+                                value={userProvinsi}
+                                items={provincies}
                             />
                         </View>
 
@@ -331,11 +350,8 @@ const EditProfile = ({ navigation }) => {
                                 onValueChange={(userKota) => setUserKota(userKota)}
                                 ref={kotaInputRef}
                                 returnKeyType="next"
-                                items={[
-                                    { label: 'Surabaya', value: 'Surabaya' },
-                                    { label: 'Bandung', value: 'Bandung' },
-                                    { label: 'Solo', value: 'Solo' },
-                                ]}
+                                value={userKota}
+                                items={cities}
                             />
                         </View>
 
@@ -356,6 +372,7 @@ const EditProfile = ({ navigation }) => {
                                 returnKeyType="next"
                                 onSubmitEditing={Keyboard.dismiss}
                                 blurOnSubmit={false}
+                                value={userBio}
                             />
                         </View>
 
@@ -384,10 +401,7 @@ const EditProfile = ({ navigation }) => {
                                     height: 40,
                                     borderRadius: 8,
                                 }}
-                                onPress={async () => {
-                                    await User.signOut();
-                                    navigation.replace('Login');
-                                }}
+                                onPress={logOutHandler}
                             />
                         </View>
                     </View>

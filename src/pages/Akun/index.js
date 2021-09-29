@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, Text, View, ScrollView, Dimensions, Image, TouchableOpacity } from 'react-native';
+import { Alert, StyleSheet, Text, View, ScrollView, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import CONFIG from '../../global/config';
@@ -31,13 +31,25 @@ const Akun = ({ navigation }) => {
         return unsubscribe;
     }, [navigation]));
 
-    const logOutHandler = async () => {
-        try {
-            await User.signOut();
-            navigation.navigate('Login');
-        } catch (error) {
-            alert(error.message);
-        }
+    const logOutHandler = () => {
+        Alert.alert(
+            "Apakah Anda yakin ingin keluar ?",
+            "Anda dapat masuk kembali dengan username dan password yang sama.",
+            [
+                {
+                    text: "Tidak",
+                    style: "cancel"
+                },
+                { text: "Ya", onPress: async () => {
+                    try {
+                        await User.signOut();
+                        navigation.navigate('Login');
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                } }
+            ]
+        );
     };
 
     return (
