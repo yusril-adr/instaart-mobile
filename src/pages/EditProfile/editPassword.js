@@ -1,7 +1,8 @@
-import React, { useState, createRef } from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 import { StyleSheet, Dimensions, TextInput, View, Text, ScrollView, TouchableOpacity, Keyboard, KeyboardAvoidingView } from 'react-native';
 import { Button } from 'react-native-elements';
 import PasswordInputText from 'react-native-hide-show-password-input';
+import User from '../../data/user';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -10,96 +11,55 @@ const editPassword = ({ navigation }) => {
     const [userPassword, setUserPassword] = useState('');
     const [userNewPassword, setUserNewPassword] = useState('');
     const [errortext, setErrortext] = useState('');
+    const [user, setUser] = useState(null);
     const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
     const [selectedValue, setSelectedValue] = useState('');
 
     const passwordInputRef = createRef();
     const newPasswordInputRef = createRef();
 
-    const handleSubmitButton = () => {
-        setErrortext('');
-        if (!userPassword) {
-            alert('Mohon isi Password');
-            return;
-        }
-        if (!userNewPassword) {
-            alert('Mohon Konfirmasi Pssword');
-            return;
-        }
+    const handleSubmitButton = async () => {
+        try {
+            setErrortext('');
+            if (!userPassword) {
+                alert('Mohon isi Password');
+                return;
+            }
+            if (!userNewPassword) {
+                alert('Mohon Konfirmasi Pssword');
+                return;
+            }
 
-        navigation.replace('Login');
-        //   //Show Loader
-        //   var dataToSend = {
-        //     name: userName,
-        //     email: userEmail,
-        //     age: userAge,
-        //     address: userAddress,
-        //     password: userPassword,
-        //   };
-        //   var formBody = [];
-        //   for (var key in dataToSend) {
-        //     var encodedKey = encodeURIComponent(key);
-        //     var encodedValue = encodeURIComponent(dataToSend[key]);
-        //     formBody.push(encodedKey + '=' + encodedValue);
-        //   }
-        //   formBody = formBody.join('&');
+            await User.updatePassword({
+                new_password: userNewPassword,
+                current_password: userPassword,
+            })
 
-        //   fetch('http://localhost:3000/api/user/register', {
-        //     method: 'POST',
-        //     body: formBody,
-        //     headers: {
-        //       //Header Defination
-        //       'Content-Type':
-        //       'application/x-www-form-urlencoded;charset=UTF-8',
-        //     },
-        //   })
-        //     .then((response) => response.json())
-        //     .then((responseJson) => {
-        //       //Hide Loader
-        //       console.log(responseJson);
-        //       // If server response message same as Data Matched
-        //       if (responseJson.status === 'success') {
-        //         setIsRegistraionSuccess(true);
-        //         console.log(
-        //           'Registration Successful. Please Login to proceed'
-        //         );
-        //       } else {
-        //         setErrortext(responseJson.msg);
-        //       }
-        //     })
-        //     .catch((error) => {
-        //       //Hide Loader
-        //       console.error(error);
-        //     });
-        // };
-        // if (isRegistraionSuccess) {
-        //   return (
-        //     <View
-        //       style={{
-        //         flex: 1,
-        //         backgroundColor: '#307ecc',
-        //         justifyContent: 'center',
-        //       }}>
-        //       <Image
-        //         source={require('../../assets/images/facebook.png')}
-        //         style={{
-        //           height: 150,
-        //           resizeMode: 'contain',
-        //           alignSelf: 'center'
-        //         }}
-        //       />
-        //       <Text style={styles.successTextStyle}>
-        //         Registration Successful
-        //       </Text>
-        //       <TouchableOpacity
-        //         style={styles.buttonStyle}
-        //         activeOpacity={0.5}
-        //         onPress={() => props.navigation.navigate('LoginScreen')}>
-        //         <Text style={styles.buttonTextStyle}>Login Now</Text>
-        //       </TouchableOpacity>
-        //     </View>
-        //   );
+            alert('Password berhasil diperbarui')
+
+            navigation.navigate('Akun');
+        } catch (error) {
+            alert(error.message)
+        }
     }
+
+    const getUserInfo = async () => {
+        const data = await User.getUser();
+        setUser(data);
+    };
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', async (e) => {
+            try {
+                await getUserInfo();
+            } catch (error) {
+                alert(error.message);
+                navigation.goBack();
+            }
+        });
+
+        return unsubscribe;
+    }, [navigation]);
 
     const placeholder = {
         label: 'Pilih masukan',
@@ -107,7 +67,6 @@ const editPassword = ({ navigation }) => {
         color: '#007bff',
     };
 
-    const [password, setPassword] = useState('');
     let inputRef = null;
 
     return (
@@ -172,26 +131,6 @@ const editPassword = ({ navigation }) => {
                             <Text style={styles.teksSatu}>Password</Text>
                         </View>
 
-                        {/* <View style={styles.SectionStyle}>
-                            
-                            <TextInput
-                                style={styles.inputStyle}
-                                onChangeText={(userNewPassword) =>
-                                    setUserNewPassword(userNewPassword)
-                                }
-                                underlineColorAndroid="#f000"
-                                placeholder="Masukkan password baru"
-                                placeholderTextColor="#000"
-                                ref={newPasswordInputRef}
-                                returnKeyType="next"
-                                secureTextEntry={true}
-                                onSubmitEditing={() =>
-                                    newPasswordInputRef.current &&
-                                    newPasswordInputRef.current.focus()
-                                }
-                                blurOnSubmit={false}
-                            />
-                        </View> */}
                         <Text style={{marginLeft: 30}}>Password Baru</Text>
                         <View style={{
                             borderWidth: 1,
@@ -202,8 +141,8 @@ const editPassword = ({ navigation }) => {
                         }}>
                             <PasswordInputText
                                 getRef={(input) => (inputRef = input)}
-                                value={password}
-                                label='Masukkan password baru'
+                                value={userNewPassword}
+                                label=''
                                 onChangeText={(userNewPassword) =>
                                     setUserNewPassword(userNewPassword)
                                 }
@@ -211,23 +150,6 @@ const editPassword = ({ navigation }) => {
                             />
                         </View>
 
-                        {/* <View style={styles.SectionStyle}>
-                            <Text>Password Saat Ini</Text>
-                            <TextInput
-                                style={styles.inputStyle}
-                                onChangeText={(UserPassword) =>
-                                    setUserPassword(UserPassword)
-                                }
-                                underlineColorAndroid="#f000"
-                                placeholder="Masukkan password lama"
-                                placeholderTextColor="#000"
-                                ref={passwordInputRef}
-                                returnKeyType="next"
-                                secureTextEntry={true}
-                                onSubmitEditing={Keyboard.dismiss}
-                                blurOnSubmit={false}
-                            />
-                        </View> */}
                         <Text style={{marginLeft: 30, marginTop: 20}}>Password Saat Ini</Text>
                         <View style={{
                             borderWidth: 1,
@@ -238,9 +160,9 @@ const editPassword = ({ navigation }) => {
                         }}>
                             <PasswordInputText
                                 getRef={(input) => (inputRef = input)}
-                                value={password}
-                                label='Masukkan password lama'
-                                onChangeText={(password) => setPassword(password)}
+                                value={userPassword}
+                                label=''
+                                onChangeText={(password) => setUserPassword(password)}
                                 style={styles.inputStyleForPwd}
                             />
                         </View>
@@ -348,7 +270,8 @@ const styles = StyleSheet.create({
         marginTop: -25,
         marginRight: 20,
         borderColor: '#000',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        color: '#000',
     },
     errorTextStyle: {
         color: 'red',

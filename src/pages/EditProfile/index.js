@@ -9,7 +9,7 @@ import Location from '../../data/location'
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const EditProfile = ({ navigation }) => {
+const EditProfile = ({ navigation, route }) => {
     const [userName, setUserName] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [userCompleteName, setUserCompleteName] = useState('');
@@ -115,7 +115,7 @@ const EditProfile = ({ navigation }) => {
         setUser(data);
     };
 
-    const setDefaultValue = async () => {
+    const setDefaultValue = async (user = user) => {
 
         const provinciesList = await Location.getProvinces();
         setProvincies(provinciesList.map((provincy) => (
@@ -139,8 +139,9 @@ const EditProfile = ({ navigation }) => {
     useEffect(useCallback(() => {
         const unsubscribe = navigation.addListener('focus', async (e) => {
             try {
-                await getUserInfo();
-                await setDefaultValue();
+                const data = await User.getUser();
+                setUser(data);
+                await setDefaultValue(data);
             } catch (error) {
                 alert(error.message);
                 navigation.goBack();
@@ -148,7 +149,7 @@ const EditProfile = ({ navigation }) => {
         });
 
         return unsubscribe;
-    }));
+    }), [navigation]);
 
     return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>

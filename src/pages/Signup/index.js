@@ -484,7 +484,8 @@ const styles = StyleSheet.create({
     marginTop: -25,
     marginRight: 20,
     borderColor: '#000',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    color: '#000',
   },
   textmasuk: {
     color: '#000',
