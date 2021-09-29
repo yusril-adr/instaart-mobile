@@ -1,46 +1,116 @@
-import React, { useState, createRef } from 'react'
-import { StyleSheet, Dimensions, TextInput, View, Text, ScrollView, TouchableOpacity, Keyboard, KeyboardAvoidingView, Image } from 'react-native'
+import React, { useState, useEffect, createRef } from 'react'
+import { Alert, StyleSheet, Dimensions, TextInput, View, Text, ScrollView, TouchableOpacity, Keyboard, KeyboardAvoidingView, Image } from 'react-native'
 import { Button, SearchBar } from 'react-native-elements'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import ImagePicker from '../../components/ImagePicker'
+import { launchImageLibrary } from 'react-native-image-picker';
+import CONFIG from '../../global/config'
+import User from '../../data/user'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const SearchContainer = () => {
-    const [search, setSearch] = useState('');
-    const searchInputRef = createRef();
-    return (
-        <SearchBar
-            placeholder="Pilih file ..."
-            placeholderTextColor='#000'
-            containerStyle={{ backgroundColor: 'transparent', borderTopWidth: 0, borderBottomWidth: 0 }}
-            inputContainerStyle={{
-                backgroundColor: '#eee',
-                flexDirection: 'row-reverse',
-                borderWidth: 1,
-                borderRadius: 10,
-                paddingLeft: 10,
-                borderBottomWidth: 1,
-                marginVertical: 30,
-                width: 310,
-                height: 35,
-                alignSelf: 'center'
-            }}
-            lightTheme
-            onChangeText={(search) => setSearch(search)}
-            value={search}
-            ref={searchInputRef}
-            searchIcon={() => <FontAwesome5
-                name='file-upload'
-                size={20}
-                color='#007bff'
-            />}
-        />
-    )
-}
-
 const editPhoto = ({ navigation }) => {
+    const [user, setUser] = useState(null);
+    const [uploadImage, setUploadImage] = useState(null);
+
+    const handleChooseFile = async () => {
+        try {
+            launchImageLibrary({mediaType: 'photo'}, (response) => {
+                if (response.errorMessage) {
+                    return alert(response.errorMessage);
+                }
+
+                if (response.assets?.length > 0) setUploadImage(response.assets[0]);             
+            });
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+
+    const handleDeleteButton = async () => {
+        Alert.alert(
+            "Apakah Anda yakin ?",
+            "Foto profil anda tidak akan dapat dikembalikan lagi.",
+            [
+                {
+                    text: "Tidak",
+                    style: "cancel"
+                },
+                { text: "Ya", onPress: async () => {
+                    try {
+                        await User.removePicture();
+
+                        setUploadImage(null);
+
+                        Alert.alert(
+                            'Berhasil !',
+                            'Foto profil berhasil dihapus',
+                            [
+                                { 
+                                    text: "OK", 
+                                    onPress: () => {
+                                        navigation.navigate('Akun');
+                                    },  
+                                }
+                            ],
+                        );
+
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                } }
+            ]
+        );
+    }
+
+    const handleSubmitButton = async () => {
+        try {
+            const formImg = new FormData();
+            formImg.append('profile_image', {
+                name: uploadImage.fileName,
+                type: uploadImage.type,
+                uri: Platform.OS === 'ios' ? uploadImage.uri.replace('file://', '') : uploadImage.uri,
+              });
+
+            await User.updatePicture(formImg);
+
+            setUploadImage(null);
+
+            Alert.alert(
+                'Berhasil !',
+                'Foto profil berhasil dirubah',
+                [
+                    { 
+                        text: "OK", 
+                        onPress: () => {
+                            navigation.navigate('Akun');
+                        },  
+                    }
+                ],
+            );
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
+    const getUserInfo = async () => {
+        const data = await User.getUser();
+        setUser(data);
+    };
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', async (e) => {
+            try {
+                await getUserInfo();
+            } catch (error) {
+                alert(error.message);
+                navigation.goBack();
+            }
+        });
+
+        return unsubscribe;
+    }, [navigation]);
+
     return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
             <ScrollView
@@ -104,14 +174,38 @@ const editPhoto = ({ navigation }) => {
                         </View>
 
                         <Image
-                            source={require('../../assets/images/user.jpg')}
+                            source={{
+                                uri: uploadImage ? uploadImage.uri : `${CONFIG.IMAGE_PATH.USER}/${user?.image}`
+                            }}
                             style={styles.mainProfile}
                         />
 
-                        {/* <SearchContainer></SearchContainer> */}
-                        <ImagePicker></ImagePicker>
+                        <View
+                            style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                marginTop: 30,
+                            }}
+                        >
+                            <Button
+                                title="Upload"
+                                titleStyle={{
+                                    color: '#007bff',
+                                }}
+                                buttonStyle={{
+                                    backgroundColor: 'transparent',
+                                    borderColor: '#007bff',
+                                    borderWidth: 1,
+                                    width: 90,
+                                    height: 40,
+                                    borderRadius: 8,
+                                    marginHorizontal: 'auto',
+                                }}
+                                onPress={handleChooseFile}
+                            />
+                        </View>
 
-                        <View style={{ flexDirection: 'row-reverse', justifyContent: 'space-evenly', marginBottom: 30 }}>
+                        <View style={{ flexDirection: 'row-reverse', justifyContent: 'space-evenly', marginBottom: 30, marginTop: 30, }}>
                             <Button
                                 title={'Simpan'}
                                 buttonStyle={{
@@ -120,7 +214,7 @@ const editPhoto = ({ navigation }) => {
                                     height: 40,
                                     borderRadius: 8,
                                 }}
-                                onPress={() => navigation.navigate('Akun')}
+                                onPress={handleSubmitButton}
                             />
                             <Button
                                 title={'Hapus'}
@@ -130,7 +224,7 @@ const editPhoto = ({ navigation }) => {
                                     height: 40,
                                     borderRadius: 8,
                                 }}
-                                onPress={() => navigation.navigate('Akun')}
+                                onPress={handleDeleteButton}
                             />
                         </View>
                     </View>

@@ -24,7 +24,7 @@ const KeywordList = ({ history, setShouldShow, setSearch }) => {
                 backgroundColor: 'white',
                 marginHorizontal: 24,
                 top: -9,
-                borderWidth: 1,
+                borderWidth: history?.length > 0 ? 1 : 0,
             }}
         >
             {history.map((keyword) => (
