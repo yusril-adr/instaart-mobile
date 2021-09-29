@@ -13,15 +13,6 @@ const ProfilePage = ({ navigation, route }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [targetUser, setTargetUser] = useState(null);
 
-    const logOutHandler = async () => {
-        try {
-            await User.signOut();
-            navigation.navigate('Login');
-        } catch (error) {
-            alert(error.message);
-        }
-    };
-
     const ProfileButton = ({ onUpdate }) => {
         if ((targetUser?.id === currentUser?.id) && targetUser?.id) {
             return (
@@ -178,32 +169,38 @@ const ProfilePage = ({ navigation, route }) => {
                         <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
                             <Text style={{ fontSize: 20, marginTop: 10 }}>Profil</Text>
                         </View>
-                        <View style={{
-                            flexDirection: 'row',
-                            borderTopWidth: 1,
-                            marginTop: 15,
-                            width: 358,
-                            backgroundColor: 'white',
-                            paddingVertical: 6,
-                            paddingHorizontal: 20,
-                            justifyContent: 'space-between'
-                        }}>
+                        <TouchableOpacity 
+                            style={{
+                                flexDirection: 'row',
+                                borderTopWidth: 1,
+                                marginTop: 15,
+                                width: 358,
+                                backgroundColor: 'white',
+                                paddingVertical: 6,
+                                paddingHorizontal: 20,
+                                justifyContent: 'space-between'
+                            }}
+                            onPress={() => navigation.navigate('FollowerPage', { username: targetUser?.username })}
+                        >
                             <Text style={{ fontSize: 15 }}>Pengikut</Text>
                             <Text style={{ fontSize: 15 }}>{targetUser?.followers?.length || 0}</Text>
-                        </View>
-                        <View style={{
-                            flexDirection: 'row',
-                            borderTopWidth: 1,
-                            width: 358,
-                            alignSelf: 'center',
-                            backgroundColor: 'white',
-                            paddingVertical: 6,
-                            paddingHorizontal: 20,
-                            justifyContent: 'space-between'
-                        }}>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                            style={{
+                                flexDirection: 'row',
+                                borderTopWidth: 1,
+                                width: 358,
+                                alignSelf: 'center',
+                                backgroundColor: 'white',
+                                paddingVertical: 6,
+                                paddingHorizontal: 20,
+                                justifyContent: 'space-between'
+                            }}
+                            onPress={() => navigation.navigate('FollowingPage', { username: targetUser?.username })}
+                        >
                             <Text style={{ fontSize: 15 }}>Mengikuti</Text>
                             <Text style={{ fontSize: 15 }}>{targetUser?.following?.length || 0}</Text>
-                        </View>
+                        </TouchableOpacity>
                         <View style={{
                             flexDirection: 'row',
                             borderTopWidth: 1,

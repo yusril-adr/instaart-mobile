@@ -3,7 +3,7 @@ import MMKVwithEncryption from "./MMKVwithEncryption";
 
 const History = {
   async getHistory() {
-    const data = await MMKVwithEncryption.getStringAsync(CONFIG.HISTORY_KEY) || null;
+    const data = (await MMKVwithEncryption.getStringAsync(CONFIG.HISTORY_KEY)) || null;
 
     const history = JSON.parse(data) || [];
     return history.reverse();

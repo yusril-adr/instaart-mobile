@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Akun, Home, Jobs, Login, Search, Signup, Splash, Upload, detailPost, ProfilePage, LikePages, BookmarkPages, EditPortfolio, PostJob, detailJobs, EditProfile, editPassword, editPhoto, searchUser, Activity, UserDetailJobs, EditJob } from '../pages'
+import { Akun, Home, Jobs, Login, Search, Signup, Splash, Upload, detailPost, ProfilePage, LikePages, BookmarkPages, FollowerPages, FollowingPages, EditPortfolio, PostJob, detailJobs, EditProfile, editPassword, editPhoto, searchUser, Activity, UserDetailJobs, EditJob } from '../pages'
 import BottomNavigator from '../components/BottomNavigator'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
@@ -59,6 +59,8 @@ const MainApp = () => {
             />
             <Tab.Screen name="UserDetailJobs" component={UserDetailJobs} options={{ headerShown: false }} />
             <Tab.Screen name="EditJob" component={EditJob} options={{ headerShown: false }} />
+            <Tab.Screen name="FollowerPage" component={FollowerPages} options={{ headerShown: false }} />
+            <Tab.Screen name="FollowingPage" component={FollowingPages} options={{ headerShown: false }} />
         </Tab.Navigator>
     )
 }

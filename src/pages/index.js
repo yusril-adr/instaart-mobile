@@ -10,6 +10,8 @@ import detailPost from './Home/detailPost'
 import ProfilePage from './ProfilePage'
 import LikePages from './LikePages'
 import BookmarkPages from './Bookmarkpages'
+import FollowerPages from './FollowerPages'
+import FollowingPages from './FollowingPages'
 import EditPortfolio from './EditPortfolio'
 import PostJob from './PostJob'
 import detailJobs from './Jobs/detailJobs'
@@ -21,4 +23,4 @@ import Activity from './ActivityPage'
 import UserDetailJobs from './Jobs/UserDetailJobs'
 import EditJob from './EditJob'
 
-export {Akun, Home, Jobs, Login, Search, Signup, Splash, Upload, detailPost, ProfilePage, LikePages, BookmarkPages, EditPortfolio, PostJob, detailJobs, EditProfile, editPhoto, editPassword, searchUser, Activity, UserDetailJobs, EditJob}
+export {Akun, Home, Jobs, Login, Search, Signup, Splash, Upload, detailPost, ProfilePage, LikePages, BookmarkPages, FollowerPages, FollowingPages, EditPortfolio, PostJob, detailJobs, EditProfile, editPhoto, editPassword, searchUser, Activity, UserDetailJobs, EditJob}

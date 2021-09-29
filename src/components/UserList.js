@@ -51,13 +51,13 @@ const EmptyResultItem = () => (
       alignSelf: 'center' 
       }}
     >
-      <FontAwesome5
+      {/* <FontAwesome5
           name='smile-wink'
           size={30}
           color='gray'
           style={{ alignSelf: 'center' }}
-      />
-      <Text style={{ fontSize: 20, textAlign: 'center', textAlignVertical: 'center' }}>Belum ada desain untuk saat ini</Text>
+      /> */}
+      <Text style={{ fontSize: 20, textAlign: 'center', textAlignVertical: 'center' }}>Masih belum ada daftar untuk saat ini</Text>
   </View>
 );
 
