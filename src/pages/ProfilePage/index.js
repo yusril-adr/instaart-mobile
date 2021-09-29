@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Linking } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { CommonActions } from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
@@ -256,7 +256,17 @@ const ProfilePage = ({ navigation, route }) => {
                             borderBottomStartRadius: 10
                         }}>
                             <TouchableOpacity
-                                style={{ backgroundColor: '#007bff', borderRadius: 50 }}>
+                                style={{ backgroundColor: '#007bff', borderRadius: 50 }}
+                                onPress={async () => {
+                                    try {
+                                        // const supported = await Linking.canOpenURL(job?.form_link);
+
+                                        await Linking.openURL(`mailto:${targetUser.email}`);
+                                    } catch (error) {
+                                        alert(error.message);
+                                    }
+                                }}
+                            >
                                 <Text style={{ color: 'white', marginHorizontal: 20, marginVertical: 5 }}>Ajak Kerjasama</Text>
                             </TouchableOpacity>
                         </View>

@@ -1,63 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Text, View, ScrollView, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import CONFIG from '../../global/config';
 import User from '../../data/user';
+import PostList from '../../components/PostList';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const ButtonLike = () => {
-    const [Like, setLike] = useState(false);
-    const Pressed = () => {
-        setLike(!Like);
-        alert('Anda menekan Tombol Like');
-    };
-    return (
-        <View>
-            <TouchableOpacity onPress={() => Pressed()}>
-                <FontAwesome5
-                    name='thumbs-up'
-                    size={23}
-                    color={Like ? 'blue' : 'gray'}
-                />
-            </TouchableOpacity>
-        </View>
-    );
-};
-
-const ButtonComment = () => {
-    return (
-        <FontAwesome5
-            name='comment'
-            size={25}
-            color='gray'
-        />
-    );
-};
-
-const ButtonViews = () => {
-    const [Views, setViews] = useState(false);
-    const Pressed = () => {
-        setViews(!Views);
-        alert('Anda menekan Tombol View');
-    };
-    return (
-        <View>
-            <TouchableOpacity onPress={() => Pressed()}>
-                <FontAwesome5
-                    name='eye'
-                    size={25}
-                    color={Views ? 'blue' : 'gray'}
-                />
-            </TouchableOpacity>
-        </View>
-    );
-};
-
 const Akun = ({ navigation }) => {
+    const [currentUser, setCurrentUser] = useState(null);
 
-    const handleSubmitPress = async () => {
+    const updateUserInfo = async () => {
+        const data = await User.getUser();
+        const fullData = await User.getUserByUsername(data.username);
+        setCurrentUser(fullData);
+    };
+
+    useEffect(useCallback(() => {
+        const unsubscribe = navigation.addListener('focus', async (e) => {
+            try {
+                await updateUserInfo();
+            } catch (error) {
+                alert(error.message);
+                navigation.navigate('Login');
+            }
+        });
+
+        return unsubscribe;
+    }, [navigation]));
+
+    const logOutHandler = async () => {
         try {
             await User.signOut();
             navigation.navigate('Login');
@@ -75,17 +49,50 @@ const Akun = ({ navigation }) => {
                         <View
                             style={{ flexDirection: 'column' }}>
                             <Image
-                                source={require('../../assets/images/user.jpg')}
+                                source={ 
+                                    { 
+                                        uri: `${CONFIG.IMAGE_PATH.USER}/${currentUser?.image}`
+                                            || `${CONFIG.IMAGE_PATH.USER}/default_user.png`,
+                                    } 
+                                }
                                 style={styles.mainProfile}
                             />
-                            <Text style={styles.mainUsername}>Quinella</Text>
-                            <Text style={{ textAlign: 'center' }}>Administrator-chan</Text>
-                            <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
-                                <View style={{ flexDirection: 'row', backgroundColor: '#fff', width: 100, height: 35, alignItems: 'center', borderRadius: 10, borderWidth: 1, borderColor: 'blue', marginTop: 20, alignSelf: 'center', justifyContent: 'center' }}>
-                                    <Text style={{ color: 'blue' }}>Edit Profile</Text>
+                            <Text style={styles.mainUsername}>{currentUser?.username}</Text>
+                            <Text style={{ textAlign: 'center' }}>{currentUser?.display_name}</Text>
+                            
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('EditProfile')}
+                            >
+                                <View 
+                                    style={{ 
+                                        flexDirection: 'row', 
+                                        backgroundColor: '#fff', 
+                                        width: 100, 
+                                        height: 35, 
+                                        alignItems: 'center', 
+                                        borderRadius: 10, 
+                                        borderWidth: 1, 
+                                        borderColor: 'blue', 
+                                        marginTop: 20, 
+                                        alignSelf: 'center', 
+                                        justifyContent: 'center' 
+                                    }}
+                                >
+                                    {/* <Icon 
+                                        name='edit'
+                                        type='font-awesome'
+                                        color='#007bff'
+                                        size={20}
+                                        style={{ marginRight: 7 }} 
+                                    /> */}
+
+                                    <Text style={{ color: '#007bff' }}>Edit Profile</Text>
                                 </View>
                             </TouchableOpacity>
-                            <Text style={{ paddingHorizontal: 10, marginVertical: 30, fontWeight: '100', fontSize: 20, textAlign: 'center' }}>Just a girl with a lot of kawaiiiii, call me administrator</Text>
+
+                            <Text style={{ paddingHorizontal: 10, marginVertical: 30, fontWeight: '100', fontSize: 20, textAlign: 'center' }}>
+                                {currentUser?.biodata}
+                            </Text>
                         </View>
                     </View>
 
@@ -104,7 +111,7 @@ const Akun = ({ navigation }) => {
                             justifyContent: 'space-between'
                         }}>
                             <Text style={{ fontSize: 15 }}>Pengikut</Text>
-                            <Text style={{ fontSize: 15 }}>4</Text>
+                            <Text style={{ fontSize: 15 }}>{currentUser?.followers?.length || 0}</Text>
                         </View>
                         <View style={{
                             flexDirection: 'row',
@@ -117,20 +124,7 @@ const Akun = ({ navigation }) => {
                             justifyContent: 'space-between'
                         }}>
                             <Text style={{ fontSize: 15 }}>Mengikuti</Text>
-                            <Text style={{ fontSize: 15 }}>2</Text>
-                        </View>
-                        <View style={{
-                            flexDirection: 'row',
-                            borderTopWidth: 1,
-                            width: 358,
-                            alignSelf: 'center',
-                            backgroundColor: 'white',
-                            paddingVertical: 6,
-                            paddingHorizontal: 20,
-                            justifyContent: 'space-between'
-                        }}>
-                            <Text style={{ fontSize: 15 }}>Email</Text>
-                            <Text style={{ fontSize: 15 }}>quinella.administrator@sao.alice</Text>
+                            <Text style={{ fontSize: 15 }}>{currentUser?.following?.length || 0}</Text>
                         </View>
                         <View style={{
                             flexDirection: 'row',
@@ -143,7 +137,7 @@ const Akun = ({ navigation }) => {
                             justifyContent: 'space-between'
                         }}>
                             <Text style={{ fontSize: 15 }}>Telepon</Text>
-                            <Text style={{ fontSize: 15 }}>081234567890</Text>
+                            <Text style={{ fontSize: 15 }}>{currentUser?.phone_number || 0}</Text>
                         </View>
                         <View style={{
                             flexDirection: 'row',
@@ -156,7 +150,7 @@ const Akun = ({ navigation }) => {
                             justifyContent: 'space-between'
                         }}>
                             <Text style={{ fontSize: 15 }}>Provinsi</Text>
-                            <Text style={{ fontSize: 15 }}>Jawa Timur</Text>
+                            <Text style={{ fontSize: 15 }}>{currentUser?.province_name}</Text>
                         </View>
                         <View style={{
                             flexDirection: 'row',
@@ -166,12 +160,10 @@ const Akun = ({ navigation }) => {
                             backgroundColor: 'white',
                             paddingVertical: 6,
                             paddingHorizontal: 20,
-                            justifyContent: 'space-between',
-                            borderBottomEndRadius: 10,
-                            borderBottomStartRadius: 10
+                            justifyContent: 'space-between'
                         }}>
                             <Text style={{ fontSize: 15 }}>Kota</Text>
-                            <Text style={{ fontSize: 15 }}>Surabaya</Text>
+                            <Text style={{ fontSize: 15 }}>{currentUser?.city_name.split(' ').slice(1).join(' ') || '' }</Text>
                         </View>
                         <View style={{
                             flexDirection: 'row',
@@ -187,128 +179,24 @@ const Akun = ({ navigation }) => {
                         }}>
                             <TouchableOpacity
                                 style={{ backgroundColor: 'red', borderRadius: 50 }}
-                                onPress={handleSubmitPress}>
+                                onPress={logOutHandler}>
                                 <Text style={{ color: 'white', marginHorizontal: 20, marginVertical: 5 }}>Logout</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
 
-                    {/* <TouchableOpacity
-                        onPress={() => navigation.navigate('detailPost')}>
-                        <View style={styles.container1}>
-                            <TouchableOpacity
-                                style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15 }}
-                                onPress={() => navigation.navigate('ProfilePage')}>
-                                <Image
-                                    source={require('../../assets/images/user.jpg')}
-                                    style={styles.UserProfile}
-                                />
-                                <Text style={styles.UserName}> Quinella </Text>
-                            </TouchableOpacity>
-
-                            <View>
-                                <Image
-                                    source={require('../../assets/images/post.jpg')}
-                                    style={styles.UserPost}
-                                />
-                            </View>
-
-                            <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 15, alignItems: 'center' }}>
-                                <View>
-                                    <ButtonLike />
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                                <View style={{ marginLeft: 15 }}>
-                                    <ButtonComment />
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                                <View style={{ marginLeft: 15 }}>
-                                    <ButtonViews />
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                            </View>
-
-                            <View>
-                                <Text style={{ fontSize: 18, alignSelf: 'center', marginTop: 10 }}>Konsep ruang kerja industry 4.0</Text>
-                            </View>
-
-                            <View style={styles.dateBox}>
-                                <View>
-                                    <Text style={{ fontSize: 18, marginTop: 10 }}>9 September 2021</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('detailPost')}>
-                        <View style={styles.container2}>
-                            <TouchableOpacity
-                                style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15 }}
-                                onPress={() => navigation.navigate('ProfilePage')}>
-                                <Image
-                                    source={require('../../assets/images/user.jpg')}
-                                    style={styles.UserProfile}
-                                />
-                                <Text style={styles.UserName}> Quinella </Text>
-                            </TouchableOpacity>
-
-                            <View>
-                                <Image
-                                    source={require('../../assets/images/post.jpg')}
-                                    style={styles.UserPost}
-                                />
-                            </View>
-
-                            <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 15, alignItems: 'center' }}>
-                                <View>
-                                    <ButtonLike></ButtonLike>
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                                <View style={{ marginLeft: 15 }}>
-                                    <ButtonComment></ButtonComment>
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                                <View style={{ marginLeft: 15 }}>
-                                    <ButtonViews></ButtonViews>
-                                </View>
-                                <View>
-                                    <Text style={{ marginLeft: 5 }}>4</Text>
-                                </View>
-                            </View>
-
-                            <View>
-                                <Text style={{ fontSize: 18, alignSelf: 'center', marginTop: 10 }}>Konsep ruang kerja industry 4.0</Text>
-                            </View>
-
-                            <View style={styles.dateBox}>
-                                <View>
-                                    <Text style={{ fontSize: 18, marginTop: 10 }}>9 September 2021</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </TouchableOpacity> */}
-
-                    <View style={{ marginVertical: 100, width: 250, alignSelf: 'center' }}>
-                        <FontAwesome5
-                            name='smile-wink'
-                            size={30}
-                            color='gray'
-                            style={{ alignSelf: 'center' }}
-                        />
-                        <Text style={{ fontSize: 20, textAlign: 'center', textAlignVertical: 'center' }}>Belum ada desain yang diunggah untuk saat ini</Text>
-                    </View>
-
+                    <PostList
+                        navigation={navigation} 
+                        posts={currentUser?.posts || []} 
+                        user={currentUser} 
+                        onUpdateList={async () => {
+                            try {
+                                await updateUserInfo();
+                            } catch {
+                                alert(error.message);
+                            }
+                        }}
+                     />
                 </View>
             </ScrollView>
         </SafeAreaView>
