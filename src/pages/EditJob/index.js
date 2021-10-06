@@ -216,6 +216,8 @@ const EditJob = ({ navigation, route }) => {
                                 onSubmitEditing={() =>
                                     jobLinkInputRef.current && jobLinkInputRef.current.focus()
                                 }
+                                multiline={true}
+                                numberOfLines={4}
                                 blurOnSubmit={false}
                                 value={jobDescription}
                             />
@@ -430,6 +432,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#000',
+        textAlignVertical: 'top',
         color: '#000',
     },
     errorTextStyle: {
