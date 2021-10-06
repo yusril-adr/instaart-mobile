@@ -1,6 +1,7 @@
 import React, { useEffect  } from 'react'
 import { Image, StyleSheet, Text, View, Dimensions,} from 'react-native';
 import NetworkConnectionHelper from '../../utils/network-connection-helper';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;

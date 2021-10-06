@@ -18,6 +18,7 @@ import User from '../../data/user';
 import Colors from '../../data/colors';
 import Categories from '../../data/categories';
 import CONFIG from '../../global/config';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -141,14 +142,7 @@ const EditPortfolio = ({ navigation, route }) => {
     }, [navigation, route.params])
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#fff' }}>
-            <ScrollView
-                keyboardShouldPersistTaps="handled"
-                contentContainerStyle={{
-                    justifyContent: 'center',
-                    alignContent: 'center',
-                }}>
-
+            <ScrollView>
                 <KeyboardAvoidingView enabled>
                     <View style={styles.container1}>
                         <View style={{ alignItems: 'center' }}>
@@ -258,7 +252,7 @@ const EditPortfolio = ({ navigation, route }) => {
                             </Text>
                         ) : null}
 
-                        <View style={{flexDirection:'row-reverse', justifyContent: 'space-around', marginTop: 20, marginBottom: 60}}>
+                        <View style={{flexDirection:'row-reverse', justifyContent: 'space-around', marginVertical: 30}}>
                             <Button
                                 title={'Simpan'}
                                 buttonStyle={{
@@ -266,7 +260,6 @@ const EditPortfolio = ({ navigation, route }) => {
                                     width: 90,
                                     height: 40,
                                     borderRadius: 8,
-                                    marginTop: 15
                                 }}
                                 onPress={handleSubmitButton}
                             />
@@ -277,7 +270,6 @@ const EditPortfolio = ({ navigation, route }) => {
                                     width: 90,
                                     height: 40,
                                     borderRadius: 8,
-                                    marginTop: 15
                                 }}
                                 onPress={handleDeleteButton}
                             />
@@ -286,7 +278,6 @@ const EditPortfolio = ({ navigation, route }) => {
 
                 </KeyboardAvoidingView>
             </ScrollView>
-        </View>
     )
 }
 
@@ -298,6 +289,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#fff',
         alignContent: 'center',
+        marginBottom: 25
     },
     container1: {
         borderColor: '#000',
@@ -306,13 +298,14 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 350,
+        width: wp('90%'),
         marginTop: 30,
+        marginBottom: 30,
         shadowColor: '#000',
-        shadowOffset: { width: 5, height: 1 },
+        shadowOffset: { width: 2, height: 1 },
         shadowOpacity: 0.5,
         shadowRadius: 1,
-        elevation: 15
+        elevation: 10,
     },
     teksSatu: {
         color: '#000',
@@ -339,7 +332,7 @@ const styles = StyleSheet.create({
     inputStyle: {
         flex: 1,
         backgroundColor: '#fff',
-        width: 310,
+        width: wp('77.5%'),
         height: 120,
         paddingLeft: 15,
         paddingRight: 15,
@@ -369,7 +362,7 @@ const pickerSelectStyles = StyleSheet.create({
     },
     inputAndroid: {
         fontSize: 16,
-        width: 310,
+        width: wp('77.5%'),
         height: 40,
         paddingHorizontal: 10,
         paddingVertical: 8,

@@ -1,14 +1,14 @@
 import React from 'react';
 import { StyleSheet, Dimensions, Text, View, Image, TouchableOpacity } from 'react-native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
 import CONFIG from '../global/config';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const windowHeight = Dimensions.get('window').height;
 
 const ResultItem = ({ currentUser, targetUser, navigation }) => (
     <TouchableOpacity
-        onPress={() =>  {
+        onPress={() => {
             if (targetUser.username === currentUser.username) {
                 navigation.navigate('Akun')
             }
@@ -17,7 +17,7 @@ const ResultItem = ({ currentUser, targetUser, navigation }) => (
         <View style={styles.container1}>
             <TouchableOpacity
                 style={{ flexDirection: 'row', marginTop: 15, marginLeft: 15 }}
-                onPress={() =>  {
+                onPress={() => {
                     if (targetUser.username === currentUser.username) {
                         navigation.navigate('Akun')
                     }
@@ -29,12 +29,12 @@ const ResultItem = ({ currentUser, targetUser, navigation }) => (
                     }
                     style={styles.UserProfile}
                 />
-                <View style={{flexDirection: 'column', justifyContent: 'center'}}>
+                <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
                     <Text style={styles.UserName}>{targetUser.username} </Text>
                     <Text style={styles.UserKota}>
                         {targetUser.city_name.split(' ').splice(1).join(' ')}
                     </Text>
-                    <Text style={styles.UserProvinsi}> 
+                    <Text style={styles.UserProvinsi}>
                         {targetUser.province_name}
                     </Text>
                 </View>
@@ -44,46 +44,45 @@ const ResultItem = ({ currentUser, targetUser, navigation }) => (
 );
 
 const EmptyResultItem = () => (
-  <View style={{ 
-      marginTop: 155,
-      marginBottom: windowHeight * 0.5,
-      width: 250, 
-      alignSelf: 'center' 
-      }}
+    <View style={{
+        width: wp('62.5%'),
+        alignSelf: 'center',
+        marginVertical: hp('25%'),
+    }}
     >
-      {/* <FontAwesome5
+        {/* <FontAwesome5
           name='smile-wink'
           size={30}
           color='gray'
           style={{ alignSelf: 'center' }}
       /> */}
-      <Text style={{ fontSize: 20, textAlign: 'center', textAlignVertical: 'center' }}>Masih belum ada daftar untuk saat ini</Text>
-  </View>
+        <Text style={{ fontSize: 20, textAlign: 'center', textAlignVertical: 'center' }}>Masih belum ada daftar untuk saat ini</Text>
+    </View>
 );
 
 const UserList = (({ navigation, users, currentUser }) => (
-  <>
-      {users.length < 1 && <EmptyResultItem />}
+    <>
+        {users.length < 1 && <EmptyResultItem />}
 
-      {users.map((targetUser) => (
-          <ResultItem 
-              key={targetUser.id}
-              navigation={navigation}
-              targetUser={targetUser} 
-              currentUser={currentUser}
-          />
-      ))}
-  </>
+        {users.map((targetUser) => (
+            <ResultItem
+                key={targetUser.id}
+                navigation={navigation}
+                targetUser={targetUser}
+                currentUser={currentUser}
+            />
+        ))}
+    </>
 ));
 
 const styles = StyleSheet.create({
     container1: {
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         backgroundColor: '#fff',
         borderWidth: 1,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 340,
+        width: wp('85%'),
         height: 110,
         borderRadius: 5,
         marginTop: 20,
@@ -98,7 +97,7 @@ const styles = StyleSheet.create({
         height: 80,
         borderRadius: 50,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         marginLeft: 15
     },
     UserName: {

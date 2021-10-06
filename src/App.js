@@ -1,8 +1,15 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native';
+import { StyleSheet, View } from 'react-native'
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import Router from './router';
 import { LogBox } from 'react-native'
+
+const MyTheme = {
+  colors: {
+    background: '#fff',
+    card: '#fff',
+  },
+};
 
 LogBox.ignoreLogs([
   'Animated: `useNativeDriver` was not specified. This is a required option and must be explicitly set to `true` or `false`',
@@ -10,7 +17,7 @@ LogBox.ignoreLogs([
 
 const App = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={MyTheme}>
       <Router />
     </NavigationContainer>
   )

@@ -1,9 +1,10 @@
-import React, { useState, createRef, useEffect } from 'react';
-import { StyleSheet, Dimensions, TextInput, View, Text, ScrollView, Image, Keyboard, KeyboardAvoidingView } from 'react-native';
+import React, { useState, createRef, useEffect, Component } from 'react';
+import { StyleSheet, Dimensions, Text, BackHandler, TextInput, View, ScrollView, Image, Keyboard, KeyboardAvoidingView, Alert } from 'react-native';
 import { Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import User from '../../data/user';
 import PasswordInputText from 'react-native-hide-show-password-input';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -14,7 +15,22 @@ const Login = ({ navigation }) => {
     const [errortext, setErrortext] = useState('');
     const passwordInputRef = createRef();
 
+    const backAction = () => {
+        if (navigation.isFocused()) {
+            Alert.alert('EXIT', 'Apakah anda yakin akan meninggalkan kami?', [
+                {
+                    text: 'TIDAK',
+                    onPress: () => null,
+                    style: 'cancel',
+                },
+                { text: 'YA', onPress: () => BackHandler.exitApp() },
+            ]);
+            return true;
+        }
+    };
+
     useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
         (async () => {
             try {
                 if (await User.getUser()) {
@@ -24,6 +40,10 @@ const Login = ({ navigation }) => {
                 alert(error.message);
             }
         })()
+
+        
+        return () =>
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
     }, []);
 
     const handleSubmitPress = async () => {
@@ -90,7 +110,8 @@ const Login = ({ navigation }) => {
                                     <Text>Password</Text>
                                     <View style={{
                                         borderWidth: 1,
-                                        width: 310,
+                                        borderColor: '#e5e5e5',
+                                        width: wp('77.5%'),
                                         height: 40,
                                         alignSelf: 'center',
                                         borderRadius: 10,
@@ -156,13 +177,13 @@ const styles = StyleSheet.create({
         alignContent: 'center',
     },
     container1: {
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         backgroundColor: '#fff',
         borderWidth: 1,
         borderRadius: 5,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 365,
+        width: wp('91.25%'),
         height: 315,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
@@ -171,12 +192,12 @@ const styles = StyleSheet.create({
         elevation: 10
     },
     container2: {
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         borderWidth: 1,
         borderRadius: 5,
         backgroundColor: '#fff',
         alignSelf: 'center',
-        width: 365,
+        width: wp('91.25%'),
         height: 80,
         marginTop: 30,
         marginBottom: 20,
@@ -189,7 +210,7 @@ const styles = StyleSheet.create({
         elevation: 10
     },
     Image: {
-        width: 480,
+        width: wp('120%'),
         height: 280,
         marginTop: windowHeight * 0.02,
         marginBottom: 20
@@ -212,25 +233,25 @@ const styles = StyleSheet.create({
     inputStyle: {
         flex: 1,
         backgroundColor: '#fff',
-        width: 310,
+        width: wp('77.5%'),
         height: 100,
         paddingLeft: 10,
         paddingRight: 15,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         fontSize: 16,
         color: '#000',
     },
     inputStyleForPwd: {
-        width: 310,
+        width: wp('77.5%'),
         height: 50,
         paddingBottom: 20,
         paddingLeft: 20,
         borderRadius: 10,
         marginTop: -25,
         marginRight: 20,
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         alignSelf: 'center',
         color: '#000',
     },

@@ -5,6 +5,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { launchImageLibrary } from 'react-native-image-picker';
 import CONFIG from '../../global/config'
 import User from '../../data/user'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -129,8 +130,9 @@ const editPhoto = ({ navigation }) => {
                             <View style={{
                                 flexDirection: 'row',
                                 borderTopWidth: 1,
+                                borderColor: '#e5e5e5',
                                 marginTop: 15,
-                                width: 358,
+                                width: wp('89.5%'),
                                 backgroundColor: 'white',
                                 paddingVertical: 15,
                                 paddingHorizontal: 30,
@@ -142,7 +144,8 @@ const editPhoto = ({ navigation }) => {
                             <View style={{
                                 flexDirection: 'row',
                                 borderTopWidth: 1,
-                                width: 358,
+                                borderColor: '#e5e5e5',
+                                width: wp('89.5%'),
                                 alignSelf: 'center',
                                 backgroundColor: 'white',
                                 paddingVertical: 15,
@@ -155,7 +158,8 @@ const editPhoto = ({ navigation }) => {
                             <View style={{
                                 flexDirection: 'row',
                                 borderTopWidth: 1,
-                                width: 358,
+                                borderColor: '#e5e5e5',
+                                width: wp('89.5%'),
                                 alignSelf: 'center',
                                 backgroundColor: 'white',
                                 paddingVertical: 15,
@@ -245,13 +249,13 @@ const styles = StyleSheet.create({
         alignContent: 'center',
     },
     container: {
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         backgroundColor: '#fff',
         borderWidth: 1,
         borderRadius: 5,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 365,
+        width: wp('91.25%'),
         marginTop: 20,
         marginBottom: 20,
         shadowColor: '#000',
@@ -261,13 +265,13 @@ const styles = StyleSheet.create({
         elevation: 10
     },
     containerInfoProfile: {
-        borderColor: '#000',
-        backgroundColor: '#eaeaea',
+        borderColor: '#e5e5e5',
+        backgroundColor: '#f7f7f7',
         borderWidth: 1,
         borderRadius: 10,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 360,
+        width: wp('90%'),
         marginTop: 40,
         marginBottom: 20,
         shadowColor: '#000',
@@ -281,7 +285,7 @@ const styles = StyleSheet.create({
         height: 100,
         borderRadius: 50,
         borderWidth: 1,
-        borderColor: 'black',
+        borderColor: '#e5e5e5',
         alignSelf: 'center'
     },
     teksSatu: {

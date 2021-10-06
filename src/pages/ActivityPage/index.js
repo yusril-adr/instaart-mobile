@@ -4,6 +4,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import CONFIG from '../../global/config';
 import User from '../../data/user';
 import DateHelper from '../../utils/date-helper';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const FollowActivity = ({ navigation, activity }) => {
     const { 
@@ -32,7 +33,7 @@ const FollowActivity = ({ navigation, activity }) => {
             </TouchableOpacity>
 
             <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: wp('77%'), paddingLeft: 10 }}>
                     <Text 
                         style={styles.UserName}
                         onPress={() => navigation.navigate('ProfilePage', { username: activity.other_username })}
@@ -73,7 +74,7 @@ const CommentActivity = ({ navigation, activity }) => {
                 />
             </TouchableOpacity>
             <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: wp('77%'), paddingLeft: 10 }}>
                     <Text 
                         style={styles.UserName}
                         onPress={() => navigation.navigate('ProfilePage', { username: activity.other_username })}
@@ -102,7 +103,10 @@ const CommentActivity = ({ navigation, activity }) => {
 };
 
 const EmptyActivity = () => (
-    <View style={{ marginVertical: 270 }}>
+    <View style={{ 
+        width: wp('62.5%'),
+        alignSelf: 'center',
+        marginVertical: hp('25%'), }}>
         <FontAwesome5
             name='smile-wink'
             size={30}
@@ -166,21 +170,22 @@ export default Activity
 const styles = StyleSheet.create({
     mainBody: {
         flex: 1,
-        backgroundColor: '#fafafa',
-        alignContent: 'center'
+        backgroundColor: '#fff',
+        alignContent: 'center',
+        marginBottom: 15
     },
     UserProfile: {
         width: 60,
         height: 60,
         borderRadius: 50,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
     },
     UserName: {
         color: '#007bff',
         fontWeight: 'bold',
         fontSize: 15,
-        marginLeft: 10,
+        // marginLeft: 10,
     },
     UserInfo: {
         color: '#000',

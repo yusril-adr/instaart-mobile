@@ -10,6 +10,7 @@ import UserList from '../../components/UserList'
 import Location from '../../data/location';
 import User from '../../data/user';
 import History from '../../data/history';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -20,7 +21,8 @@ const KeywordList = ({ history, setShouldShow, setSearch }) => {
             style={{
                 position: 'relative',
                 backgroundColor: 'white',
-                marginHorizontal: 24,
+                width: wp('90%'),
+                alignSelf: 'center',
                 top: -9,
                 borderWidth: 1,
             }}
@@ -56,20 +58,22 @@ const SearchContainer = ({ history, updateHistory, search, setSearch, shouldShow
             <SearchBar
                 clearIcon={false}
                 placeholder="Cari ..."
-                containerStyle={{ 
-                    backgroundColor: 'transparent', 
-                    borderTopWidth: 0, 
-                    borderBottomWidth: 0 
+                containerStyle={{
+                    backgroundColor: 'transparent',
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0,
+                    borderColor: '#e5e5e5',
                 }}
                 inputContainerStyle={{
                     backgroundColor: '#fff',
                     flexDirection: 'row-reverse',
                     borderWidth: 1,
+                    borderColor: '#e5e5e5',
                     borderRadius: 5,
                     paddingLeft: 10,
                     borderBottomWidth: 1,
                     marginTop: 15,
-                    width: 345,
+                    width: wp('90%'),
                     alignSelf: 'center',
                 }}
                 lightTheme
@@ -78,7 +82,7 @@ const SearchContainer = ({ history, updateHistory, search, setSearch, shouldShow
                 ref={searchInputRef}
                 onFocus={() => {
                     // if (search.trim()) {
-                        setShouldShow(true)
+                    setShouldShow(true)
                     // }
                 }}
                 // onBlur={() => {
@@ -165,44 +169,47 @@ const searchUser = ({ navigation, route }) => {
             setClick2(true);
             navigation.navigate('Search', { keyword: search });
         };
+        return (
+            <TouchableOpacity onPress={() => Pressed1()}>
+                <View style={{
+                    flexDirection: 'row',
+                    backgroundColor: Click1 ? '#007bff' : 'white',
+                    width: 100,
+                    height: 40,
+                    alignItems: 'center',
+                    borderRadius: 10,
+                    borderWidth: 1,
+                    borderColor: '#007bff',
+                    justifyContent: 'center'
+                }}>
+                    <Text style={{ color: Click1 ? 'white' : '#007bff', fontSize: 16 }}>Desain</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    };
+
+    const SearchPengguna = () => {
         const Pressed2 = () => {
             setClick2(false);
             setClick1(true);
             navigation.navigate('searchUser', { keyword: search });
         };
         return (
-            <View style={{ width: 222, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <TouchableOpacity onPress={() => Pressed1()}>
-                    <View style={{
-                        flexDirection: 'row',
-                        backgroundColor: Click1 ? '#007bff' : 'white',
-                        width: 100,
-                        height: 40,
-                        alignItems: 'center',
-                        borderRadius: 10,
-                        borderWidth: 1,
-                        borderColor: '#007bff',
-                        justifyContent: 'center'
-                    }}>
-                        <Text style={{ color: Click1 ? 'white' : '#007bff', fontSize: 16 }}>Desain</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => Pressed2()}>
-                    <View style={{
-                        flexDirection: 'row',
-                        backgroundColor: Click2 ? '#007bff' : 'white',
-                        width: 100,
-                        height: 40,
-                        alignItems: 'center',
-                        borderRadius: 10,
-                        borderWidth: 1,
-                        borderColor: '#007bff',
-                        justifyContent: 'center'
-                    }}>
-                        <Text style={{ color: Click2 ? 'white' : '#007bff', fontSize: 16 }}>Pengguna</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity onPress={() => Pressed2()}>
+                <View style={{
+                    flexDirection: 'row',
+                    backgroundColor: Click2 ? '#007bff' : 'white',
+                    width: 100,
+                    height: 40,
+                    alignItems: 'center',
+                    borderRadius: 10,
+                    borderWidth: 1,
+                    borderColor: '#007bff',
+                    justifyContent: 'center'
+                }}>
+                    <Text style={{ color: Click2 ? 'white' : '#007bff', fontSize: 16 }}>Pengguna</Text>
+                </View>
+            </TouchableOpacity>
         );
     };
 
@@ -224,28 +231,28 @@ const searchUser = ({ navigation, route }) => {
         async () => {
             const initValue = async () => {
                 const provinceList = await Location.getProvinces();
-    
+
                 setProvincies(provinceList.map((provincy) => (
                     { label: provincy.nama, value: provincy.id }
                 )));
-    
+
                 if (provinsiParam !== '') {
                     const citiesList = await Location.getCitiesByProvinceId(provinsiParam);
                     setCities(citiesList.map((city) => (
                         { label: city.nama, value: city.id }
                     )));
                 }
-    
+
                 await updateHistory();
-    
+
                 await updateResultUser();
             };
-    
+
             const getUserInfo = async () => {
                 const data = await User.getUser();
                 setUser(data);
             };
-    
+
             const unsubscribe = navigation.addListener('focus', async (e) => {
                 try {
                     setSearch(keyword);
@@ -269,7 +276,7 @@ const searchUser = ({ navigation, route }) => {
                 alert(error.message);
                 navigation.goBack();
             }
-    
+
             return unsubscribe;
         }, [navigation, route?.params]
     ), [navigation, route?.params]);
@@ -279,11 +286,11 @@ const searchUser = ({ navigation, route }) => {
             <ScrollView
                 contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={styles.mainBody}>
-                    <SearchContainer search={search} 
-                        history={history} 
-                        updateHistory={updateHistory} 
-                        search={search} 
-                        setSearch={setSearch} 
+                    <SearchContainer search={search}
+                        history={history}
+                        updateHistory={updateHistory}
+                        search={search}
+                        setSearch={setSearch}
                         shouldShow={shouldKeyShow}
                         setShouldShow={setShouldKeyShow}
                         onSearch={async () => {
@@ -298,6 +305,7 @@ const searchUser = ({ navigation, route }) => {
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 10 }}>
                         <SearchDesain />
+                        <SearchPengguna />
                         <Filter />
                     </View>
 
@@ -384,15 +392,20 @@ const searchUser = ({ navigation, route }) => {
                     )}
 
                     {resultUser.length > 0 && keyword !== '' && (
-                        <UserList 
-                            navigation={navigation} 
-                            users={resultUser} 
+                        <UserList
+                            navigation={navigation}
+                            users={resultUser}
                             currentUser={user}
                         />
                     )}
 
                     {(resultUser.length < 1 || keyword === '') && (
-                        <View style={{ flexDirection: 'column', height: 400, justifyContent: 'center', alignItems: 'center', alignSelf: 'center' }}>
+                        <View style={{
+                            width: wp('80%'),
+                            alignSelf: 'center',
+                            alignItems: 'center',
+                            marginVertical: hp('25%'),
+                        }}>
                             <FontAwesome5
                                 name='search'
                                 size={30}
@@ -400,7 +413,7 @@ const searchUser = ({ navigation, route }) => {
                             />
                             <Text style={{ fontSize: 20 }}>Hasil pencarian tidak ditemukan</Text>
                         </View>
-                    ) }
+                    )}
 
                 </View>
             </ScrollView>
@@ -414,7 +427,7 @@ const styles = StyleSheet.create({
     mainBody: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: '#fafafa',
+        backgroundColor: '#fff',
         alignContent: 'center',
     },
     buttonStyle: {
@@ -450,7 +463,7 @@ const pickerSelectStyles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 8,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         borderRadius: 5,
         color: 'black',
         paddingRight: 30, // to ensure the text is never behind the icon

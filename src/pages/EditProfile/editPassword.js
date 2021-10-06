@@ -3,6 +3,7 @@ import { StyleSheet, Dimensions, TextInput, View, Text, ScrollView, TouchableOpa
 import { Button } from 'react-native-elements';
 import PasswordInputText from 'react-native-hide-show-password-input';
 import User from '../../data/user';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -87,8 +88,9 @@ const editPassword = ({ navigation }) => {
                             <View style={{
                                 flexDirection: 'row',
                                 borderTopWidth: 1,
+                                borderColor: '#e5e5e5',
                                 marginTop: 15,
-                                width: 358,
+                                width: wp('89.5%'),
                                 backgroundColor: 'white',
                                 paddingVertical: 15,
                                 paddingHorizontal: 30,
@@ -100,7 +102,8 @@ const editPassword = ({ navigation }) => {
                             <View style={{
                                 flexDirection: 'row',
                                 borderTopWidth: 1,
-                                width: 358,
+                                borderColor: '#e5e5e5',
+                                width: wp('89.5%'),
                                 alignSelf: 'center',
                                 backgroundColor: 'white',
                                 paddingVertical: 15,
@@ -113,7 +116,8 @@ const editPassword = ({ navigation }) => {
                             <View style={{
                                 flexDirection: 'row',
                                 borderTopWidth: 1,
-                                width: 358,
+                                borderColor: '#e5e5e5',
+                                width: wp('89.5%'),
                                 alignSelf: 'center',
                                 backgroundColor: 'white',
                                 paddingVertical: 15,
@@ -134,7 +138,8 @@ const editPassword = ({ navigation }) => {
                         <Text style={{marginLeft: 30}}>Password Baru</Text>
                         <View style={{
                             borderWidth: 1,
-                            width: 310,
+                            borderColor: '#e5e5e5',
+                            width: wp('77.5%'),
                             height: 40,
                             alignSelf: 'center',
                             borderRadius: 10,
@@ -153,7 +158,8 @@ const editPassword = ({ navigation }) => {
                         <Text style={{marginLeft: 30, marginTop: 20}}>Password Saat Ini</Text>
                         <View style={{
                             borderWidth: 1,
-                            width: 310,
+                            borderColor: '#e5e5e5',
+                            width: wp('77.5%'),
                             height: 40,
                             alignSelf: 'center',
                             borderRadius: 10,
@@ -203,13 +209,13 @@ const styles = StyleSheet.create({
         alignContent: 'center',
     },
     container: {
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         backgroundColor: '#fff',
         borderWidth: 1,
         borderRadius: 5,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 365,
+        width: wp('91.25%'),
         marginTop: 20,
         marginBottom: 20,
         shadowColor: '#000',
@@ -219,13 +225,13 @@ const styles = StyleSheet.create({
         elevation: 10
     },
     containerInfoProfile: {
-        borderColor: '#000',
-        backgroundColor: '#eaeaea',
+        borderColor: '#e5e5e5',
+        backgroundColor: '#f7f7f7',
         borderWidth: 1,
         borderRadius: 10,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 360,
+        width: wp('90%'),
         marginTop: 40,
         marginBottom: 20,
         shadowColor: '#000',
@@ -252,24 +258,24 @@ const styles = StyleSheet.create({
     inputStyle: {
         flex: 1,
         backgroundColor: '#fff',
-        width: 310,
+        width: wp('77.5%'),
         height: 100,
         paddingLeft: 15,
         paddingRight: 15,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         color: '#000',
     },
     inputStyleForPwd: {
-        width: 310,
+        width: wp('77.5%'),
         height: 50,
         paddingBottom: 20,
         paddingLeft: 20,
         borderRadius: 10,
         marginTop: -25,
         marginRight: 20,
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         alignSelf: 'center',
         color: '#000',
     },

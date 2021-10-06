@@ -7,6 +7,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Job from '../../data/job';
 import User from '../../data/user';
 import Location from '../../data/location';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -388,7 +389,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 350,
+        width: wp('90%'),
         marginTop: 30,
         marginBottom: 30,
         shadowColor: '#000',
@@ -422,7 +423,7 @@ const styles = StyleSheet.create({
     inputStyle: {
         flex: 1,
         backgroundColor: '#fff',
-        width: 310,
+        width: wp('77.5%'),
         height: 120,
         paddingLeft: 15,
         paddingRight: 15,
@@ -451,7 +452,7 @@ const pickerSelectStyles = StyleSheet.create({
     },
     inputAndroid: {
         fontSize: 16,
-        width: 310,
+        width: wp('77.5%'),
         height: 40,
         paddingHorizontal: 10,
         paddingVertical: 8,

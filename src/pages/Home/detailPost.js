@@ -7,6 +7,7 @@ import Post from '../../data/post';
 import User from '../../data/user';
 import DateHelper from '../../utils/date-helper';
 import CONFIG from '../../global/config';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -22,7 +23,7 @@ const ButtonLike = ({ post, user, onUpdate }) => {
                 await User.likePost(post?.id);
                 alert('Desain disukai');
             }
-            
+
             await onUpdate();
         } catch (error) {
             alert(error.message);
@@ -56,15 +57,15 @@ const ButtonLike = ({ post, user, onUpdate }) => {
 const ButtonShare = ({ postId }) => (
     <TouchableOpacity onPress={async () => {
         try {
-          const result = await Share.share({
-            message:
-              `${CONFIG.POST_URL}/${postId}`,
-          });
-          
+            const result = await Share.share({
+                message:
+                    `${CONFIG.POST_URL}/${postId}`,
+            });
+
         } catch (error) {
-          alert(error.message);
+            alert(error.message);
         }
-      }}
+    }}
     >
         <View style={{ flexDirection: 'row', backgroundColor: '#007bff', width: 100, height: 40, alignItems: 'center', borderRadius: 10, borderWidth: 1, borderColor: '#fff', marginTop: 20, alignSelf: 'center' }}>
             <Icon name='share-alt'
@@ -91,9 +92,9 @@ const PostDate = ({ postDate }) => {
 
 const BookmarkButton = ({ isBookmarked, onPress }) => {
     return (
-        <TouchableOpacity style={{ marginLeft: 35 }} onPress={onPress}>
+        <TouchableOpacity onPress={onPress}>
             <View>
-                { isBookmarked ? 
+                {isBookmarked ?
                     (
                         <Icon
                             name='bookmark'
@@ -105,17 +106,17 @@ const BookmarkButton = ({ isBookmarked, onPress }) => {
                         <Icon
                             name='bookmark'
                             type='font-awesome-5'
-                            color='gray'
+                            color='#7f7f7f'
                             regular
                             size={40}
                         />
-                    ) }
+                    )}
             </View>
         </TouchableOpacity>
     );
 };
 
-const CommentItem = ({currentUser, comment, navigation}) => {
+const CommentItem = ({ currentUser, comment, navigation }) => {
     const { year, month, date } = DateHelper.parse(comment.date);
 
     return (
@@ -156,7 +157,7 @@ const CommentItem = ({currentUser, comment, navigation}) => {
                     </TouchableOpacity>
 
                     <Text style={{ fontSize: 13, fontWeight: '300', marginLeft: 5 }}>
-                            {date} {month.slice(0, 3)} {year}
+                        {date} {month.slice(0, 3)} {year}
                     </Text>
                 </View>
                 <Text style={{ fontSize: 13 }}>{comment.body}</Text>
@@ -212,13 +213,22 @@ const detailPost = ({ navigation, route }) => {
                 <View style={styles.mainBody}>
                     <View style={styles.container1}>
                         <View
-                            style={{ flexDirection: 'row', marginTop: 15, marginLeft: 5 }}>
+                            style={{
+                                flexDirection: 'row',
+                                marginTop: 15,
+                                alignSelf: 'center',
+                                width: wp('90%'),
+                                flexWrap: 'wrap',
+                                borderBottomWidth: 1,
+                                borderColor: '#e5e5e5',
+                                paddingBottom: 15
+                            }}>
                             <Image
                                 source={{
                                     uri: `${CONFIG.IMAGE_PATH.USER}/${post?.user_image}`
                                 }}
                                 style={styles.UserProfile}
-                                onPress={ () => {
+                                onPress={() => {
                                     if (post.username === user.username) {
                                         navigation.navigate('Akun');
                                     }
@@ -227,41 +237,43 @@ const detailPost = ({ navigation, route }) => {
                             />
                             <View style={{ flexDirection: 'column' }}>
                                 <Text style={styles.UserCaption}>{post?.title}</Text>
-                                <Text 
+                                <Text
                                     style={styles.UserName}
-                                    onPress={ () => {
-                                    if (post.username === user.username) {
-                                        navigation.navigate('Akun');
-                                    }
-                                    else navigation.navigate('ProfilePage', { username: post.username });
-                                }}
+                                    onPress={() => {
+                                        if (post.username === user.username) {
+                                            navigation.navigate('Akun');
+                                        }
+                                        else navigation.navigate('ProfilePage', { username: post.username });
+                                    }}
                                 >
                                     {post?.username}
                                 </Text>
                             </View>
-                            <BookmarkButton 
-                                isBookmarked={
-                                    bookmarkPosts.find((boomarkPost) => (boomarkPost.id === post?.id))
-                                }
-
-                                onPress={async () => {
-                                    try {
-                                        const isBookmarkPost = bookmarkPosts.find((boomarkPost) => (boomarkPost.id === post?.id));
-
-                                        if (isBookmarkPost) {
-                                            await User.unBookmarkPost(post?.id);
-                                            alert('Desain dihapus dari daftar penyimpanan');
-                                        }
-                                        else {
-                                            await User.bookmarkPost(post?.id);
-                                            alert('Desain berhasil disimpan');
-                                        }
-                                        await updateBookmark();
-                                    } catch(error) {
-                                        alert(error.message);
+                            <View style={{ flex: 1, justifyContent: 'center',  alignItems: 'flex-end' }}>
+                                <BookmarkButton
+                                    isBookmarked={
+                                        bookmarkPosts.find((boomarkPost) => (boomarkPost.id === post?.id))
                                     }
-                                }}
-                            />
+
+                                    onPress={async () => {
+                                        try {
+                                            const isBookmarkPost = bookmarkPosts.find((boomarkPost) => (boomarkPost.id === post?.id));
+
+                                            if (isBookmarkPost) {
+                                                await User.unBookmarkPost(post?.id);
+                                                alert('Desain dihapus dari daftar penyimpanan');
+                                            }
+                                            else {
+                                                await User.bookmarkPost(post?.id);
+                                                alert('Desain berhasil disimpan');
+                                            }
+                                            await updateBookmark();
+                                        } catch (error) {
+                                            alert(error.message);
+                                        }
+                                    }}
+                                />
+                            </View>
                         </View>
 
                         <View>
@@ -274,9 +286,9 @@ const detailPost = ({ navigation, route }) => {
                         </View>
 
                         <View style={{
-                                ...styles.dateBox,
-                                // paddingTop: 20,
-                            }}
+                            ...styles.dateBox,
+                            // paddingTop: 20,
+                        }}
                         >
                             {post?.user_id === user?.id && (
                                 <TouchableOpacity onPress={() => navigation.navigate('EditPortfolio', { postId: post?.id })}>
@@ -299,12 +311,12 @@ const detailPost = ({ navigation, route }) => {
                                     alert(error.message);
                                 }
                             }} />
-                            
+
                             <View>
                                 <Text style={{ fontSize: 18, color: 'gray', alignSelf: 'center', marginTop: 10 }}>{post?.title}</Text>
                             </View>
                             <View>
-                               <PostDate postDate={post?.date} />
+                                <PostDate postDate={post?.date} />
                             </View>
                             <View style={{ flexDirection: 'row', marginTop: 15, alignSelf: 'center', alignItems: 'center' }}>
                                 <View>
@@ -338,7 +350,7 @@ const detailPost = ({ navigation, route }) => {
                                     <Text style={{ marginLeft: 5, color: 'gray' }}>{post?.insight}</Text>
                                 </View>
                             </View>
-                            
+
                             <ButtonShare postId={post?.id} />
 
                         </View>
@@ -357,6 +369,7 @@ const detailPost = ({ navigation, route }) => {
                                 style={{
                                     flexDirection: 'row',
                                     borderBottomWidth: 1,
+                                    borderColor: '#e5e5e5',
                                     height: 70,
                                     alignItems: 'center',
                                     justifyContent: 'center'
@@ -364,13 +377,13 @@ const detailPost = ({ navigation, route }) => {
                                 <TextInput
                                     style={{
                                         backgroundColor: '#fff',
-                                        width: 230,
+                                        width: wp('57.5%'),
                                         height: 40,
                                         paddingLeft: 15,
                                         paddingRight: 15,
                                         borderRadius: 50,
                                         borderWidth: 1,
-                                        borderColor: '#000',
+                                        borderColor: '#e5e5e5',
                                         marginRight: 10
                                     }}
                                     onChangeText={(input) => setCommentInput(input)}
@@ -420,23 +433,23 @@ const detailPost = ({ navigation, route }) => {
                             </View>
 
                             <View style={{ paddingBottom: 10, }}>
-                                {comments.map((comment) => ( 
-                                    <CommentItem 
-                                        key={comment.id} 
-                                        comment={comment} 
+                                {comments.map((comment) => (
+                                    <CommentItem
+                                        key={comment.id}
+                                        comment={comment}
                                         currentUser={user}
-                                        navigation={navigation} 
-                                    /> 
+                                        navigation={navigation}
+                                    />
                                 ))}
 
                                 {comments.length < 1 && (
-                                    <View style={{ 
+                                    <View style={{
                                         marginTop: 55,
                                         // marginBottom: windowHeight * 0.5,
-                                        width: 250, 
-                                        alignSelf: 'center' 
-                                        }}
-                                        >
+                                        width: 250,
+                                        alignSelf: 'center'
+                                    }}
+                                    >
                                         <FontAwesome5
                                             name='smile-wink'
                                             size={30}
@@ -447,7 +460,7 @@ const detailPost = ({ navigation, route }) => {
                                     </View>
                                 )}
                             </View>
-                        </View> 
+                        </View>
 
                     </View>
                 </View>
@@ -462,27 +475,27 @@ const styles = StyleSheet.create({
     mainBody: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: '#fafafa',
+        backgroundColor: '#fff',
         alignContent: 'center',
     },
     container1: {
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         backgroundColor: '#fff',
         alignSelf: 'center',
         alignContent: 'center',
-        width: 350,
+        width: wp('87.5%'),
         marginTop: 5,
     },
     container2: {
-        borderColor: '#000',
-        backgroundColor: '#F7F7F7',
+        borderColor: '#e5e5e5',
+        backgroundColor: '#EEEEEE',
         borderWidth: 1,
         borderTopWidth: 0,
         alignSelf: 'center',
         alignContent: 'center',
         alignItems: 'center',
         justifyContent: 'center',
-        width: 349,
+        width: wp('90%'),
         minHeight: 410,
         paddingBottom: 20,
         paddingTop: 20,
@@ -494,17 +507,18 @@ const styles = StyleSheet.create({
         elevation: 15
     },
     commentColumn: {
-        width: 300,
+        width: wp('80%'),
         minHeight: 360,
         backgroundColor: 'white',
-        borderWidth: 1
+        borderWidth: 1,
+        borderColor: '#e5e5e5'
     },
     UserProfile: {
         width: 60,
         height: 60,
         borderRadius: 50,
         borderWidth: 1,
-        borderColor: '#000'
+        borderColor: '#e5e5e5'
     },
     UserName: {
         color: '#000',
@@ -513,10 +527,9 @@ const styles = StyleSheet.create({
         marginLeft: 15
     },
     UserPost: {
-        width: 350,
+        width: wp('90%'),
         height: 400,
-        marginTop: 15,
-        alignSelf: 'center'
+        alignSelf: 'center',
     },
     UserCaption: {
         fontSize: 18,
@@ -526,9 +539,9 @@ const styles = StyleSheet.create({
     dateBox: {
         justifyContent: 'center',
         alignSelf: 'center',
-        width: 350,
+        width: wp('90%'),
         minHeight: 345,
-        backgroundColor: '#333',
+        backgroundColor: '#444444',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.5,
@@ -540,7 +553,8 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         paddingLeft: 15,
         paddingBottom: 20,
-        width: 349,
+        width: wp('90%'),
         borderWidth: 1,
+        borderColor: '#e5e5e5'
     },
 });

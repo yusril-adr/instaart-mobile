@@ -8,18 +8,18 @@ const TabItem = ({ isFocused, onLongPress, onPress, label, navigation }) => {
     const [userImage, setUserImage] = useState(null);
 
     useEffect(() => {
-      const unsubscribe = navigation.addListener('state', async (e) => {
-          try {
-              if (label === 'Akun') {
-                const user = await User.getUser();
-                setUserImage(user.image);
-              }
-          } catch (error) {
-              console.log(error.message);
-          }
-      });
+        const unsubscribe = navigation.addListener('state', async (e) => {
+            try {
+                if (label === 'Akun') {
+                    const user = await User.getUser();
+                    setUserImage(user.image);
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        });
 
-      return unsubscribe;
+        return unsubscribe;
     }, [navigation])
 
     const Icons = () => {
@@ -31,7 +31,7 @@ const TabItem = ({ isFocused, onLongPress, onPress, label, navigation }) => {
         /> : <Icon
             name='home'
             type='font-awesome'
-            color='gray'
+            color='#7f7f7f'
             size={33}
         />
 
@@ -43,7 +43,7 @@ const TabItem = ({ isFocused, onLongPress, onPress, label, navigation }) => {
         /> : <Icon
             name='search'
             type='font-awesome'
-            color='gray'
+            color='#7f7f7f'
             size={30}
         />
 
@@ -55,7 +55,7 @@ const TabItem = ({ isFocused, onLongPress, onPress, label, navigation }) => {
         /> : <Icon
             name='plus-circle'
             type='font-awesome'
-            color='gray'
+            color='#7f7f7f'
             size={35}
         />
 
@@ -67,20 +67,27 @@ const TabItem = ({ isFocused, onLongPress, onPress, label, navigation }) => {
         /> : <Icon
             name='briefcase'
             type='font-awesome'
-            color='gray'
+            color='#7f7f7f'
             size={30}
         />
 
-        if (label === "Akun") return (
+        if (label === "Akun") return isFocused ?
             <Image
                 source={{
-                    uri: userImage ? 
-                        `${CONFIG.IMAGE_PATH.USER}/${userImage}` : 
+                    uri: userImage ?
+                        `${CONFIG.IMAGE_PATH.USER}/${userImage}` :
+                        `${CONFIG.IMAGE_PATH.USER}/default_user.png`,
+                }}
+                style={styles.ImageFocused}
+            /> :
+            <Image
+                source={{
+                    uri: userImage ?
+                        `${CONFIG.IMAGE_PATH.USER}/${userImage}` :
                         `${CONFIG.IMAGE_PATH.USER}/default_user.png`,
                 }}
                 style={styles.Image}
             />
-        );
 
         return <Icon
             name='home'
@@ -109,10 +116,17 @@ const styles = StyleSheet.create({
         alignContent: 'center'
     },
     Image: {
-        width: 35,
-        height: 35,
+        width: 33,
+        height: 33,
         borderRadius: 50,
         borderWidth: 1,
-        borderColor: '#000'
+        borderColor: '#e5e5e5'
+    },
+    ImageFocused: {
+        width: 33,
+        height: 33,
+        borderRadius: 50,
+        borderWidth: 3,
+        borderColor: '#007bff'
     },
 })

@@ -6,6 +6,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Job from '../../data/job'
 import User from '../../data/user'
 import CONFIG from '../../global/config'
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -51,7 +52,7 @@ const JobItem = ({ navigation, currentUser, job, }) => {
     return (
         <View>
             <View style={styles.container2}>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={{ width: 320, flexDirection: 'row', marginTop: 20, alignSelf: 'center', alignItems: 'center' }}
                     onPress={() => {
                         if (job.username === currentUser.username) {
@@ -107,8 +108,9 @@ const JobItem = ({ navigation, currentUser, job, }) => {
                         height: 73,
                         borderBottomEndRadius: 5,
                         borderBottomStartRadius: 5,
+                        borderColor: '#e5e5e5',
                         paddingBottom: 5,
-                        backgroundColor: '#cacaca'
+                        backgroundColor: '#f7f7f7'
                     }}>
                         <TouchableOpacity onPress={() => navigation.navigate('detailJobs', { jobId: job.id })}>
                             <View
@@ -138,7 +140,11 @@ const JobList = ({ navigation, currentUser, jobs }) => {
     return (
         <>
             {jobs.length < 1 && (
-                <View style={{ marginTop: 150 }}>
+                <View style={{
+                    width: wp('62.5%'),
+                    alignSelf: 'center',
+                    marginVertical: hp('25%'),
+                }}>
                     <FontAwesome5
                         name='smile-wink'
                         size={30}
@@ -152,10 +158,10 @@ const JobList = ({ navigation, currentUser, jobs }) => {
             )}
 
             {jobs.map((job) => (
-                <JobItem 
+                <JobItem
                     key={job.id}
                     currentUser={currentUser}
-                    navigation={navigation} 
+                    navigation={navigation}
                     job={job}
                 />
             ))}
@@ -189,13 +195,7 @@ const Jobs = ({ navigation }) => {
     }, [navigation]);
 
     return (
-        <SafeAreaView
-            style={{
-                backgroundColor: 'white',
-                minHeight: windowHeight,
-                paddingBottom: 100,
-            }}
-        >
+        <SafeAreaView>
             <ScrollView>
                 <View style={styles.mainBody}>
                     <TouchableOpacity onPress={() => navigation.navigate('PostJob')}>
@@ -211,23 +211,23 @@ const Jobs = ({ navigation }) => {
                                 alignSelf: 'center',
                             }}>
                             <View
-                                style={{ 
+                                style={{
                                     flexDirection: 'row',
-                                    marginLeft: 10, 
+                                    marginLeft: 10,
                                     marginRight: 10,
-                                    fontSize: 20, 
-                                    color: '#fff', 
-                                    alignItems:'center'
+                                    fontSize: 20,
+                                    color: '#fff',
+                                    alignItems: 'center'
 
                                 }}
                             >
-                                    <Icon
-                                        name='plus'
-                                        type='font-awesome'
-                                        color='#fff'
-                                        size={25}
-                                    />
-                                    <Text style={{ color: '#fff', marginLeft: 10 }}>Pekerjaan Baru</Text>
+                                <Icon
+                                    name='plus'
+                                    type='font-awesome'
+                                    color='#fff'
+                                    size={25}
+                                />
+                                <Text style={{ color: '#fff', marginLeft: 10 }}>Pekerjaan Baru</Text>
                             </View>
                         </View>
                     </TouchableOpacity>
@@ -253,16 +253,17 @@ const styles = StyleSheet.create({
     mainBody: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: '#fafafa',
+        backgroundColor: '#fff',
         alignContent: 'center',
+        marginBottom: 15
     },
     container1: {
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         backgroundColor: '#fff',
         borderWidth: 1,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 360,
+        width: wp('90%'),
         height: 290,
         marginTop: 20,
         shadowColor: '#000',
@@ -273,12 +274,12 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     container2: {
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         backgroundColor: '#fff',
         borderWidth: 1,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 360,
+        width: wp('90%'),
         height: 300,
         marginTop: 30,
         shadowColor: '#000',
@@ -294,7 +295,7 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 50,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         marginLeft: 10,
         marginRight: 10
     },
@@ -304,7 +305,7 @@ const styles = StyleSheet.create({
         fontWeight: '300',
     },
     JobContainer: {
-        width: 280,
+        width: wp('70%'),
         height: 150,
         flexDirection: 'column',
         marginTop: 15,

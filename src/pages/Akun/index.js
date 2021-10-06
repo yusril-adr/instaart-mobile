@@ -5,6 +5,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import CONFIG from '../../global/config';
 import User from '../../data/user';
 import PostList from '../../components/PostList';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -84,7 +85,7 @@ const Akun = ({ navigation }) => {
                                         alignItems: 'center', 
                                         borderRadius: 10, 
                                         borderWidth: 1, 
-                                        borderColor: 'blue', 
+                                        borderColor: '#007bff', 
                                         marginTop: 20, 
                                         alignSelf: 'center', 
                                         justifyContent: 'center' 
@@ -116,8 +117,9 @@ const Akun = ({ navigation }) => {
                             style={{
                                 flexDirection: 'row',
                                 borderTopWidth: 1,
+                                borderTopColor: '#7f7f7f',
                                 marginTop: 15,
-                                width: 358,
+                                width: wp('89.5%'),
                                 backgroundColor: 'white',
                                 paddingVertical: 6,
                                 paddingHorizontal: 20,
@@ -132,7 +134,8 @@ const Akun = ({ navigation }) => {
                             style={{
                                 flexDirection: 'row',
                                 borderTopWidth: 1,
-                                width: 358,
+                                borderTopColor: '#7f7f7f',
+                                width: wp('89.5%'),
                                 alignSelf: 'center',
                                 backgroundColor: 'white',
                                 paddingVertical: 6,
@@ -147,7 +150,8 @@ const Akun = ({ navigation }) => {
                         <View style={{
                             flexDirection: 'row',
                             borderTopWidth: 1,
-                            width: 358,
+                            borderTopColor: '#7f7f7f',
+                            width: wp('89.5%'),
                             alignSelf: 'center',
                             backgroundColor: 'white',
                             paddingVertical: 6,
@@ -160,7 +164,8 @@ const Akun = ({ navigation }) => {
                         <View style={{
                             flexDirection: 'row',
                             borderTopWidth: 1,
-                            width: 358,
+                            borderTopColor: '#7f7f7f',
+                            width: wp('89.5%'),
                             alignSelf: 'center',
                             backgroundColor: 'white',
                             paddingVertical: 6,
@@ -173,7 +178,8 @@ const Akun = ({ navigation }) => {
                         <View style={{
                             flexDirection: 'row',
                             borderTopWidth: 1,
-                            width: 358,
+                            borderTopColor: '#7f7f7f',
+                            width: wp('89.5%'),
                             alignSelf: 'center',
                             backgroundColor: 'white',
                             paddingVertical: 6,
@@ -186,7 +192,8 @@ const Akun = ({ navigation }) => {
                         <View style={{
                             flexDirection: 'row',
                             borderTopWidth: 1,
-                            width: 358,
+                            borderTopColor: '#7f7f7f',
+                            width: wp('89.5%'),
                             alignSelf: 'center',
                             justifyContent: 'center',
                             backgroundColor: 'white',
@@ -227,16 +234,16 @@ const styles = StyleSheet.create({
     mainBody: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: '#fafafa',
+        backgroundColor: '#fff',
         alignContent: 'center',
     },
     containerProfile: {
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         backgroundColor: '#fff',
         borderWidth: 1,
         alignSelf: 'center',
         alignItems: 'center',
-        width: 360,
+        width: wp('90%'),
         marginTop: 30,
         shadowColor: '#000',
         shadowOffset: { width: 2, height: 1 },
@@ -245,13 +252,13 @@ const styles = StyleSheet.create({
         elevation: 10
     },
     containerInfoProfile: {
-        borderColor: '#000',
-        backgroundColor: '#eaeaea',
+        borderColor: '#e5e5e5',
+        backgroundColor: '#f7f7f7',
         borderWidth: 1,
         borderRadius: 10,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 360,
+        width: wp('90%'),
         marginTop: 40,
         marginBottom: 20,
         shadowColor: '#000',
@@ -261,12 +268,12 @@ const styles = StyleSheet.create({
         elevation: 10,
     },
     container1: {
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         backgroundColor: '#fff',
         borderWidth: 1,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 360,
+        width: wp('90%'),
         height: 410,
         marginTop: 20,
         shadowColor: '#000',
@@ -276,12 +283,12 @@ const styles = StyleSheet.create({
         elevation: 10
     },
     container2: {
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         backgroundColor: '#fff',
         borderWidth: 1,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 360,
+        width: wp('90%'),
         height: 410,
         marginTop: 30,
         marginBottom: 50,
@@ -296,7 +303,7 @@ const styles = StyleSheet.create({
         height: 80,
         borderRadius: 50,
         borderWidth: 1,
-        borderColor: 'black',
+        borderColor: '#e5e5e5',
         marginTop: 40,
         alignSelf: 'center'
     },
@@ -328,10 +335,10 @@ const styles = StyleSheet.create({
     dateBox: {
         alignSelf: 'center',
         alignItems: 'center',
-        width: 360,
+        width: wp('90%'),
         height: 45,
         backgroundColor: '#cacaca',
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         borderWidth: 1,
         marginTop: 10
     },

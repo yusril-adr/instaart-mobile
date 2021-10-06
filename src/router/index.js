@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -6,14 +6,15 @@ import { Akun, Home, Jobs, Login, Search, Signup, Splash, Upload, detailPost, Pr
 import BottomNavigator from '../components/BottomNavigator'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
+import { color } from 'react-native-elements/dist/helpers'
 
-const FontAwesomeHeaderButton = (props) => {    
+const FontAwesomeHeaderButton = (props) => {
     return (
-        <HeaderButton 
-            IconComponent={FontAwesome5} 
-            color="gray"
-            pressColor="#007bff" 
-            iconSize={23} 
+        <HeaderButton
+            IconComponent={FontAwesome5}
+            color="#7f7f7f"
+            pressColor="#007bff"
+            iconSize={23}
             {...props}
         />
     );
@@ -33,8 +34,8 @@ const LogoTitle = () => {
 
 const MainApp = () => {
     return (
-        <Tab.Navigator 
-            tabBar={props => <BottomNavigator {...props} state={{...props.state, routes: props.state.routes.slice(0,5)}} />}
+        <Tab.Navigator
+            tabBar={props => <BottomNavigator {...props} state={{ ...props.state, routes: props.state.routes.slice(0, 5) }} />}
             backBehavior="history"
         >
             <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
@@ -53,10 +54,7 @@ const MainApp = () => {
             <Tab.Screen name="editPhoto" component={editPhoto} options={{ headerShown: false }} />
             <Tab.Screen name="editPassword" component={editPassword} options={{ headerShown: false }} />
             <Tab.Screen name="searchUser" component={searchUser} options={{ headerShown: false }} />
-            <Tab.Screen name="Activity" 
-                component={Activity}
-                options={{ headerShown: false }} 
-            />
+            <Tab.Screen name="Activity" component={Activity} options={{ headerShown: false }} />
             <Tab.Screen name="UserDetailJobs" component={UserDetailJobs} options={{ headerShown: false }} />
             <Tab.Screen name="EditJob" component={EditJob} options={{ headerShown: false }} />
             <Tab.Screen name="FollowerPage" component={FollowerPages} options={{ headerShown: false }} />
@@ -67,7 +65,7 @@ const MainApp = () => {
 
 const Router = () => {
     return (
-        <Stack.Navigator initialRouteName="Splash">
+        <Stack.Navigator initialRouteName="Splash" backBehavior="history">
             <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
             <Stack.Screen name="Signup" component={Signup} options={{
                 headerTitle: (props) => (
@@ -86,6 +84,7 @@ const Router = () => {
                         <Text style={styles.teks}>Instaart</Text>
                     </View>
                 ),
+                headerBackVisible: false,
                 headerTitleAlign: 'center'
             }} />
             <Stack.Screen name="MainApp" component={MainApp} options={({ navigation, route }) => ({
@@ -100,12 +99,12 @@ const Router = () => {
                 headerRight: () => {
                     return (
                         <HeaderButtons HeaderButtonComponent={FontAwesomeHeaderButton}>
-                            <Item 
-                                title="activity" 
-                                iconName="compass" 
+                            <Item
+                                title="activity"
+                                iconName="compass"
                                 onPress={() => {
                                     navigation.navigate('Activity')
-                                }} 
+                                }}
                             />
                             <Item title="like" iconName="heart" onPress={() => navigation.navigate('LikePages')} />
                             <Item title="bookmark" iconName="bookmark" onPress={() => navigation.navigate('BookmarkPages')} />
@@ -126,7 +125,7 @@ const styles = StyleSheet.create({
         marginRight: 15
     },
     teks: {
-        color: 'gray',
+        color: '#7f7f7f',
         textAlignVertical: 'center',
         fontSize: 23,
         fontWeight: '100',

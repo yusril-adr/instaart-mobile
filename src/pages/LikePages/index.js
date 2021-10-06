@@ -6,6 +6,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Post from '../../data/post';
 import User from '../../data/user';
 import PostList from '../../components/PostList';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -72,8 +73,9 @@ const styles = StyleSheet.create({
     mainBody: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: '#fafafa',
+        backgroundColor: '#fff',
         alignContent: 'center',
+        marginBottom: 15
     },
     container1: {
         borderColor: '#000',
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 360,
+        width: wp('90%'),
         height: 415,
         marginTop: 30,
         shadowColor: '#000',
@@ -96,7 +98,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 360,
+        width: wp('90%'),
         height: 415,
         marginTop: 30,
         marginBottom: 50,
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
     dateBox: {
         alignSelf: 'center',
         alignItems: 'center',
-        width: 360,
+        width: wp('90%'),
         height: 45,
         backgroundColor: '#cacaca',
         borderColor: '#000',

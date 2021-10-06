@@ -5,6 +5,7 @@ import RNPickerSelect from 'react-native-picker-select'
 import { Chevron } from 'react-native-shapes'
 import User from '../../data/user'
 import Location from '../../data/location'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -169,8 +170,9 @@ const EditProfile = ({ navigation, route }) => {
                             <View style={{
                                 flexDirection: 'row',
                                 borderTopWidth: 1,
+                                borderColor: '#e5e5e5',
                                 marginTop: 15,
-                                width: 358,
+                                width: wp('89.5%'),
                                 backgroundColor: 'white',
                                 paddingVertical: 15,
                                 paddingHorizontal: 30,
@@ -182,7 +184,8 @@ const EditProfile = ({ navigation, route }) => {
                             <View style={{
                                 flexDirection: 'row',
                                 borderTopWidth: 1,
-                                width: 358,
+                                borderColor: '#e5e5e5',
+                                width: wp('89.5%'),
                                 alignSelf: 'center',
                                 backgroundColor: 'white',
                                 paddingVertical: 15,
@@ -195,7 +198,8 @@ const EditProfile = ({ navigation, route }) => {
                             <View style={{
                                 flexDirection: 'row',
                                 borderTopWidth: 1,
-                                width: 358,
+                                borderColor: '#e5e5e5',
+                                width: wp('89.5%'),
                                 alignSelf: 'center',
                                 backgroundColor: 'white',
                                 paddingVertical: 15,
@@ -423,13 +427,13 @@ const styles = StyleSheet.create({
         alignContent: 'center',
     },
     container: {
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         backgroundColor: '#fff',
         borderWidth: 1,
         borderRadius: 5,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 365,
+        width: wp('91.25%'),
         marginTop: 20,
         marginBottom: 20,
         shadowColor: '#000',
@@ -439,13 +443,13 @@ const styles = StyleSheet.create({
         elevation: 10
     },
     containerInfoProfile: {
-        borderColor: '#000',
-        backgroundColor: '#eaeaea',
+        borderColor: '#e5e5e5',
+        backgroundColor: '#f7f7f7',
         borderWidth: 1,
         borderRadius: 10,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 360,
+        width: wp('90%'),
         marginTop: 40,
         marginBottom: 20,
         shadowColor: '#000',
@@ -486,13 +490,13 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         textAlignVertical: 'top',
-        width: 310,
+        width: wp('77.5%'),
         height: 100,
         paddingLeft: 15,
         paddingRight: 15,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         fontSize: 16,
         color: '#000',
     },
@@ -524,12 +528,12 @@ const pickerSelectStyles = StyleSheet.create({
     },
     inputAndroid: {
         fontSize: 16,
-        width: 310,
+        width: wp('77.5%'),
         height: 40,
         paddingHorizontal: 10,
         paddingVertical: 8,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         borderRadius: 10,
         color: 'black',
         paddingRight: 30, // to ensure the text is never behind the icon

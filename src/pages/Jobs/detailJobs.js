@@ -5,6 +5,7 @@ import { Icon } from 'react-native-elements'
 import Job from '../../data/job';
 import User from '../../data/user';
 import CONFIG from '../../global/config';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const detailJobs = ({ navigation, route }) => {
     const { jobId } = route.params;
@@ -58,7 +59,7 @@ const detailJobs = ({ navigation, route }) => {
     return (
         <ScrollView>
             <View style={styles.container1}>
-                <View style={{ width: 320, flexDirection: 'column', marginTop: 20, alignSelf: 'center', alignItems: 'center' }}>
+                <View style={{ width: wp('80%'), flexDirection: 'column', marginTop: 20, alignSelf: 'center', alignItems: 'center' }}>
                     <View>
                         <Image
                             source={{ 
@@ -132,7 +133,7 @@ const detailJobs = ({ navigation, route }) => {
                         width: 348,
                         height: 73,
                         paddingVertical: 15,
-                        backgroundColor: '#cacaca'
+                        backgroundColor: '#f7f7f7'
                     }}>
                         <TouchableOpacity onPress={AlertJob}>
                             <View
@@ -170,13 +171,13 @@ export default detailJobs
 
 const styles = StyleSheet.create({
     container1: {
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         backgroundColor: '#fff',
         borderWidth: 1,
         borderRadius: 10,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 350,
+        width: wp('87.5%'),
         marginTop: 45,
         marginBottom: 30,
         shadowColor: '#000',
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
         height: 80,
         borderRadius: 50,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         marginBottom: 10,
         marginTop: 15
     },

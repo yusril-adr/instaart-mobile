@@ -7,6 +7,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import Post from '../../data/post'
 import Colors from '../../data/colors'
 import Categories from '../../data/categories'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -294,6 +295,7 @@ const Upload = ({ navigation }) => {
                                         backgroundColor: 'transparent',
                                         borderColor: '#007bff',
                                         borderWidth: 1,
+                                        width: 90,
                                         height: 40,
                                         borderRadius: 8,
                                     }}
@@ -339,20 +341,20 @@ const styles = StyleSheet.create({
         alignContent: 'center',
     },
     container1: {
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         backgroundColor: '#fff',
         borderWidth: 1,
         borderRadius: 20,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 350,
+        width: wp('90%'),
         marginTop: 30,
         marginBottom: 30,
         shadowColor: '#000',
-        shadowOffset: { width: 5, height: 1 },
+        shadowOffset: { width: 2, height: 1 },
         shadowOpacity: 0.5,
         shadowRadius: 1,
-        elevation: 15
+        elevation: 10,
     },
     teksSatu: {
         color: '#000',
@@ -379,14 +381,14 @@ const styles = StyleSheet.create({
     inputStyle: {
         flex: 1,
         backgroundColor: '#fff',
-        width: 310,
+        width: wp('77.5%'),
         height: 120,
         textAlignVertical: 'top',
         paddingLeft: 15,
         paddingRight: 15,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         color: '#000',
     },
     errorTextStyle: {
@@ -409,12 +411,12 @@ const pickerSelectStyles = StyleSheet.create({
     },
     inputAndroid: {
         fontSize: 16,
-        width: 310,
+        width: wp('77.5%'),
         height: 40,
         paddingHorizontal: 10,
         paddingVertical: 8,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         borderRadius: 10,
         color: 'black',
         paddingRight: 30, // to ensure the text is never behind the icon

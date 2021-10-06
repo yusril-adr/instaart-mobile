@@ -12,6 +12,7 @@ import Categories from '../../data/categories';
 import Post from '../../data/post';
 import User from '../../data/user';
 import History from '../../data/history';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -22,7 +23,8 @@ const KeywordList = ({ history, setShouldShow, setSearch }) => {
             style={{
                 position: 'relative',
                 backgroundColor: 'white',
-                marginHorizontal: 24,
+                width: wp('90%'),
+                alignSelf: 'center',
                 top: -9,
                 borderWidth: history?.length > 0 ? 1 : 0,
             }}
@@ -58,20 +60,22 @@ const SearchContainer = ({ history, updateHistory, search, setSearch, shouldShow
             <SearchBar
                 clearIcon={false}
                 placeholder="Cari ..."
-                containerStyle={{ 
-                    backgroundColor: 'transparent', 
-                    borderTopWidth: 0, 
-                    borderBottomWidth: 0 
+                containerStyle={{
+                    backgroundColor: 'transparent',
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0,
+                    borderColor: '#e5e5e5',
                 }}
                 inputContainerStyle={{
                     backgroundColor: '#fff',
                     flexDirection: 'row-reverse',
                     borderWidth: 1,
+                    borderColor: '#e5e5e5',
                     borderRadius: 5,
                     paddingLeft: 10,
                     borderBottomWidth: 1,
                     marginTop: 15,
-                    width: 345,
+                    width: wp('90%'),
                     alignSelf: 'center',
                 }}
                 lightTheme
@@ -80,7 +84,7 @@ const SearchContainer = ({ history, updateHistory, search, setSearch, shouldShow
                 ref={searchInputRef}
                 onFocus={() => {
                     // if (search.trim()) {
-                        setShouldShow(true)
+                    setShouldShow(true)
                     // }
                 }}
                 // onBlur={() => {
@@ -168,44 +172,47 @@ const Search = ({ navigation, route }) => {
             setClick2(true);
             navigation.navigate('Search', { keyword: search });
         };
+        return (
+            <TouchableOpacity onPress={() => Pressed1()}>
+                <View style={{
+                    flexDirection: 'row',
+                    backgroundColor: Click1 ? '#007bff' : 'white',
+                    width: 100,
+                    height: 40,
+                    alignItems: 'center',
+                    borderRadius: 10,
+                    borderWidth: 1,
+                    borderColor: '#007bff',
+                    justifyContent: 'center'
+                }}>
+                    <Text style={{ color: Click1 ? 'white' : '#007bff', fontSize: 16 }}>Desain</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    };
+
+    const SearchPengguna = () => {
         const Pressed2 = () => {
             setClick2(false);
             setClick1(true);
             navigation.navigate('searchUser', { keyword: search });
         };
         return (
-            <View style={{ width: 222, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <TouchableOpacity onPress={() => Pressed1()}>
-                    <View style={{
-                        flexDirection: 'row',
-                        backgroundColor: Click1 ? '#007bff' : 'white',
-                        width: 100,
-                        height: 40,
-                        alignItems: 'center',
-                        borderRadius: 10,
-                        borderWidth: 1,
-                        borderColor: '#007bff',
-                        justifyContent: 'center'
-                    }}>
-                        <Text style={{ color: Click1 ? 'white' : '#007bff', fontSize: 16 }}>Desain</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => Pressed2()}>
-                    <View style={{
-                        flexDirection: 'row',
-                        backgroundColor: Click2 ? '#007bff' : 'white',
-                        width: 100,
-                        height: 40,
-                        alignItems: 'center',
-                        borderRadius: 10,
-                        borderWidth: 1,
-                        borderColor: '#007bff',
-                        justifyContent: 'center'
-                    }}>
-                        <Text style={{ color: Click2 ? 'white' : '#007bff', fontSize: 16 }}>Pengguna</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity onPress={() => Pressed2()}>
+                <View style={{
+                    flexDirection: 'row',
+                    backgroundColor: Click2 ? '#007bff' : 'white',
+                    width: 100,
+                    height: 40,
+                    alignItems: 'center',
+                    borderRadius: 10,
+                    borderWidth: 1,
+                    borderColor: '#007bff',
+                    justifyContent: 'center'
+                }}>
+                    <Text style={{ color: Click2 ? 'white' : '#007bff', fontSize: 16 }}>Pengguna</Text>
+                </View>
+            </TouchableOpacity>
         );
     };
 
@@ -227,30 +234,30 @@ const Search = ({ navigation, route }) => {
             const initValue = async () => {
                 const colorList = await Colors.getColors();
                 const categoriesList = await Categories.getCategories();
-    
+
                 setCategories(categoriesList.map((category) => (
                     { label: category.name, value: category.id }
                 )));
                 setColors(colorList.map((color) => (
                     { label: color.name, value: color.id }
                 )));
-    
+
                 await updateHistory();
-    
+
                 if (keyword.trim() === '') {
                     const popular = await Post.getMostLikes();
                     setPopularPost(popular);
                 } else {
                     await updateResultPost();
                 }
-    
+
             };
-    
+
             const getUserInfo = async () => {
                 const data = await User.getUser();
                 setUser(data);
             };
-    
+
             const unsubscribe = navigation.addListener('focus', async (e) => {
                 try {
                     setSearch(keyword);
@@ -263,7 +270,7 @@ const Search = ({ navigation, route }) => {
                     navigation.goBack();
                 }
             });
-    
+
             try {
                 setSearch(keyword);
                 await getUserInfo();
@@ -271,7 +278,7 @@ const Search = ({ navigation, route }) => {
             } catch (error) {
                 alert(error.message);
             }
-    
+
             return unsubscribe;
         }, [navigation, route.params])
         , [navigation, route.params])
@@ -281,11 +288,11 @@ const Search = ({ navigation, route }) => {
             <ScrollView
                 contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={styles.mainBody}>
-                    <SearchContainer 
-                        history={history} 
-                        updateHistory={updateHistory} 
-                        search={search} 
-                        setSearch={setSearch} 
+                    <SearchContainer
+                        history={history}
+                        updateHistory={updateHistory}
+                        search={search}
+                        setSearch={setSearch}
                         shouldShow={shouldKeyShow}
                         setShouldShow={setShouldKeyShow}
                         onSearch={async () => {
@@ -297,8 +304,9 @@ const Search = ({ navigation, route }) => {
                         }}
                     />
 
-                    <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 10 }}>
                         <SearchDesain />
+                        <SearchPengguna />
                         <Filter />
                     </View>
 
@@ -394,10 +402,10 @@ const Search = ({ navigation, route }) => {
                             >
                                 Paling Disukai
                             </Text>
-                            <PostList 
-                                navigation={navigation} 
-                                posts={popularPost} 
-                                user={user} 
+                            <PostList
+                                navigation={navigation}
+                                posts={popularPost}
+                                user={user}
                                 onUpdateList={async () => {
                                     try {
                                         const newList = await Post.getMostLikes();
@@ -409,9 +417,14 @@ const Search = ({ navigation, route }) => {
                             />
                         </>
                     )}
-                    
+
                     {resultPost.length < 1 && keyword.trim() !== '' && (
-                        <View style={{ flexDirection: 'column', height: 400, justifyContent: 'center', alignItems: 'center', alignSelf: 'center' }}>
+                        <View style={{
+                            width: wp('80%'),
+                            alignSelf: 'center',
+                            alignItems: 'center',
+                            marginVertical: hp('25%'),
+                        }}>
                             <FontAwesome5
                                 name='search'
                                 size={30}
@@ -419,13 +432,13 @@ const Search = ({ navigation, route }) => {
                             />
                             <Text style={{ fontSize: 20 }}>Hasil pencarian tidak ditemukan</Text>
                         </View>
-                    ) }
+                    )}
 
                     {resultPost.length > 0 && keyword.trim() !== '' && (
-                        <PostList 
-                            navigation={navigation} 
-                            posts={resultPost} 
-                            user={user} 
+                        <PostList
+                            navigation={navigation}
+                            posts={resultPost}
+                            user={user}
                             onUpdateList={async () => {
                                 try {
                                     await updateResultPost();
@@ -448,7 +461,7 @@ const styles = StyleSheet.create({
     mainBody: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: '#fafafa',
+        backgroundColor: '#fff',
         alignContent: 'center',
     },
     buttonStyle: {
@@ -458,12 +471,12 @@ const styles = StyleSheet.create({
         color: '#007bff'
     },
     container1: {
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         backgroundColor: '#fff',
         borderWidth: 1,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 360,
+        width: wp('90%'),
         height: 410,
         marginTop: 20,
         shadowColor: '#000',
@@ -473,12 +486,12 @@ const styles = StyleSheet.create({
         elevation: 10
     },
     container2: {
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         backgroundColor: '#fff',
         borderWidth: 1,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 360,
+        width: wp('90%'),
         height: 410,
         marginTop: 30,
         marginBottom: 50,
@@ -508,10 +521,10 @@ const styles = StyleSheet.create({
     dateBox: {
         alignSelf: 'center',
         alignItems: 'center',
-        width: 360,
+        width: wp('90%'),
         height: 45,
         backgroundColor: '#cacaca',
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         borderWidth: 1,
         marginTop: 10
     },
@@ -542,7 +555,7 @@ const pickerSelectStyles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 8,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         borderRadius: 5,
         color: 'black',
         paddingRight: 30, // to ensure the text is never behind the icon

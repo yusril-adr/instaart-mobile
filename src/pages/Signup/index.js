@@ -8,6 +8,7 @@ import Location from '../../data/location';
 import PhoneNumberValidation from '../../utils/phone-number-validation';
 import User from '../../data/user';
 import CONFIG from '../../global/config';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -190,7 +191,8 @@ const Signup = ({ navigation }) => {
               <Text>Password</Text>
               <View style={{
                 borderWidth: 1,
-                width: 310,
+                borderColor: '#e5e5e5',
+                width: wp('77.5%'),
                 height: 40,
                 alignSelf: 'center',
                 borderRadius: 10,
@@ -213,7 +215,8 @@ const Signup = ({ navigation }) => {
               <Text>Konfirmasi Password</Text>
               <View style={{
                 borderWidth: 1,
-                width: 310,
+                borderColor: '#e5e5e5',
+                width: wp('77.5%'),
                 height: 40,
                 alignSelf: 'center',
                 borderRadius: 10,
@@ -400,13 +403,13 @@ const styles = StyleSheet.create({
     alignContent: 'center',
   },
   container1: {
-    borderColor: '#000',
+    borderColor: '#e5e5e5',
     backgroundColor: '#fff',
     borderWidth: 1,
     borderRadius: 5,
     alignSelf: 'center',
     alignContent: 'center',
-    width: 365,
+    width: wp('91.25%'),
     height: 900,
     marginTop: 20,
     shadowColor: '#000',
@@ -416,12 +419,12 @@ const styles = StyleSheet.create({
     elevation: 10
   },
   container2: {
-    borderColor: '#000',
+    borderColor: '#e5e5e5',
     borderWidth: 1,
     borderRadius: 5,
     backgroundColor: '#fff',
     alignSelf: 'center',
-    width: 365,
+    width: wp('91.25%'),
     height: 80,
     marginTop: 50,
     marginBottom: 40,
@@ -464,26 +467,26 @@ const styles = StyleSheet.create({
   inputStyle: {
     flex: 1,
     backgroundColor: '#fff',
-    width: 310,
+    width: wp('77.5%'),
     height: 100,
     textAlignVertical: 'top',
     paddingLeft: 10,
     paddingRight: 15,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#000',
+    borderColor: '#e5e5e5',
     fontSize: 16,
     color: '#000',
   },
   inputStyleForPwd: {
-    width: 310,
+    width: wp('77.5%'),
     height: 50,
     paddingBottom: 20,
     paddingLeft: 20,
     borderRadius: 10,
     marginTop: -25,
     marginRight: 20,
-    borderColor: '#000',
+    borderColor: '#e5e5e5',
     alignSelf: 'center',
     color: '#000',
   },
@@ -515,12 +518,12 @@ const pickerSelectStyles = StyleSheet.create({
   },
   inputAndroid: {
     fontSize: 16,
-    width: 310,
+    width: wp('77.5%'),
     height: 40,
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderWidth: 1,
-    borderColor: '#000',
+    borderColor: '#e5e5e5',
     borderRadius: 10,
     color: 'black',
     paddingRight: 30, // to ensure the text is never behind the icon

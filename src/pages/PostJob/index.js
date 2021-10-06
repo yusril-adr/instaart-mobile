@@ -6,6 +6,7 @@ import { Chevron } from 'react-native-shapes'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Job from '../../data/job';
 import Location from '../../data/location';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -107,14 +108,7 @@ const PostJob = ({ navigation }) => {
     }, [navigation])
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#fff' }}>
-            <ScrollView
-                keyboardShouldPersistTaps="handled"
-                contentContainerStyle={{
-                    justifyContent: 'center',
-                    alignContent: 'center',
-                }}>
-
+            <ScrollView>
                 <KeyboardAvoidingView enabled>
                     <View style={styles.container1}>
                         <View style={{ alignItems: 'center' }}>
@@ -296,7 +290,6 @@ const PostJob = ({ navigation }) => {
 
                 </KeyboardAvoidingView>
             </ScrollView>
-        </View>
     )
 }
 
@@ -308,22 +301,23 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#fff',
         alignContent: 'center',
+        marginBottom: 20
     },
     container1: {
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         backgroundColor: '#fff',
         borderWidth: 1,
         borderRadius: 10,
         alignSelf: 'center',
         alignContent: 'center',
-        width: 350,
+        width: wp('90%'),
         marginTop: 30,
         marginBottom: 30,
         shadowColor: '#000',
-        shadowOffset: { width: 5, height: 1 },
+        shadowOffset: { width: 2, height: 1 },
         shadowOpacity: 0.5,
         shadowRadius: 1,
-        elevation: 15
+        elevation: 10,
     },
     teksSatu: {
         color: '#000',
@@ -351,13 +345,13 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         textAlignVertical: 'top',
-        width: 310,
+        width: wp('77.5%'),
         height: 120,
         paddingLeft: 15,
         paddingRight: 15,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         color: '#000',
     },
     errorTextStyle: {
@@ -380,12 +374,12 @@ const pickerSelectStyles = StyleSheet.create({
     },
     inputAndroid: {
         fontSize: 16,
-        width: 310,
+        width: wp('77.5%'),
         height: 40,
         paddingHorizontal: 10,
         paddingVertical: 8,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: '#e5e5e5',
         borderRadius: 10,
         color: 'black',
         paddingRight: 30, // to ensure the text is never behind the icon

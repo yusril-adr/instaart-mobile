@@ -1,3 +1,4 @@
 import BottomNavigator from './BottomNavigator'
+import backButton from './backButton'
 
-export { BottomNavigator }
+export { BottomNavigator, backButton }

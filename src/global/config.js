@@ -2,7 +2,8 @@
 // const BASE_URL = 'http://10.0.2.2/instaart';
 
 // Production version
-const BASE_URL = 'https://instaart.cybertwenty.com';
+// const BASE_URL = 'https://instaart.cybertwenty.com';
+const BASE_URL = 'http://instaart.expectron.tech/';
 
 const CONFIG = {
   API_BASE_URL: `${BASE_URL}/api`,
