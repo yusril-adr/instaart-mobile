@@ -11,8 +11,88 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 
 const ProfilePage = ({ navigation, route }) => {
     const { username = null } = route?.params || {};
-    const [currentUser, setCurrentUser] = useState(null);
-    const [targetUser, setTargetUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState({
+        id:"1",
+        username:"yusril-adr",
+        display_name:"Yusril A. P.",
+        biodata:"Just a normal person.",
+        image:"615d4aeb49b1b.jpg",
+        email:"a@a",
+        phone_number:"087854029394",
+        province_id:"35",
+        province_name:"Jawa Timur",
+        city_id:"3578",
+        city_name:"Kota Surabaya",
+        followers:["6","7"],
+        following:["6","7"],
+        bookmark_posts:[{
+            id:"13",
+            color_id:"8",
+            category_id:"5",
+            image:"615d25395f562.png",
+            title:"Ani-Time",
+            date:"2021-10-06 12:25:29",
+            insight:"15",
+            user_image:"615d4aeb49b1b.jpg",
+            username:"yusril-adr"
+        }],
+    });
+    const [targetUser, setTargetUser] = useState({
+        id:"6",
+        username:"_seo-jun",
+        display_name:"Han Seo Jun",
+        biodata:"",
+        image:"6.jpg",
+        email:"janganbanyaktanya@yahoohohoho",
+        phone_number:"0852349975",
+        province_id:"35",
+        province_name:"Jawa Timur",
+        city_id:"3524",
+        city_name:"Kabupaten Lamongan",
+        followers:[],
+        following:["1"],
+        bookmark_posts:[],
+        posts:[
+            {
+                id:"14",
+                color_id:"6",
+                category_id:"4",
+                title:"MUSCLE BOY",
+                caption:"YOU KNOW WHAT IS THAT MUSCLE",
+                image:"615d2af2c1d8c.png",
+                date:"2021-10-06 12:49:56",
+                user_id:"6",
+                insight:"5",
+                user_image:"6.jpg",
+                username:"_seo-jun",
+                likes:["1"],
+                comments:[
+                    {
+                        user_id:"1",
+                        username:"yusril-adr",
+                        user_image:"615d4aeb49b1b.jpg",
+                        id:"8",
+                        body:"Benny anjing",
+                        date:"2021-10-06 12:57:05"
+                    },{
+                        user_id:"6",
+                        username:"_seo-jun",
+                        user_image:"6.jpg",
+                        id:"6",
+                        body:"Han Seo Jun ",
+                        date:"2021-10-06 12:50:38"
+                    },{
+                        user_id:"6",
+                        username:"_seo-jun",
+                        user_image:"6.jpg",
+                        id:"7",
+                        body:"Han Seo Jun ",
+                        date:"2021-10-06 12:50:38"
+                    },
+                ],
+            },
+        ],
+    });
 
     const ProfileButton = ({ onUpdate }) => {
         if ((targetUser?.id === currentUser?.id) && targetUser?.id) {
@@ -52,8 +132,8 @@ const ProfilePage = ({ navigation, route }) => {
                     <TouchableOpacity 
                         onPress={async () => {
                             try {
-                                await User.unFollowUser(targetUser.id);
-                                await onUpdate();
+                                // await User.unFollowUser(targetUser.id);
+                                // await onUpdate();
                             } catch (error) {
                                 alert(error.message)
                             }
@@ -83,8 +163,8 @@ const ProfilePage = ({ navigation, route }) => {
                     <TouchableOpacity 
                         onPress={async () => {
                             try {
-                                await User.followUser(targetUser.id);
-                                await onUpdate();
+                                // await User.followUser(targetUser.id);
+                                // await onUpdate();
                             } catch (error) {
                                 alert(error.message)
                             }
@@ -123,17 +203,17 @@ const ProfilePage = ({ navigation, route }) => {
     };
 
     useEffect(useCallback(() => {
-        const unsubscribe = navigation.addListener('focus', async (e) => {
-            try {
-                await updateCurrentUserInfo();
-                await updateTargetUserInfo();
-            } catch (error) {
-                alert(error.message);
-                navigation.navigate('Login');
-            }
-        });
+        // const unsubscribe = navigation.addListener('focus', async (e) => {
+        //     try {
+        //         await updateCurrentUserInfo();
+        //         await updateTargetUserInfo();
+        //     } catch (error) {
+        //         alert(error.message);
+        //         navigation.navigate('Login');
+        //     }
+        // });
 
-        return unsubscribe;
+        // return unsubscribe;
     }, [navigation, route?.params]));
     
     return (

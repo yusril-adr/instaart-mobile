@@ -39,26 +39,26 @@ const MainApp = () => {
             backBehavior="history"
         >
             <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
-            <Tab.Screen name="Search" component={Search} options={{ headerShown: false }} />
-            <Tab.Screen name="Upload" component={Upload} options={{ headerShown: false }} />
-            <Tab.Screen name="Jobs" component={Jobs} options={{ headerShown: false }} />
+            <Tab.Screen name="Search" component={Home} options={{ headerShown: false }} />
+            <Tab.Screen name="Upload" component={Home} options={{ headerShown: false }} />
+            <Tab.Screen name="Jobs" component={Home} options={{ headerShown: false }} />
             <Tab.Screen name="Akun" component={Akun} options={{ headerShown: false }} />
             <Tab.Screen name="ProfilePage" component={ProfilePage} options={{ headerShown: false }} />
-            <Tab.Screen name="detailPost" component={detailPost} options={{ headerShown: false }} />
-            <Tab.Screen name="LikePages" component={LikePages} options={{ headerShown: false }} />
-            <Tab.Screen name="BookmarkPages" component={BookmarkPages} options={{ headerShown: false }} />
-            <Tab.Screen name="EditPortfolio" component={EditPortfolio} options={{ headerShown: false }} />
-            <Tab.Screen name="PostJob" component={PostJob} options={{ headerShown: false }} />
-            <Tab.Screen name="detailJobs" component={detailJobs} options={{ headerShown: false }} />
+            <Tab.Screen name="detailPost" component={Home} options={{ headerShown: false }} />
+            <Tab.Screen name="LikePages" component={Home} options={{ headerShown: false }} />
+            <Tab.Screen name="BookmarkPages" component={Home} options={{ headerShown: false }} />
+            <Tab.Screen name="EditPortfolio" component={Home} options={{ headerShown: false }} />
+            <Tab.Screen name="PostJob" component={Home} options={{ headerShown: false }} />
+            <Tab.Screen name="detailJobs" component={Home} options={{ headerShown: false }} />
             <Tab.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
             <Tab.Screen name="editPhoto" component={editPhoto} options={{ headerShown: false }} />
             <Tab.Screen name="editPassword" component={editPassword} options={{ headerShown: false }} />
-            <Tab.Screen name="searchUser" component={searchUser} options={{ headerShown: false }} />
+            <Tab.Screen name="searchUser" component={Home} options={{ headerShown: false }} />
             <Tab.Screen name="Activity" component={Activity} options={{ headerShown: false }} />
-            <Tab.Screen name="UserDetailJobs" component={UserDetailJobs} options={{ headerShown: false }} />
-            <Tab.Screen name="EditJob" component={EditJob} options={{ headerShown: false }} />
-            <Tab.Screen name="FollowerPage" component={FollowerPages} options={{ headerShown: false }} />
-            <Tab.Screen name="FollowingPage" component={FollowingPages} options={{ headerShown: false }} />
+            <Tab.Screen name="UserDetailJobs" component={Home} options={{ headerShown: false }} />
+            <Tab.Screen name="EditJob" component={Home} options={{ headerShown: false }} />
+            <Tab.Screen name="FollowerPage" component={Home} options={{ headerShown: false }} />
+            <Tab.Screen name="FollowingPage" component={Home} options={{ headerShown: false }} />
         </Tab.Navigator>
     )
 }

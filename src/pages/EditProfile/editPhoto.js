@@ -11,7 +11,32 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const editPhoto = ({ navigation }) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState({
+        id:"1",
+        username:"yusril-adr",
+        display_name:"Yusril A. P.",
+        biodata:"Just a normal person.",
+        image:"615d4aeb49b1b.jpg",
+        email:"a@a",
+        phone_number:"087854029394",
+        province_id:"35",
+        province_name:"Jawa Timur",
+        city_id:"3578",
+        city_name:"Kota Surabaya",
+        followers:["6","7"],
+        following:["6","7"],
+        bookmark_posts:[{
+            id:"13",
+            color_id:"8",
+            category_id:"5",
+            image:"615d25395f562.png",
+            title:"Ani-Time",
+            date:"2021-10-06 12:25:29",
+            insight:"15",
+            user_image:"615d4aeb49b1b.jpg",
+            username:"yusril-adr"
+        }]
+    });
     const [uploadImage, setUploadImage] = useState(null);
 
     const handleChooseFile = async () => {
@@ -39,7 +64,7 @@ const editPhoto = ({ navigation }) => {
                 },
                 { text: "Ya", onPress: async () => {
                     try {
-                        await User.removePicture();
+                        // await User.removePicture();
 
                         setUploadImage(null);
 
@@ -73,7 +98,7 @@ const editPhoto = ({ navigation }) => {
                 uri: Platform.OS === 'ios' ? uploadImage.uri.replace('file://', '') : uploadImage.uri,
               });
 
-            await User.updatePicture(formImg);
+            // await User.updatePicture(formImg);
 
             setUploadImage(null);
 
@@ -100,16 +125,16 @@ const editPhoto = ({ navigation }) => {
     };
 
     useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', async (e) => {
-            try {
-                await getUserInfo();
-            } catch (error) {
-                alert(error.message);
-                navigation.goBack();
-            }
-        });
+        // const unsubscribe = navigation.addListener('focus', async (e) => {
+        //     try {
+        //         await getUserInfo();
+        //     } catch (error) {
+        //         alert(error.message);
+        //         navigation.goBack();
+        //     }
+        // });
 
-        return unsubscribe;
+        // return unsubscribe;
     }, [navigation]);
 
     return (

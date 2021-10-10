@@ -43,7 +43,7 @@ const EditProfile = ({ navigation, route }) => {
                 },
                 { text: "Ya", onPress: async () => {
                     try {
-                        await User.signOut();
+                        // await User.signOut();
                         navigation.navigate('Login');
                     } catch (error) {
                         alert(error.message);
@@ -97,7 +97,7 @@ const EditProfile = ({ navigation, route }) => {
                 biodata: userBio,
             };
 
-            await User.update(inputData);
+            // await User.update(inputData);
 
             navigation.navigate('Akun');
         } catch (error) {
@@ -140,9 +140,10 @@ const EditProfile = ({ navigation, route }) => {
     useEffect(useCallback(() => {
         const unsubscribe = navigation.addListener('focus', async (e) => {
             try {
-                const data = await User.getUser();
-                setUser(data);
-                await setDefaultValue(data);
+                // const data = await User.getUser();
+                // setUser(data);
+                await setDefaultValue();
+                // await setDefaultValue(data);
             } catch (error) {
                 alert(error.message);
                 navigation.goBack();

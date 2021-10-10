@@ -100,7 +100,7 @@ const Signup = ({ navigation }) => {
         city_name: await Location.getCity(userKota),
       };
 
-      const user = await User.signUp(data);
+      // const user = await User.signUp(data);
       navigation.replace('Login');
     } catch (error) {
       console.log(error);

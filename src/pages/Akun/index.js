@@ -11,7 +11,72 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const Akun = ({ navigation }) => {
-    const [currentUser, setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState({
+        id:"1",
+        username:"yusril-adr",
+        display_name:"Yusril A. P.",
+        biodata:"Just a normal person.",
+        image:"615d4aeb49b1b.jpg",
+        email:"a@a",
+        phone_number:"087854029394",
+        province_id:"35",
+        province_name:"Jawa Timur",
+        city_id:"3578",
+        city_name:"Kota Surabaya",
+        followers:["6","7"],
+        following:["6","7"],
+        bookmark_posts:[{
+            id:"13",
+            color_id:"8",
+            category_id:"5",
+            image:"615d25395f562.png",
+            title:"Ani-Time",
+            date:"2021-10-06 12:25:29",
+            insight:"15",
+            user_image:"615d4aeb49b1b.jpg",
+            username:"yusril-adr"
+        }],
+        posts:[
+            {
+                id:"13",
+                color_id:"8",
+                category_id:"5",
+                title:"Ani-Time",
+                caption:"List your anime anytime.",
+                image:"615d25395f562.png",
+                date:"2021-10-06 12:25:29",
+                user_id:"1",
+                insight:"15",
+                user_image:"615d4aeb49b1b.jpg",
+                username:"yusril-adr",
+                likes:["1"],
+                comments:[
+                    {
+                        user_id:"7",
+                        username:"testing",
+                        user_image:"default_user.png",
+                        id:"11",
+                        body:"Kerennnn",
+                        date:"2021-10-06 15:10:11"
+                    },{
+                        user_id:"7",
+                        username:"testing",
+                        user_image:"default_user.png",
+                        id:"10",
+                        body:"Weee",
+                        date:"2021-10-06 15:10:03",
+                    },{
+                        user_id:"6",
+                        username:"_seo-jun",
+                        user_image:"6.jpg",
+                        id:"9",
+                        body:"Waw keren sekali ",
+                        date:"2021-10-06 12:57:48",
+                    },
+                ],
+            },
+        ],
+    });
 
     const updateUserInfo = async () => {
         const data = await User.getUser();
@@ -20,16 +85,16 @@ const Akun = ({ navigation }) => {
     };
 
     useEffect(useCallback(() => {
-        const unsubscribe = navigation.addListener('focus', async (e) => {
-            try {
-                await updateUserInfo();
-            } catch (error) {
-                alert(error.message);
-                navigation.navigate('Login');
-            }
-        });
+        // const unsubscribe = navigation.addListener('focus', async (e) => {
+        //     try {
+        //         await updateUserInfo();
+        //     } catch (error) {
+        //         alert(error.message);
+        //         navigation.navigate('Login');
+        //     }
+        // });
 
-        return unsubscribe;
+        // return unsubscribe;
     }, [navigation]));
 
     const logOutHandler = () => {
@@ -43,7 +108,7 @@ const Akun = ({ navigation }) => {
                 },
                 { text: "Ya", onPress: async () => {
                     try {
-                        await User.signOut();
+                        // await User.signOut();
                         navigation.navigate('Login');
                     } catch (error) {
                         alert(error.message);
@@ -216,7 +281,7 @@ const Akun = ({ navigation }) => {
                         user={currentUser} 
                         onUpdateList={async () => {
                             try {
-                                await updateUserInfo();
+                                // await updateUserInfo();
                             } catch {
                                 alert(error.message);
                             }

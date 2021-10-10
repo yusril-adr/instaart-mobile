@@ -118,8 +118,53 @@ const EmptyActivity = () => (
 );
 
 const Activity = ({ navigation }) => {
-    const [currentUser, setCurrentUser] = useState(null);
-    const [activities, setActivities] = useState([]);
+    const [currentUser, setCurrentUser] = useState({
+        id:"1",
+        username:"yusril-adr",
+        display_name:"Yusril A. P.",
+        biodata:"Just a normal person.",
+        image:"615d4aeb49b1b.jpg",
+        email:"a@a",
+        phone_number:"087854029394",
+        province_id:"35",
+        province_name:"Jawa Timur",
+        city_id:"3578",
+        city_name:"Kota Surabaya",
+        followers:["6","7"],
+        following:["6","7"],
+        bookmark_posts:[{
+            id:"13",
+            color_id:"8",
+            category_id:"5",
+            image:"615d25395f562.png",
+            title:"Ani-Time",
+            date:"2021-10-06 12:25:29",
+            insight:"15",
+            user_image:"615d4aeb49b1b.jpg",
+            username:"yusril-adr"
+        }]
+    });
+    const [activities, setActivities] = useState([
+        {
+            post_id:"13",
+            post_title:"Ani-Time",
+            owner_id:"1",
+            other_image:"6.jpg",
+            other_username:"_seo-jun",
+            other_id:"6",
+            relation:"comment",
+            date:"2021-10-06 12:57:48"
+        },{
+            post_id:null,
+            post_title:null,
+            owner_id:"1",
+            other_image:"6.jpg",
+            other_username:"_seo-jun",
+            other_id:"6",
+            relation:"follow",
+            date:"2021-10-06 12:57:35"
+        },
+    ]);
 
     const updateUserInfo = async () => {
         const data = await User.getUser();
@@ -134,8 +179,8 @@ const Activity = ({ navigation }) => {
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async (e) => {
             try {
-                await updateUserInfo();
-                await updateActivities();
+                // await updateUserInfo();
+                // await updateActivities();
             } catch (error) {
                 alert(error.message);
                 navigation.navigate('Login');

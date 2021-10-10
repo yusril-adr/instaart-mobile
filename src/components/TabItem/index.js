@@ -5,21 +5,21 @@ import CONFIG from '../../global/config';
 import User from '../../data/user';
 
 const TabItem = ({ isFocused, onLongPress, onPress, label, navigation }) => {
-    const [userImage, setUserImage] = useState(null);
+    const [userImage, setUserImage] = useState('615d4aeb49b1b.jpg');
 
     useEffect(() => {
-        const unsubscribe = navigation.addListener('state', async (e) => {
-            try {
-                if (label === 'Akun') {
-                    const user = await User.getUser();
-                    setUserImage(user.image);
-                }
-            } catch (error) {
-                console.log(error.message);
-            }
-        });
+        // const unsubscribe = navigation.addListener('state', async (e) => {
+        //     try {
+        //         if (label === 'Akun') {
+        //             const user = await User.getUser();
+        //             setUserImage(user.image);
+        //         }
+        //     } catch (error) {
+        //         console.log(error.message);
+        //     }
+        // });
 
-        return unsubscribe;
+        // return unsubscribe;
     }, [navigation])
 
     const Icons = () => {

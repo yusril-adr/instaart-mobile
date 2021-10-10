@@ -31,10 +31,10 @@ const editPassword = ({ navigation }) => {
                 return;
             }
 
-            await User.updatePassword({
-                new_password: userNewPassword,
-                current_password: userPassword,
-            })
+            // await User.updatePassword({
+            //     new_password: userNewPassword,
+            //     current_password: userPassword,
+            // })
 
             alert('Password berhasil diperbarui')
 
@@ -50,16 +50,16 @@ const editPassword = ({ navigation }) => {
     };
 
     useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', async (e) => {
-            try {
-                await getUserInfo();
-            } catch (error) {
-                alert(error.message);
-                navigation.goBack();
-            }
-        });
+        // const unsubscribe = navigation.addListener('focus', async (e) => {
+        //     try {
+        //         await getUserInfo();
+        //     } catch (error) {
+        //         alert(error.message);
+        //         navigation.goBack();
+        //     }
+        // });
 
-        return unsubscribe;
+        // return unsubscribe;
     }, [navigation]);
 
     const placeholder = {

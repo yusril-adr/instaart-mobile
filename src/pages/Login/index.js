@@ -31,15 +31,15 @@ const Login = ({ navigation }) => {
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
-        (async () => {
-            try {
-                if (await User.getUser()) {
-                    navigation.replace('MainApp');
-                }
-            } catch (error) {
-                alert(error.message);
-            }
-        })()
+        // (async () => {
+        //     try {
+        //         if (await User.getUser()) {
+        //             navigation.replace('MainApp');
+        //         }
+        //     } catch (error) {
+        //         alert(error.message);
+        //     }
+        // })()
 
         
         return () =>
@@ -57,7 +57,7 @@ const Login = ({ navigation }) => {
                 alert('Mohon isi password anda');
                 return;
             }
-            await User.signIn(userEmail, userPassword);
+            // await User.signIn(userEmail, userPassword);
             navigation.replace('MainApp');
         } catch (error) {
             alert(error.message);
