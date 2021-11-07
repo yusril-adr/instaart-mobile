@@ -5,13 +5,13 @@ import { Icon } from 'react-native-elements'
 import Job from '../../data/job';
 import User from '../../data/user';
 import CONFIG from '../../global/config';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const detailJobs = ({ navigation, route }) => {
     const { jobId } = route.params;
     const [job, setJob] = useState(null);
     const [user, setUser] = useState(null);
-    
+
     const AlertJob = () => {
         Alert.alert(
             "Peringatan !",
@@ -21,13 +21,15 @@ const detailJobs = ({ navigation, route }) => {
                     text: "Batal",
                     style: "cancel"
                 },
-                { text: "Mengerti", onPress: async () => {
-                    const supported = await Linking.canOpenURL(job?.form_link);
+                {
+                    text: "Mengerti", onPress: async () => {
+                        const supported = await Linking.canOpenURL(job?.form_link);
 
-                    if (supported || job?.form_link.startsWith('https://')) {
-                        await Linking.openURL(job?.form_link);
-                    } 
-                } }
+                        if (supported || job?.form_link.startsWith('https://')) {
+                            await Linking.openURL(job?.form_link);
+                        }
+                    }
+                }
             ]
         );
     };
@@ -62,7 +64,7 @@ const detailJobs = ({ navigation, route }) => {
                 <View style={{ width: wp('80%'), flexDirection: 'column', marginTop: 20, alignSelf: 'center', alignItems: 'center' }}>
                     <View>
                         <Image
-                            source={{ 
+                            source={{
                                 uri: `${CONFIG.IMAGE_PATH.USER}/${job?.user_image || 'default_user.png'}`
                             }}
                             style={styles.JobProfile}
@@ -73,19 +75,56 @@ const detailJobs = ({ navigation, route }) => {
                         <Text style={{ fontSize: 18, textAlign: 'center', marginTop: 10 }}>{job?.username}</Text>
                     </View>
 
+                    <View style={{
+                        alignSelf: 'center',
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        marginTop: 10,
+                        width: 348,
+                        height: 73,
+                        paddingVertical: 15,
+                        backgroundColor: '#f7f7f7'
+                    }}>
+                        <TouchableOpacity onPress={AlertJob}>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    backgroundColor: '#007bff',
+                                    width: 100,
+                                    height: 45,
+                                    alignItems: 'center',
+                                    borderRadius: 10,
+                                    justifyContent: 'center',
+                                    borderWidth: 1,
+                                    borderColor: 'white',
+                                }}>
+                                <Text
+                                    style={{
+                                        marginLeft: 10,
+                                        marginRight: 10,
+                                        fontSize: 20,
+                                        color: '#fff'
+                                    }}
+                                >
+                                    Lamar
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+
                     {job?.user_id === user?.id && (
                         <TouchableOpacity onPress={() => navigation.navigate('EditJob', { jobId: jobId })}>
-                            <View 
-                                style={{ 
-                                    flexDirection: 'row', 
-                                    backgroundColor: '#fff', 
-                                    height: 40, 
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    backgroundColor: '#fff',
+                                    height: 40,
                                     alignItems: 'center',
                                     alignContent: 'center',
-                                    borderRadius: 5, 
-                                    borderWidth: 1, 
-                                    borderColor: '#007bff', 
-                                    marginTop: 20, 
+                                    borderRadius: 5,
+                                    borderWidth: 1,
+                                    borderColor: '#007bff',
+                                    marginTop: 20,
                                     alignSelf: 'center',
                                     paddingHorizontal: 10,
                                 }}
@@ -125,42 +164,7 @@ const detailJobs = ({ navigation, route }) => {
                             {job?.description}
                         </Text>
                     </View>
-                    <View style={{
-                        alignSelf: 'center',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        marginTop: 20,
-                        width: 348,
-                        height: 73,
-                        paddingVertical: 15,
-                        backgroundColor: '#f7f7f7'
-                    }}>
-                        <TouchableOpacity onPress={AlertJob}>
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    backgroundColor: '#007bff',
-                                    width: 100,
-                                    height: 45,
-                                    alignItems: 'center',
-                                    borderRadius: 10,
-                                    justifyContent: 'center',
-                                    borderWidth: 1,
-                                    borderColor: 'white',
-                                }}>
-                                <Text
-                                    style={{ 
-                                        marginLeft: 10,
-                                        marginRight: 10, 
-                                        fontSize: 20, 
-                                        color: '#fff'
-                                    }}
-                                >
-                                    Lamar
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+
                 </View>
             </View>
         </ScrollView>
@@ -205,6 +209,6 @@ const styles = StyleSheet.create({
     JobInfo: {
         fontSize: 18,
         textAlign: 'justify',
-        marginTop: 20
+        marginVertical: 40
     }
 })

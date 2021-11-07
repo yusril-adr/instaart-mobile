@@ -41,7 +41,7 @@ const Login = ({ navigation }) => {
             }
         })()
 
-        
+
         return () =>
             BackHandler.removeEventListener('hardwareBackPress', backAction);
     }, []);
@@ -149,15 +149,18 @@ const Login = ({ navigation }) => {
                                     }}
                                     onPress={handleSubmitPress}
                                 />
-                            </View>
-
-                            <View style={styles.container2}>
-                                <Text style={styles.textdaftar}>Belum memiliki akun? <Text
-                                    style={styles.daftar}
-                                    onPress={() => navigation.navigate('Signup')}>
-                                    Daftar
-                                </Text>
-                                </Text>
+                                <View style={{
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    paddingVertical: 20,
+                                }}>
+                                    <Text style={styles.textdaftar}>Belum memiliki akun? <Text
+                                        style={styles.daftar}
+                                        onPress={() => navigation.navigate('Signup')}>
+                                        Daftar
+                                    </Text>
+                                    </Text>
+                                </View>
                             </View>
 
                         </KeyboardAvoidingView>
@@ -181,33 +184,18 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderWidth: 1,
         borderRadius: 5,
+        marginBottom: 20,
         alignSelf: 'center',
         alignContent: 'center',
         width: wp('91.25%'),
-        height: 315,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.7,
-        shadowRadius: 2,
-        elevation: 10
-    },
-    container2: {
-        borderColor: '#e5e5e5',
-        borderWidth: 1,
-        borderRadius: 5,
-        backgroundColor: '#fff',
-        alignSelf: 'center',
-        width: wp('91.25%'),
-        height: 80,
-        marginTop: 30,
-        marginBottom: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.7,
-        shadowRadius: 2,
-        elevation: 10
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.29,
+        shadowRadius: 4.65,
+        elevation: 7,
     },
     Image: {
         width: wp('120%'),

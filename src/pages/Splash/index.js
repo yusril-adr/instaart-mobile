@@ -3,9 +3,6 @@ import { Image, StyleSheet, Text, View, Dimensions,} from 'react-native';
 import NetworkConnectionHelper from '../../utils/network-connection-helper';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
-
 const Splash = ({ navigation }) => {
 
     useEffect(async () => {
@@ -35,26 +32,28 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#fff'
+        backgroundColor: '#007bff'
     },
     logo: {
-        width: 200,
-        height: 200,
+        width: 198,
+        height: 190,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     teksSatu: {
         fontSize: 40,
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 30,
-        fontFamily: 'Redressed-3X6y'
+        fontFamily: 'Redressed-3X6y',
+        color: 'white'
     },
     teksDua: {
         fontSize: 15,
         fontWeight: '200',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 20
+        marginTop: 20,
+        color: 'white'
     }
 })

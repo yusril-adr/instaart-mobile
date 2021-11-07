@@ -2,13 +2,12 @@ import React, { useState, useEffect, createRef } from 'react'
 import { StyleSheet, Text, View, ScrollView, Dimensions, Image, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { SearchBar, Icon } from 'react-native-elements'
+import { Button } from 'react-native-elements';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Job from '../../data/job'
 import User from '../../data/user'
 import CONFIG from '../../global/config'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
-const windowHeight = Dimensions.get('window').height;
 
 const SearchContainer = ({ search, setSearch }) => {
     const searchInputRef = createRef();
@@ -137,6 +136,24 @@ const JobItem = ({ navigation, currentUser, job, }) => {
 };
 
 const JobList = ({ navigation, currentUser, jobs }) => {
+    const [currentShowedJob, setCurrentShowedJob] = useState(0);
+
+    const loadMore = () => {
+        const jobDifference = jobs.length - currentShowedJob;
+        const afterTotalRenderJob = jobDifference < CONFIG.JOB_LIST_DEFAULT_LENGTH
+            ? currentShowedJob + jobDifference
+            : currentShowedJob + CONFIG.JOB_LIST_DEFAULT_LENGTH;
+
+        setCurrentShowedJob(afterTotalRenderJob);
+    };
+
+    useEffect(() => {
+        const showedPost = jobs.length > CONFIG.JOB_LIST_DEFAULT_LENGTH 
+            ? CONFIG.JOB_LIST_DEFAULT_LENGTH : jobs.length;
+
+        setCurrentShowedJob(showedPost);       
+    }, [jobs]);
+
     return (
         <>
             {jobs.length < 1 && (
@@ -157,14 +174,34 @@ const JobList = ({ navigation, currentUser, jobs }) => {
                 </View>
             )}
 
-            {jobs.map((job) => (
-                <JobItem
-                    key={job.id}
-                    currentUser={currentUser}
-                    navigation={navigation}
-                    job={job}
+            {jobs.map((job, jobIndex) => {
+                if (jobIndex + 1 > currentShowedJob) return;
+                
+                return (
+                    <JobItem
+                        key={job.id}
+                        currentUser={currentUser}
+                        navigation={navigation}
+                        job={job}
+                    />
+                );
+            })}
+
+            {
+                jobs.length !== currentShowedJob && 
+                <Button
+                    title={'Muat Lebih'}
+                    buttonStyle={{
+                        backgroundColor: '#007bff',
+                        height: 40,
+                        alignSelf: 'center',
+                        borderRadius: 8,
+                        marginTop: 25,
+                        marginBottom: 20,
+                    }}
+                    onPress={loadMore}
                 />
-            ))}
+            }
         </>
     );
 };
@@ -198,39 +235,38 @@ const Jobs = ({ navigation }) => {
         <SafeAreaView>
             <ScrollView>
                 <View style={styles.mainBody}>
-                    <TouchableOpacity onPress={() => navigation.navigate('PostJob')}>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                backgroundColor: '#007bff',
-                                height: 45,
-                                alignItems: 'center',
-                                borderRadius: 50,
-                                marginTop: 40,
-                                paddingHorizontal: 10,
-                                alignSelf: 'center',
-                            }}>
+                    <View>
+                        <Image
+                            source={require('../../assets/images/jumbotron.png')}
+                            style={{ width: wp('100%'), height: 250, position: 'absolute', zIndex: -2 }}
+                        />
+                        <Text style={{ textAlign: 'center', fontSize: 25, color: 'white', marginTop: 50 }}>Temukan Pekerjaan Yang{'\n'}Sesuai Denganmu</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('PostJob')}>
                             <View
                                 style={{
                                     flexDirection: 'row',
-                                    marginLeft: 10,
-                                    marginRight: 10,
-                                    fontSize: 20,
-                                    color: '#fff',
-                                    alignItems: 'center'
-
-                                }}
-                            >
-                                <Icon
-                                    name='plus'
-                                    type='font-awesome'
-                                    color='#fff'
-                                    size={25}
-                                />
-                                <Text style={{ color: '#fff', marginLeft: 10 }}>Pekerjaan Baru</Text>
+                                    backgroundColor: '#007bff',
+                                    height: 45,
+                                    alignItems: 'center',
+                                    borderRadius: 50,
+                                    marginVertical: 40,
+                                    paddingHorizontal: 10,
+                                    alignSelf: 'center',
+                                }}>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        padding: 10,
+                                        fontSize: 20,
+                                        color: '#fff',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <Text style={{ color: '#fff', fontSize: 18 }}>Pekerjaan Baru</Text>
+                                </View>
                             </View>
-                        </View>
-                    </TouchableOpacity>
+                        </TouchableOpacity>
+                    </View>
 
                     {/* <SearchContainer
                         search={search}

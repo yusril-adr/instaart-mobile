@@ -8,10 +8,7 @@ import Location from '../../data/location';
 import PhoneNumberValidation from '../../utils/phone-number-validation';
 import User from '../../data/user';
 import CONFIG from '../../global/config';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const Signup = ({ navigation }) => {
   const [userName, setUserName] = useState('');
@@ -53,7 +50,7 @@ const Signup = ({ navigation }) => {
       alert('Mohon isi Password');
       return;
     }
-    if(userPassword.length < CONFIG.PASSWORD_MIN_LENGTH) {
+    if (userPassword.length < CONFIG.PASSWORD_MIN_LENGTH) {
       alert('Password terlalu pendek.');
       return;
     }
@@ -138,13 +135,7 @@ const Signup = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{
-          justifyContent: 'center',
-          alignContent: 'center',
-        }}>
-
+      <ScrollView>
         <KeyboardAvoidingView enabled>
           <View style={styles.container1}>
             <View style={{ alignItems: 'center' }}>
@@ -376,15 +367,19 @@ const Signup = ({ navigation }) => {
               }}
               onPress={handleSubmitButton}
             />
-          </View>
 
-          <View style={styles.container2}>
-            <Text style={styles.textmasuk}>Sudah memiliki akun? <Text
-              style={styles.masuk}
-              onPress={() => navigation.navigate('Login')}>
-              Masuk
-            </Text>
-            </Text>
+            <View style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              paddingVertical: 20,
+            }}>
+              <Text style={styles.textmasuk}>Sudah memiliki akun? <Text
+                style={styles.masuk}
+                onPress={() => navigation.navigate('Login')}>
+                Masuk
+              </Text>
+              </Text>
+            </View>
           </View>
 
         </KeyboardAvoidingView>
@@ -407,40 +402,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderWidth: 1,
     borderRadius: 5,
+    marginBottom: 20,
     alignSelf: 'center',
     alignContent: 'center',
     width: wp('91.25%'),
-    height: 900,
+    // height: 900,
     marginTop: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.7,
-    shadowRadius: 2,
-    elevation: 10
-  },
-  container2: {
-    borderColor: '#e5e5e5',
-    borderWidth: 1,
-    borderRadius: 5,
-    backgroundColor: '#fff',
-    alignSelf: 'center',
-    width: wp('91.25%'),
-    height: 80,
-    marginTop: 50,
-    marginBottom: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.7,
-    shadowRadius: 2,
-    elevation: 10
-  },
-  Image: {
-    width: 500,
-    height: 300,
-    marginTop: windowHeight * 0.02,
-    marginBottom: 20
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    elevation: 7,
   },
   teksSatu: {
     color: '#000',

@@ -12,8 +12,8 @@ const FontAwesomeHeaderButton = (props) => {
     return (
         <HeaderButton
             IconComponent={FontAwesome5}
-            color="#7f7f7f"
-            pressColor="#007bff"
+            color="#fff"
+            pressColor="#fff"
             iconSize={23}
             {...props}
         />
@@ -74,6 +74,7 @@ const Router = () => {
                         <Text style={styles.teks}>Instaart</Text>
                     </View>
                 ),
+                headerStyle: { backgroundColor: '#007bff' },
                 headerBackVisible: false,
                 headerTitleAlign: 'center'
             }} />
@@ -84,6 +85,7 @@ const Router = () => {
                         <Text style={styles.teks}>Instaart</Text>
                     </View>
                 ),
+                headerStyle: { backgroundColor: '#007bff' },
                 headerBackVisible: false,
                 headerTitleAlign: 'center'
             }} />
@@ -94,6 +96,7 @@ const Router = () => {
                         <Text style={styles.teks}>Instaart</Text>
                     </View>
                 ),
+                headerStyle: { backgroundColor: '#007bff' },
                 headerBackVisible: false,
                 headerTitleAlign: 'left',
                 headerRight: () => {
@@ -120,12 +123,12 @@ export default Router
 
 const styles = StyleSheet.create({
     Image: {
-        width: 30,
+        width: 32,
         height: 30,
         marginRight: 15
     },
     teks: {
-        color: '#7f7f7f',
+        color: '#fff',
         textAlignVertical: 'center',
         fontSize: 23,
         fontWeight: '100',

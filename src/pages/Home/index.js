@@ -12,6 +12,7 @@ const windowHeight = Dimensions.get('window').height;
 const Home = ({ navigation }) => {
     const [user, setUser] = useState(null);
     const [postList, setPostList] = useState([]);
+
     const backAction = () => {
         if (navigation.isFocused()) {
             Alert.alert('EXIT', 'Apakah anda yakin akan meninggalkan kami?', [

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Dimensions, Text, View, Image, TouchableOpacity } from 'react-native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { Button } from 'react-native-elements';
 import CONFIG from '../global/config';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
@@ -60,20 +61,60 @@ const EmptyResultItem = () => (
     </View>
 );
 
-const UserList = (({ navigation, users, currentUser }) => (
-    <>
-        {users.length < 1 && <EmptyResultItem />}
+const UserList = (({ navigation, users, currentUser }) => {
+    const [currentShowedUser, setCurrentShowedUser] = useState(0);
 
-        {users.map((targetUser) => (
-            <ResultItem
-                key={targetUser.id}
-                navigation={navigation}
-                targetUser={targetUser}
-                currentUser={currentUser}
-            />
-        ))}
-    </>
-));
+    const loadMore = () => {
+        const userDifference = users.length - currentShowedUser;
+        const afterTotalRenderUser = userDifference < CONFIG.USER_LIST_DEFAULT_LENGTH
+            ? currentShowedUser + userDifference
+            : currentShowedUser + CONFIG.USER_LIST_DEFAULT_LENGTH;
+
+        setCurrentShowedUser(afterTotalRenderUser);
+    };
+
+    useEffect(() => {
+        const showedPost = users.length > CONFIG.USER_LIST_DEFAULT_LENGTH 
+            ? CONFIG.USER_LIST_DEFAULT_LENGTH : users.length;
+
+        setCurrentShowedUser(showedPost);       
+    }, [users]);
+    
+    return (
+        <>
+            {users.length < 1 && <EmptyResultItem />}
+
+            {users.map((targetUser, userIndex) => {
+                if (userIndex + 1 > currentShowedUser) return;
+                
+                return (
+                    <ResultItem
+                        key={targetUser.id}
+                        navigation={navigation}
+                        targetUser={targetUser}
+                        currentUser={currentUser}
+                    />
+                );
+            })}
+
+            {
+                users.length !== currentShowedUser && 
+                <Button
+                    title={'Muat Lebih'}
+                    buttonStyle={{
+                        backgroundColor: '#007bff',
+                        height: 40,
+                        alignSelf: 'center',
+                        borderRadius: 8,
+                        marginTop: 25,
+                        marginBottom: 20,
+                    }}
+                    onPress={loadMore}
+                />
+            }
+        </>
+    )
+});
 
 const styles = StyleSheet.create({
     container1: {

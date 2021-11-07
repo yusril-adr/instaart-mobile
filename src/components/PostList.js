@@ -1,14 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Dimensions, Text, View, Image, TouchableOpacity } from 'react-native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { Link } from '@react-navigation/native';
+import { Button } from 'react-native-elements';
 import User from '../data/user';
 import CONFIG from '../global/config';
 import DateHelper from '../utils/date-helper';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
-const windowHeight = Dimensions.get('window').height;
-
 
 const ButtonLike = ({ post, user, onUpdate }) => {
     const onPress = async () => {
@@ -30,12 +27,12 @@ const ButtonLike = ({ post, user, onUpdate }) => {
                         <FontAwesome5
                             name='thumbs-up'
                             solid
-                            size={23}
+                            size={13}
                             color='#007bff'
                         /> :
                         <FontAwesome5
                             name='thumbs-up'
-                            size={23}
+                            size={13}
                             color='gray'
                         />
                 }
@@ -51,7 +48,7 @@ const ButtonComment = ({ navigation, postId, postData }) => {
         }}>
             <FontAwesome5
                 name='comment'
-                size={25}
+                size={15}
                 color='gray'
             />
         </TouchableOpacity>
@@ -65,7 +62,7 @@ const ButtonViews = () => {
             <TouchableOpacity>
                 <FontAwesome5
                     name='eye'
-                    size={25}
+                    size={15}
                     color='gray'
                 />
             </TouchableOpacity>
@@ -87,63 +84,54 @@ const PostItem = ({ post, user, onUpdate, navigation }) => (
         onPress={() => navigation.navigate('detailPost', { postId: post.id, postData: post })}
     >
         <View style={styles.container1}>
-            <View style={{borderBottomWidth: 1, borderColor: '#e5e5e5', paddingVertical: 15 }}>
-                <TouchableOpacity
-                    style={{ flexDirection: 'row' , marginLeft: 15 }}
-                    onPress={() => {
-                        if (post.username === user.username) {
-                            navigation.navigate('Akun');
-                        }
-                        else navigation.navigate('ProfilePage', { username: post.username });
-                    }}>
-                    <Image
-                        source={{
-                            uri: `${CONFIG.IMAGE_PATH.USER}/${post.user_image}`
-                        }}
-                        style={styles.UserProfile}
-                    />
-                    <Text style={styles.UserName}>{post.username}</Text>
-                </TouchableOpacity>
-            </View>
+            <Image
+                source={{
+                    uri: `${CONFIG.IMAGE_PATH.POST}/${post.image}`
+                }}
+                style={styles.UserPost}
+            />
 
-            <View style={{borderBottomWidth: 1, borderColor: '#e5e5e5'}}>
-                <Image
-                    source={{
-                        uri: `${CONFIG.IMAGE_PATH.POST}/${post.image}`
-                    }}
-                    style={styles.UserPost}
-                />
-            </View>
-
-
-            <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 15, alignItems: 'center' }}>
-                <View>
-                    <ButtonLike post={post} user={user} onUpdate={onUpdate} />
+            <View style={{ flexDirection: 'column-reverse', marginTop: 10, alignItems: 'center', justifyContent: 'space-between' }}>
+                <View style={{ flexDirection: 'row', alignSelf: 'flex-start', marginTop: -20 }}>
+                    <TouchableOpacity
+                        style={{ flexDirection: 'row', alignItems: 'center' }}
+                        onPress={() => {
+                            if (post.username === user.username) {
+                                navigation.navigate('Akun');
+                            }
+                            else navigation.navigate('ProfilePage', { username: post.username });
+                        }}>
+                        <Image
+                            source={{
+                                uri: `${CONFIG.IMAGE_PATH.USER}/${post.user_image}`
+                            }}
+                            style={styles.UserProfile}
+                        />
+                        <View style={{ flexDirection: 'column' }}>
+                            <Text style={styles.UserName}>{post.username}</Text>
+                            <Text style={styles.UserName}>{post.title}</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
-                <View>
-                    <Text style={{ marginLeft: 5 }}>{post.likes.length}</Text>
-                </View>
-                <View style={{ marginLeft: 15 }}>
-                    <ButtonComment postId={post.id} postData={post} navigation={navigation} />
-                </View>
-                <View>
-                    <Text style={{ marginLeft: 5 }}>{post.comments.length}</Text>
-                </View>
-                <View style={{ marginLeft: 15 }}>
-                    <ButtonViews />
-                </View>
-                <View>
-                    <Text style={{ marginLeft: 5 }}>{post.insight}</Text>
-                </View>
-            </View>
-
-            <View>
-                <Text style={{ fontSize: 18, marginLeft: 15, marginTop: 10 }}>{post.title}</Text>
-            </View>
-
-            <View style={styles.dateBox}>
-                <View>
-                    <PostDate postDate={post.date} />
+                <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
+                    <View>
+                        <ButtonLike post={post} user={user} onUpdate={onUpdate} />
+                    </View>
+                    <View>
+                        <Text style={{ marginLeft: 5 }}>{post.likes.length}</Text>
+                    </View>
+                    <View style={{ marginLeft: 5 }}>
+                        <ButtonComment postId={post.id} postData={post} navigation={navigation} />
+                    </View>
+                    <View>
+                        <Text style={{ marginLeft: 5 }}>{post.comments.length}</Text>
+                    </View>
+                    <View style={{ marginLeft: 5 }}>
+                        <ButtonViews />
+                    </View>
+                    <View>
+                        <Text style={{ marginLeft: 5 }}>{post.insight}</Text>
+                    </View>
                 </View>
             </View>
         </View>
@@ -167,40 +155,70 @@ const EmptyPostItem = () => (
     </View>
 );
 
-const PostList = (({ navigation, posts, user, onUpdateList }) => (
-    <>
-        {posts.length < 1 && <EmptyPostItem />}
+const PostList = (({ navigation, posts, user, onUpdateList }) => {
+    const [currentShowedPost, setCurrentShowedPost] = useState(0);
 
-        {posts.map((post) => (
-            <PostItem
-                key={post.id}
-                navigation={navigation}
-                post={post}
-                user={user}
-                onUpdate={onUpdateList}
-            />
-        ))}
-    </>
-));
+    const loadMore = () => {
+        const postDifference = posts.length - currentShowedPost;
+        const afterTotalRenderPost = postDifference < CONFIG.POST_LIST_DEFAULT_LENGTH
+            ? currentShowedPost + postDifference
+            : currentShowedPost + CONFIG.POST_LIST_DEFAULT_LENGTH;
+
+        setCurrentShowedPost(afterTotalRenderPost);
+    };
+
+    useEffect(() => {
+        const showedPost = posts.length > CONFIG.POST_LIST_DEFAULT_LENGTH 
+            ? CONFIG.POST_LIST_DEFAULT_LENGTH : posts.length;
+
+        setCurrentShowedPost(showedPost);       
+    }, [posts]);
+
+    return (
+        <>
+            {posts.length < 1 && <EmptyPostItem />}
+
+            {posts.map((post, postIndex) => {
+                if (postIndex + 1 > currentShowedPost) return;
+                
+                return (
+                    <PostItem
+                        key={post.id}
+                        navigation={navigation}
+                        post={post}
+                        user={user}
+                        onUpdate={onUpdateList}
+                    />
+                );
+            })}
+
+            {
+                posts.length !== currentShowedPost && 
+                <Button
+                    title={'Muat Lebih'}
+                    buttonStyle={{
+                        backgroundColor: '#007bff',
+                        height: 40,
+                        alignSelf: 'center',
+                        borderRadius: 8,
+                        marginTop: 25,
+                        marginBottom: 20,
+                    }}
+                    onPress={loadMore}
+                />
+            }
+        </>
+    );
+});
 
 const styles = StyleSheet.create({
     container1: {
-        borderColor: '#e5e5e5',
         backgroundColor: '#fff',
-        borderWidth: 1,
-        borderRadius: 10,
         alignSelf: 'center',
         alignContent: 'center',
         width: wp('90%'),
-        height: 410,
         marginTop: 20,
         marginBottom: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 2, height: 1 },
-        shadowOpacity: 0.5,
-        shadowRadius: 1,
-        elevation: 10,
-        //   overflow: 'hidden',
     },
     UserProfile: {
         width: 40,
@@ -212,26 +230,13 @@ const styles = StyleSheet.create({
     UserName: {
         color: '#000',
         fontSize: 15,
-        marginTop: 10,
         marginLeft: 10,
     },
     UserPost: {
         width: '100%',
         height: 215,
-        // marginTop: 15,
+        borderRadius: 10,
         overflow: 'hidden',
-    },
-    dateBox: {
-        alignSelf: 'center',
-        alignItems: 'center',
-        width: wp('90%'),
-        height: 45,
-        backgroundColor: '#f7f7f7',
-        borderColor: '#e5e5e5',
-        borderBottomRightRadius: 10,
-        borderBottomLeftRadius: 10,
-        borderWidth: 1,
-        marginTop: 10
     },
 });
 
