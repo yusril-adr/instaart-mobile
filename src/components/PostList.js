@@ -168,10 +168,21 @@ const PostList = (({ navigation, posts, user, onUpdateList }) => {
     };
 
     useEffect(() => {
-        const showedPost = posts.length > CONFIG.POST_LIST_DEFAULT_LENGTH 
-            ? CONFIG.POST_LIST_DEFAULT_LENGTH : posts.length;
+        const unsubscribe = navigation.addListener('focus', () => {
+            const showedPost = posts.length > CONFIG.POST_LIST_DEFAULT_LENGTH 
+                ? CONFIG.POST_LIST_DEFAULT_LENGTH : posts.length;
 
-        setCurrentShowedPost(showedPost);       
+            setCurrentShowedPost(showedPost);     
+          });
+      
+        return unsubscribe;
+    }, [navigation]);
+
+    useEffect(() => {
+        const showedPost = currentShowedPost || (posts.length > CONFIG.POST_LIST_DEFAULT_LENGTH 
+            ? CONFIG.POST_LIST_DEFAULT_LENGTH : posts.length);
+
+        setCurrentShowedPost(showedPost);
     }, [posts]);
 
     return (
