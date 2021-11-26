@@ -51,7 +51,7 @@ const Followers = ({ navigation, route }) => {
             <ScrollView
                 contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={styles.mainBody}>
-                    <Text style={{ alignSelf: 'center', marginTop: 20, fontSize: 20, fontWeight: 'bold' }}>Pengikut {username || ''}</Text>
+                    <Text style={{ alignSelf: 'center', marginTop: 20, fontSize: 25, fontWeight: 'bold' }}>Pengikut {username || ''}</Text>
 
                    <UserList 
                        navigation={navigation} 

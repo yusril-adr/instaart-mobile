@@ -44,7 +44,7 @@ const Likes = ({ navigation }) => {
             <ScrollView
                 contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={styles.mainBody}>
-                    <Text style={{ alignSelf: 'center', marginTop: 20, fontSize: 20, fontWeight: 'bold' }}>Disukai</Text>
+                    <Text style={{ alignSelf: 'center', marginTop: 20, fontSize: 25, fontWeight: 'bold' }}>Disukai</Text>
 
                     <PostList 
                         navigation={navigation} 

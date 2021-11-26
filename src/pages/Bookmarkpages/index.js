@@ -42,7 +42,7 @@ const Bookmark = ({ navigation }) => {
             <ScrollView
                 contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={styles.mainBody}>
-                    <Text style={{ alignSelf: 'center', marginTop: 20, fontSize: 20, fontWeight: 'bold' }}>Disimpan</Text>
+                    <Text style={{ alignSelf: 'center', marginTop: 20, fontSize: 25, fontWeight: 'bold' }}>Disimpan</Text>
 
                     <PostList 
                         navigation={navigation} 

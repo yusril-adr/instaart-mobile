@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
     },
     teksSatu: {
         color: '#000',
-        fontSize: 33,
+        fontSize: 25,
         fontWeight: 'bold',
         textAlign: 'center',
         marginTop: 20,
