@@ -27,7 +27,7 @@ const editPassword = ({ navigation }) => {
                 return;
             }
             if (!userNewPassword) {
-                alert('Mohon Konfirmasi Pssword');
+                alert('Mohon Konfirmasi Password');
                 return;
             }
 
