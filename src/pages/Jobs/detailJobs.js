@@ -75,70 +75,6 @@ const detailJobs = ({ navigation, route }) => {
                         <Text style={{ fontSize: 18, textAlign: 'center', marginTop: 10 }}>{job?.username}</Text>
                     </View>
 
-                    <View style={{
-                        alignSelf: 'center',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        marginTop: 10,
-                        width: 348,
-                        height: 73,
-                        paddingVertical: 15,
-                        backgroundColor: '#f7f7f7'
-                    }}>
-                        <TouchableOpacity onPress={AlertJob}>
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    backgroundColor: '#007bff',
-                                    width: 100,
-                                    height: 45,
-                                    alignItems: 'center',
-                                    borderRadius: 10,
-                                    justifyContent: 'center',
-                                    borderWidth: 1,
-                                    borderColor: 'white',
-                                }}>
-                                <Text
-                                    style={{
-                                        marginLeft: 10,
-                                        marginRight: 10,
-                                        fontSize: 20,
-                                        color: '#fff'
-                                    }}
-                                >
-                                    Lamar
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-
-                    {job?.user_id === user?.id && (
-                        <TouchableOpacity onPress={() => navigation.navigate('EditJob', { jobId: jobId })}>
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    backgroundColor: '#fff',
-                                    height: 40,
-                                    alignItems: 'center',
-                                    alignContent: 'center',
-                                    borderRadius: 5,
-                                    borderWidth: 1,
-                                    borderColor: '#007bff',
-                                    marginTop: 20,
-                                    alignSelf: 'center',
-                                    paddingHorizontal: 10,
-                                }}
-                            >
-                                <Icon name='edit'
-                                    type='font-awesome'
-                                    color='#007bff'
-                                    size={20}
-                                    style={{ marginRight: 7 }} />
-                                <Text style={{ color: '#007bff', fontSize: 18 }}>Edit Pekerjaan</Text>
-                            </View>
-                        </TouchableOpacity>
-                    )}
-
                     <View>
                         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
                             <FontAwesome5
@@ -164,7 +100,73 @@ const detailJobs = ({ navigation, route }) => {
                             {job?.description}
                         </Text>
                     </View>
+                    
+                    <View style={{
+                        alignSelf: 'center',
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        marginTop: 10,
+                        width: 348,
+                        height: 73,
+                        paddingVertical: 15,
+                        backgroundColor: '#f7f7f7'
+                    }}>
+                        {job?.user_id !== user?.id && (
+                            <TouchableOpacity onPress={AlertJob}>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        backgroundColor: '#007bff',
+                                        width: 100,
+                                        height: 45,
+                                        alignItems: 'center',
+                                        borderRadius: 10,
+                                        justifyContent: 'center',
+                                        borderWidth: 1,
+                                        borderColor: 'white',
+                                    }}>
+                                    <Text
+                                        style={{
+                                            marginLeft: 10,
+                                            marginRight: 10,
+                                            fontSize: 20,
+                                            color: '#fff'
+                                        }}
+                                    >
+                                        Lamar
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                        
 
+                        {job?.user_id === user?.id && (
+                            <TouchableOpacity onPress={() => navigation.navigate('EditJob', { jobId: jobId })}>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        backgroundColor: '#fff',
+                                        height: 45,
+                                        alignItems: 'center',
+                                        alignContent: 'center',
+                                        borderRadius: 5,
+                                        borderWidth: 1,
+                                        borderColor: '#007bff',
+                                        // marginTop: 20,
+                                        alignSelf: 'center',
+                                        paddingHorizontal: 10,
+                                    }}
+                                >
+                                    <Icon name='edit'
+                                        type='font-awesome'
+                                        color='#007bff'
+                                        size={20}
+                                        style={{ marginRight: 7 }} />
+                                    <Text style={{ color: '#007bff', fontSize: 18 }}>Edit</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                    </View>
                 </View>
             </View>
         </ScrollView>

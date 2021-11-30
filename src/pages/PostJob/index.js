@@ -108,188 +108,188 @@ const PostJob = ({ navigation }) => {
     }, [navigation])
 
     return (
-            <ScrollView>
-                <KeyboardAvoidingView enabled>
-                    <View style={styles.container1}>
-                        <View style={{ alignItems: 'center' }}>
-                            <Text style={styles.teksSatu}>Pekerjaan Baru</Text>
-                        </View>
-
-                        <View style={styles.SectionStyle}>
-                            <Text>Judul Pekerjaan</Text>
-                            <TextInput
-                                style={styles.inputStyle}
-                                onChangeText={(jobTitle) => setJobTitle(jobTitle)}
-                                underlineColorAndroid="#f000"
-                                placeholder="Masukkan judul pekerjaan"
-                                placeholderTextColor="#000"
-                                autoCapitalize="sentences"
-                                returnKeyType="next"
-                                onSubmitEditing={() =>
-                                    jobDescInputRef.current && jobDescInputRef.current.focus()
-                                }
-                                blurOnSubmit={false}
-                            />
-                        </View>
-
-                        <View style={styles.SectionStyleForDesc}>
-                            <Text>Deskripsi Pekerjaan</Text>
-                            <TextInput
-                                style={styles.inputStyle}
-                                onChangeText={(jobDescription) =>
-                                    setJobDescription(jobDescription)
-                                }
-                                multiline={true}
-                                numberOfLines={4}
-                                underlineColorAndroid="#f000"
-                                placeholder="Masukkan deskripsi pekerjaan"
-                                placeholderTextColor="#000"
-                                keyboardType='default'
-                                ref={jobDescInputRef}
-                                returnKeyType="next"
-                                onSubmitEditing={() =>
-                                    jobLinkInputRef.current && jobLinkInputRef.current.focus()
-                                }
-                                blurOnSubmit={false}
-                            />
-                        </View>
-
-                        <View style={styles.SectionStyle}>
-                            <Text>Waktu kerja</Text>
-                            <RNPickerSelect
-                                style={{
-                                    ...pickerSelectStyles,
-                                    placeholder: {
-                                        color: 'black',
-                                        fontSize: 14,
-                                        fontWeight: 'normal',
-                                        paddingLeft: 15
-                                    },
-                                    iconContainer: {
-                                        top: 15,
-                                        right: 15,
-                                    },
-                                }}
-                                Icon={() => {
-                                    return <Chevron size={1.5} color="gray" />;
-                                }}
-                                useNativeAndroidPickerStyle={false}
-                                placeholder={placeholder}
-                                onValueChange={(waktuKerja) => setWaktuKerja(waktuKerja)}
-                                ref={waktuInputRef}
-                                returnKeyType="next"
-                                items={[
-                                    { label: 'Full Time', value: 'Full Time' },
-                                    { label: 'Part Time', value: 'Part Time' },
-                                ]}
-                            />
-                        </View>
-
-                        <View style={styles.SectionStyle}>
-                            <Text>Provinsi</Text>
-                            <RNPickerSelect
-                                style={{
-                                    ...pickerSelectStyles,
-                                    placeholder: {
-                                        color: 'black',
-                                        fontSize: 14,
-                                        fontWeight: 'normal',
-                                        paddingLeft: 15
-                                    },
-                                    iconContainer: {
-                                        top: 15,
-                                        right: 15,
-                                    },
-                                }}
-                                Icon={() => {
-                                    return <Chevron size={1.5} color="gray" />;
-                                }}
-                                useNativeAndroidPickerStyle={false}
-                                placeholder={placeholder}
-                                onValueChange={async (provinsiInput) => {
-                                    setProvinsi(provinsiInput);
-
-                                    const citiesList = await Location.getCitiesByProvinceId(provinsiInput);
-
-                                    setCities(citiesList.map((city) => (
-                                        { label: city.nama, value: city.id }
-                                    )));
-                                }}
-                                ref={provinsiInputRef}
-                                returnKeyType="next"
-                                items={provincies}
-                            />
-                        </View>
-
-                        <View style={styles.SectionStyle}>
-                            <Text>Kota</Text>
-                            <RNPickerSelect
-                                style={{
-                                    ...pickerSelectStyles,
-                                    placeholder: {
-                                        color: 'black',
-                                        fontSize: 14,
-                                        fontWeight: 'normal',
-                                        paddingLeft: 15
-                                    },
-                                    iconContainer: {
-                                        top: 15,
-                                        right: 15,
-                                    },
-                                }}
-                                Icon={() => {
-                                    return <Chevron size={1.5} color="gray" />;
-                                }}
-                                useNativeAndroidPickerStyle={false}
-                                placeholder={placeholder}
-                                onValueChange={(kotaInput) => {
-                                    setKota(kotaInput);
-                                }}
-                                ref={kotaInputRef}
-                                returnKeyType="next"
-                                items={cities}
-                            />
-                        </View>
-
-                        <View style={styles.SectionStyle}>
-                            <Text>Link Formulir</Text>
-                            <TextInput
-                                style={styles.inputStyle}
-                                onChangeText={(jobLink) => setJobLink(jobLink)}
-                                underlineColorAndroid="#f000"
-                                placeholder="Masukkan link formulir"
-                                placeholderTextColor="#000"
-                                autoCapitalize="sentences"
-                                ref={jobLinkInputRef}
-                                returnKeyType="next"
-                                onSubmitEditing={Keyboard.dismiss}
-                                blurOnSubmit={false}
-                            />
-                        </View>
-
-                        {errortext != '' ? (
-                            <Text style={styles.errorTextStyle}>
-                                {errortext}
-                            </Text>
-                        ) : null}
-
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 15, marginBottom: 30 }}>
-                            <Button
-                                title={'Buat'}
-                                buttonStyle={{
-                                    backgroundColor: '#007bff',
-                                    width: 90,
-                                    height: 40,
-                                    borderRadius: 8,
-                                    marginBottom: 20
-                                }}
-                                onPress={handleSubmitButton}
-                            />
-                        </View>
+        <ScrollView>
+            <KeyboardAvoidingView enabled>
+                <View style={styles.container1}>
+                    <View style={{ alignItems: 'center' }}>
+                        <Text style={styles.teksSatu}>Pekerjaan Baru</Text>
                     </View>
 
-                </KeyboardAvoidingView>
-            </ScrollView>
+                    <View style={styles.SectionStyle}>
+                        <Text>Nama Pekerjaan</Text>
+                        <TextInput
+                            style={styles.inputStyle}
+                            onChangeText={(jobTitle) => setJobTitle(jobTitle)}
+                            underlineColorAndroid="#f000"
+                            placeholder="Nama Pekerjaan"
+                            placeholderTextColor="#000"
+                            autoCapitalize="sentences"
+                            returnKeyType="next"
+                            onSubmitEditing={() =>
+                                jobDescInputRef.current && jobDescInputRef.current.focus()
+                            }
+                            blurOnSubmit={false}
+                        />
+                    </View>
+
+                    <View style={styles.SectionStyleForDesc}>
+                        <Text>Deskripsi Pekerjaan</Text>
+                        <TextInput
+                            style={styles.inputStyle}
+                            onChangeText={(jobDescription) =>
+                                setJobDescription(jobDescription)
+                            }
+                            multiline={true}
+                            numberOfLines={4}
+                            underlineColorAndroid="#f000"
+                            placeholder="Deskripsi Pekerjaan ..."
+                            placeholderTextColor="#000"
+                            keyboardType='default'
+                            ref={jobDescInputRef}
+                            returnKeyType="next"
+                            onSubmitEditing={() =>
+                                jobLinkInputRef.current && jobLinkInputRef.current.focus()
+                            }
+                            blurOnSubmit={false}
+                        />
+                    </View>
+
+                    <View style={styles.SectionStyle}>
+                        <Text>Waktu kerja</Text>
+                        <RNPickerSelect
+                            style={{
+                                ...pickerSelectStyles,
+                                placeholder: {
+                                    color: 'black',
+                                    fontSize: 14,
+                                    fontWeight: 'normal',
+                                    paddingLeft: 15
+                                },
+                                iconContainer: {
+                                    top: 15,
+                                    right: 15,
+                                },
+                            }}
+                            Icon={() => {
+                                return <Chevron size={1.5} color="gray" />;
+                            }}
+                            useNativeAndroidPickerStyle={false}
+                            placeholder={placeholder}
+                            onValueChange={(waktuKerja) => setWaktuKerja(waktuKerja)}
+                            ref={waktuInputRef}
+                            returnKeyType="next"
+                            items={[
+                                { label: 'Full Time', value: 'Full Time' },
+                                { label: 'Part Time', value: 'Part Time' },
+                            ]}
+                        />
+                    </View>
+
+                    <View style={styles.SectionStyle}>
+                        <Text>Provinsi</Text>
+                        <RNPickerSelect
+                            style={{
+                                ...pickerSelectStyles,
+                                placeholder: {
+                                    color: 'black',
+                                    fontSize: 14,
+                                    fontWeight: 'normal',
+                                    paddingLeft: 15
+                                },
+                                iconContainer: {
+                                    top: 15,
+                                    right: 15,
+                                },
+                            }}
+                            Icon={() => {
+                                return <Chevron size={1.5} color="gray" />;
+                            }}
+                            useNativeAndroidPickerStyle={false}
+                            placeholder={placeholder}
+                            onValueChange={async (provinsiInput) => {
+                                setProvinsi(provinsiInput);
+
+                                const citiesList = await Location.getCitiesByProvinceId(provinsiInput);
+
+                                setCities(citiesList.map((city) => (
+                                    { label: city.nama, value: city.id }
+                                )));
+                            }}
+                            ref={provinsiInputRef}
+                            returnKeyType="next"
+                            items={provincies}
+                        />
+                    </View>
+
+                    <View style={styles.SectionStyle}>
+                        <Text>Kota</Text>
+                        <RNPickerSelect
+                            style={{
+                                ...pickerSelectStyles,
+                                placeholder: {
+                                    color: 'black',
+                                    fontSize: 14,
+                                    fontWeight: 'normal',
+                                    paddingLeft: 15
+                                },
+                                iconContainer: {
+                                    top: 15,
+                                    right: 15,
+                                },
+                            }}
+                            Icon={() => {
+                                return <Chevron size={1.5} color="gray" />;
+                            }}
+                            useNativeAndroidPickerStyle={false}
+                            placeholder={placeholder}
+                            onValueChange={(kotaInput) => {
+                                setKota(kotaInput);
+                            }}
+                            ref={kotaInputRef}
+                            returnKeyType="next"
+                            items={cities}
+                        />
+                    </View>
+
+                    <View style={styles.SectionStyle}>
+                        <Text>Link Formulir</Text>
+                        <TextInput
+                            style={styles.inputStyle}
+                            onChangeText={(jobLink) => setJobLink(jobLink)}
+                            underlineColorAndroid="#f000"
+                            placeholder="Masukkan link formulir"
+                            placeholderTextColor="#000"
+                            autoCapitalize="sentences"
+                            ref={jobLinkInputRef}
+                            returnKeyType="next"
+                            onSubmitEditing={Keyboard.dismiss}
+                            blurOnSubmit={false}
+                        />
+                    </View>
+
+                    {errortext != '' ? (
+                        <Text style={styles.errorTextStyle}>
+                            {errortext}
+                        </Text>
+                    ) : null}
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 15, marginBottom: 30 }}>
+                        <Button
+                            title={'Buat'}
+                            buttonStyle={{
+                                backgroundColor: '#007bff',
+                                width: 90,
+                                height: 40,
+                                borderRadius: 8,
+                                marginBottom: 20
+                            }}
+                            onPress={handleSubmitButton}
+                        />
+                    </View>
+                </View>
+
+            </KeyboardAvoidingView>
+        </ScrollView>
     )
 }
 

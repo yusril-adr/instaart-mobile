@@ -183,12 +183,12 @@ const EditJob = ({ navigation, route }) => {
                         </View>
 
                         <View style={styles.SectionStyle}>
-                            <Text>Judul Pekerjaan</Text>
+                            <Text>Nama Pekerjaan</Text>
                             <TextInput
                                 style={styles.inputStyle}
                                 onChangeText={(jobTitle) => setJobTitle(jobTitle)}
                                 underlineColorAndroid="#f000"
-                                placeholder="Masukkan judul pekerjaan"
+                                placeholder="Nama Pekerjaan"
                                 placeholderTextColor="#000"
                                 autoCapitalize="sentences"
                                 returnKeyType="next"
@@ -208,7 +208,7 @@ const EditJob = ({ navigation, route }) => {
                                     setJobDescription(jobDescription)
                                 }
                                 underlineColorAndroid="#f000"
-                                placeholder="Masukkan deskripsi pekerjaan"
+                                placeholder="Deskripsi pekerjaan..."
                                 placeholderTextColor="#000"
                                 keyboardType='default'
                                 ref={jobDescInputRef}
