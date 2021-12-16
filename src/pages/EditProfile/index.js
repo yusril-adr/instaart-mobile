@@ -35,7 +35,7 @@ const EditProfile = ({ navigation, route }) => {
     const logOutHandler = () => {
         Alert.alert(
             "Apakah Anda yakin ingin keluar ?",
-            "Anda dapat masuk kembali dengan username dan password yang sama.",
+            "Anda dapat masuk kembali dengan nama pengguna dan kata sandi yang sama.",
             [
                 {
                     text: "Tidak",
@@ -57,7 +57,7 @@ const EditProfile = ({ navigation, route }) => {
         try {
             setErrortext('');
             if (!userName) {
-                alert('Mohon isi Nama');
+                alert('Mohon isi Nama Pengguna');
                 return;
             }
             if (!userCompleteName) {
@@ -65,7 +65,7 @@ const EditProfile = ({ navigation, route }) => {
                 return;
             }
             if (!userEmail) {
-                alert('Mohon isi Email');
+                alert('Mohon isi Surel');
                 return;
             }
             if (!userTelepon) {
@@ -207,7 +207,7 @@ const EditProfile = ({ navigation, route }) => {
                                 borderBottomEndRadius: 10,
                                 borderBottomStartRadius: 10
                             }}>
-                                <Text style={{ fontSize: 15 }}>Password</Text>
+                                <Text style={{ fontSize: 15 }}>Kata Sandi</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -218,7 +218,7 @@ const EditProfile = ({ navigation, route }) => {
                         </View>
 
                         <View style={styles.SectionStyle}>
-                            <Text>Username</Text>
+                            <Text>Nama Pengguna</Text>
                             <TextInput
                                 style={styles.inputStyle}
                                 onChangeText={(UserName) => setUserName(UserName)}
@@ -256,12 +256,12 @@ const EditProfile = ({ navigation, route }) => {
                         </View>
 
                         <View style={styles.SectionStyle}>
-                            <Text>Email</Text>
+                            <Text>Surel</Text>
                             <TextInput
                                 style={styles.inputStyle}
                                 onChangeText={(UserEmail) => setUserEmail(UserEmail)}
                                 underlineColorAndroid="#f000"
-                                placeholder="Masukkan email anda"
+                                placeholder="Masukkan surel anda"
                                 placeholderTextColor="#000"
                                 keyboardType='email-address'
                                 ref={emailInputRef}

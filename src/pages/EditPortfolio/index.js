@@ -47,7 +47,7 @@ const EditPortfolio = ({ navigation, route }) => {
                 return;
             }
             if (!userCaption) {
-                alert('Mohon isi Caption');
+                alert('Mohon isi Deskripsi');
                 return;
             }
             if (!userKategori) {
@@ -168,14 +168,14 @@ const EditPortfolio = ({ navigation, route }) => {
                         </View>
 
                         <View style={styles.SectionStyleForCaption}>
-                            <Text>Caption</Text>
+                            <Text>Deskripsi</Text>
                             <TextInput
                                 style={styles.inputStyle}
                                 onChangeText={(userCaption) =>
                                     setUserCaption(userCaption)
                                 }
                                 underlineColorAndroid="#f000"
-                                placeholder="Masukkan caption anda"
+                                placeholder="Masukkan deskripsi anda"
                                 placeholderTextColor="#000"
                                 keyboardType='default'
                                 multiline

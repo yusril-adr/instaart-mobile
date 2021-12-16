@@ -35,7 +35,7 @@ const Akun = ({ navigation }) => {
     const logOutHandler = () => {
         Alert.alert(
             "Apakah Anda yakin ingin keluar ?",
-            "Anda dapat masuk kembali dengan username dan password yang sama.",
+            "Anda dapat masuk kembali dengan nama pengguna dan kata sandi yang sama.",
             [
                 {
                     text: "Tidak",
@@ -99,7 +99,7 @@ const Akun = ({ navigation }) => {
                                         style={{ marginRight: 7 }} 
                                     /> */}
 
-                                    <Text style={{ color: '#007bff' }}>Edit Profile</Text>
+                                    <Text style={{ color: '#007bff' }}>Edit Profil</Text>
                                 </View>
                             </TouchableOpacity>
 
@@ -205,7 +205,7 @@ const Akun = ({ navigation }) => {
                             <TouchableOpacity
                                 style={{ backgroundColor: 'red', borderRadius: 50 }}
                                 onPress={logOutHandler}>
-                                <Text style={{ color: 'white', marginHorizontal: 20, marginVertical: 5 }}>Logout</Text>
+                                <Text style={{ color: 'white', marginHorizontal: 20, marginVertical: 5 }}>Keluar</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

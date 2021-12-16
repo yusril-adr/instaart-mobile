@@ -41,7 +41,7 @@ const ProfilePage = ({ navigation, route }) => {
                             style={{ marginRight: 7 }} 
                         /> */}
 
-                        <Text style={{ color: '#007bff' }}>Edit Profile</Text>
+                        <Text style={{ color: '#007bff' }}>Edit Profil</Text>
                     </View>
                 </TouchableOpacity>
 
@@ -62,7 +62,8 @@ const ProfilePage = ({ navigation, route }) => {
                         <View style={{
                             flexDirection: 'row',
                             backgroundColor: '#007bff',
-                            width: 100,
+                            // width: 100,
+                            paddingHorizontal: 10,
                             height: 35,
                             alignItems: 'center',
                             borderRadius: 10,
@@ -72,7 +73,7 @@ const ProfilePage = ({ navigation, route }) => {
                             alignSelf: 'center',
                             justifyContent: 'center'
                         }}>
-                            <Text style={{ color: 'white' }}>Unfollow</Text>
+                            <Text style={{ color: 'white' }}>Batal Mengikuti</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -103,7 +104,7 @@ const ProfilePage = ({ navigation, route }) => {
                             alignSelf: 'center',
                             justifyContent: 'center'
                         }}>
-                            <Text style={{ color: '#007bff' }}>Follow</Text>
+                            <Text style={{ color: '#007bff' }}>Ikuti</Text>
                         </View>
                     </TouchableOpacity>
                 </View>

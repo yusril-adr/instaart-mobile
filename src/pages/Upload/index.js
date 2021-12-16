@@ -43,7 +43,7 @@ const Upload = ({ navigation }) => {
             return;
         }
         if (!userCaption) {
-            alert('Mohon isi Caption');
+            alert('Mohon isi Deskripsi');
             return;
         }
         if (!userKategori) {
@@ -173,7 +173,7 @@ const Upload = ({ navigation }) => {
                         </View>
 
                         <View style={styles.SectionStyleForCaption}>
-                            <Text>Caption</Text>
+                            <Text>Deskripsi</Text>
                             <TextInput
                                 style={styles.inputStyle}
                                 onChangeText={(userCaption) =>
@@ -182,7 +182,7 @@ const Upload = ({ navigation }) => {
                                 multiline={true}
                                 numberOfLines={4}                                
                                 underlineColorAndroid="#f000"
-                                placeholder="Masukkan caption anda"
+                                placeholder="Masukkan deskripsi anda"
                                 placeholderTextColor="#000"
                                 keyboardType='default'
                                 ref={captionInputRef}

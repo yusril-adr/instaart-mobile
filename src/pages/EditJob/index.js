@@ -98,11 +98,11 @@ const EditJob = ({ navigation, route }) => {
             return;
         }
         if (!jobLink) {
-            alert('Mohon masukkan link pekerjaan');
+            alert('Mohon masukkan tautan pekerjaan');
             return;
         }
         if (!jobLink.startsWith('https://')) {
-            alert('Link tidak valid, link harus diawali dengan "https://"');
+            alert('Tautan tidak valid, tautan harus diawali dengan "https://"');
             return;
         }
 
@@ -248,10 +248,10 @@ const EditJob = ({ navigation, route }) => {
                                 ref={waktuInputRef}
                                 returnKeyType="next"
                                 items={[
-                                    { label: 'Full Time', value: 'Full Time' },
-                                    { label: 'Part Time', value: 'Part Time' },
-                                    { label: 'Freelance', value: 'Freelance' },
-                                    { label: 'Contract', value: 'Contract' },
+                                    { label: 'Penuh Waktu', value: 'Full Time' },
+                                    { label: 'Paruh Waktu', value: 'Part Time' },
+                                    { label: 'Pekerjaan Lepas', value: 'Freelance' },
+                                    { label: 'Pekerjaan Kontrak', value: 'Contract' },
                                 ]}
                                 value={tipePekerjaan}
                             />
@@ -324,12 +324,12 @@ const EditJob = ({ navigation, route }) => {
                         </View>
 
                         <View style={styles.SectionStyle}>
-                            <Text>Link Formulir</Text>
+                            <Text>Tautan Formulir</Text>
                             <TextInput
                                 style={styles.inputStyle}
                                 onChangeText={(jobLink) => setJobLink(jobLink)}
                                 underlineColorAndroid="#f000"
-                                placeholder="Masukkan link formulir"
+                                placeholder="Masukkan tautan formulir"
                                 placeholderTextColor="#000"
                                 autoCapitalize="sentences"
                                 ref={jobLinkInputRef}
