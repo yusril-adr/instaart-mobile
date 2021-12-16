@@ -77,7 +77,7 @@ const EditProfile = ({ navigation, route }) => {
                 return;
             }
             if (!userKota) {
-                alert('Mohon Pilih Kota');
+                alert('Mohon Pilih Kabupaten/Kota');
                 return;
             }
             // if (!userBio) {
@@ -332,7 +332,7 @@ const EditProfile = ({ navigation, route }) => {
                         </View>
 
                         <View style={styles.SectionStyle}>
-                            <Text>Kota</Text>
+                            <Text>Kabupaten/Kota</Text>
                             <RNPickerSelect
                                 style={{
                                     ...pickerSelectStyles,

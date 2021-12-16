@@ -95,7 +95,7 @@ const JobItem = ({ navigation, currentUser, job, }) => {
                             color='#000'
                             style={{ marginRight: 10 }}
                         />
-                        <Text>{job.work_time}</Text>
+                        <Text>{job.work_type}</Text>
                     </View>
                     <View style={{
                         alignSelf: 'center',

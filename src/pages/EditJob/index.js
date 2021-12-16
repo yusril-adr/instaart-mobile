@@ -15,7 +15,7 @@ const windowHeight = Dimensions.get('window').height;
 const EditJob = ({ navigation, route }) => {
     const [jobTitle, setJobTitle] = useState('');
     const [jobDescription, setJobDescription] = useState('');
-    const [waktuKerja, setWaktuKerja] = useState('');
+    const [tipePekerjaan, setTipePekerjaan] = useState('');
     const [provinsi, setProvinsi] = useState('');
     const [kota, setKota] = useState('');
     const [jobLink, setJobLink] = useState('');
@@ -57,7 +57,7 @@ const EditJob = ({ navigation, route }) => {
 
             setJobTitle(jobData.title);
             setJobDescription(jobData.description);
-            setWaktuKerja(jobData.work_time);
+            setTipePekerjaan(jobData.work_type);
             setProvinsi(parseInt(jobData.province_id));
             setKota(parseInt(jobData.city_id));
             setJobLink(jobData.form_link);
@@ -85,8 +85,8 @@ const EditJob = ({ navigation, route }) => {
             alert('Mohon masukkan deskripsi');
             return;
         }
-        if (!waktuKerja) {
-            alert('Mohon masukkan waktu kerja');
+        if (!tipePekerjaan) {
+            alert('Mohon masukkan tipe pekerjaan');
             return;
         }
         if (!provinsi) {
@@ -94,7 +94,7 @@ const EditJob = ({ navigation, route }) => {
             return;
         }
         if (!kota) {
-            alert('Mohon masukkan lokasi kota');
+            alert('Mohon masukkan lokasi kabupaten/kota');
             return;
         }
         if (!jobLink) {
@@ -116,13 +116,13 @@ const EditJob = ({ navigation, route }) => {
                 city_id: kota,
                 province_name: await Location.getProvince(provinsi),
                 city_name: await Location.getCity(kota),
-                work_time: waktuKerja,
+                work_type: tipePekerjaan,
             };
 
             await Job.updateJob(inputData);
             setJobTitle('');
             setJobDescription('');
-            setWaktuKerja('');
+            setTipePekerjaan('');
             setProvinsi('');
             setKota('');
             setJobLink('');
@@ -146,7 +146,7 @@ const EditJob = ({ navigation, route }) => {
                             await Job.deleteJob(jobId);
                             setJobTitle('');
                             setJobDescription('');
-                            setWaktuKerja('');
+                            setTipePekerjaan('');
                             setProvinsi('');
                             setKota('');
                             setJobLink('');
@@ -224,7 +224,7 @@ const EditJob = ({ navigation, route }) => {
                         </View>
 
                         <View style={styles.SectionStyle}>
-                            <Text>Waktu kerja</Text>
+                            <Text>Tipe Pekerjaan</Text>
                             <RNPickerSelect
                                 style={{
                                     ...pickerSelectStyles,
@@ -244,14 +244,16 @@ const EditJob = ({ navigation, route }) => {
                                 }}
                                 useNativeAndroidPickerStyle={false}
                                 placeholder={placeholder}
-                                onValueChange={(waktuKerja) => setWaktuKerja(waktuKerja)}
+                                onValueChange={(tipePekerjaan) => setTipePekerjaan(tipePekerjaan)}
                                 ref={waktuInputRef}
                                 returnKeyType="next"
                                 items={[
                                     { label: 'Full Time', value: 'Full Time' },
                                     { label: 'Part Time', value: 'Part Time' },
+                                    { label: 'Freelance', value: 'Freelance' },
+                                    { label: 'Contract', value: 'Contract' },
                                 ]}
-                                value={waktuKerja}
+                                value={tipePekerjaan}
                             />
                         </View>
 
@@ -293,7 +295,7 @@ const EditJob = ({ navigation, route }) => {
                         </View>
 
                         <View style={styles.SectionStyle}>
-                            <Text>Kota</Text>
+                            <Text>Kabupaten/Kota</Text>
                             <RNPickerSelect
                                 style={{
                                     ...pickerSelectStyles,

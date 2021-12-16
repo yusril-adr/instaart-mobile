@@ -243,7 +243,7 @@ const ProfilePage = ({ navigation, route }) => {
                             paddingHorizontal: 20,
                             justifyContent: 'space-between'
                         }}>
-                            <Text style={{ fontSize: 15 }}>Kota</Text>
+                            <Text style={{ fontSize: 15 }}>Kabupaten/Kota</Text>
                             <Text style={{ fontSize: 15 }}>{targetUser?.city_name.split(' ').slice(1).join(' ') || '' }</Text>
                         </View>
                         <View style={{

@@ -14,7 +14,7 @@ const windowHeight = Dimensions.get('window').height;
 const PostJob = ({ navigation }) => {
     const [jobTitle, setJobTitle] = useState('');
     const [jobDescription, setJobDescription] = useState('');
-    const [waktuKerja, setWaktuKerja] = useState('');
+    const [tipePekerjaan, setTipePekerjaan] = useState('');
     const [provinsi, setProvinsi] = useState('');
     const [kota, setKota] = useState('');
     const [cities, setCities] = useState([]);
@@ -38,8 +38,8 @@ const PostJob = ({ navigation }) => {
             alert('Mohon masukkan deskripsi');
             return;
         }
-        if (!waktuKerja) {
-            alert('Mohon masukkan waktu kerja');
+        if (!tipePekerjaan) {
+            alert('Mohon masukkan tipe pekerjaan');
             return;
         }
         if (!provinsi) {
@@ -47,7 +47,7 @@ const PostJob = ({ navigation }) => {
             return;
         }
         if (!kota) {
-            alert('Mohon masukkan lokasi kota');
+            alert('Mohon masukkan lokasi kabupaten/kota');
             return;
         }
         if (!jobLink) {
@@ -69,7 +69,7 @@ const PostJob = ({ navigation }) => {
                 city_id: kota,
                 province_name: await Location.getProvince(provinsi),
                 city_name: await Location.getCity(kota),
-                work_time: waktuKerja,
+                work_type: tipePekerjaan,
             };
 
             await Job.newJob(inputData);
@@ -155,7 +155,7 @@ const PostJob = ({ navigation }) => {
                     </View>
 
                     <View style={styles.SectionStyle}>
-                        <Text>Waktu kerja</Text>
+                        <Text>Tipe Pekerjaan</Text>
                         <RNPickerSelect
                             style={{
                                 ...pickerSelectStyles,
@@ -175,12 +175,14 @@ const PostJob = ({ navigation }) => {
                             }}
                             useNativeAndroidPickerStyle={false}
                             placeholder={placeholder}
-                            onValueChange={(waktuKerja) => setWaktuKerja(waktuKerja)}
+                            onValueChange={(tipePekerjaan) => setTipePekerjaan(tipePekerjaan)}
                             ref={waktuInputRef}
                             returnKeyType="next"
                             items={[
                                 { label: 'Full Time', value: 'Full Time' },
                                 { label: 'Part Time', value: 'Part Time' },
+                                { label: 'Freelance', value: 'Freelance' },
+                                { label: 'Contract', value: 'Contract' },
                             ]}
                         />
                     </View>
@@ -222,7 +224,7 @@ const PostJob = ({ navigation }) => {
                     </View>
 
                     <View style={styles.SectionStyle}>
-                        <Text>Kota</Text>
+                        <Text>Kabupaten/Kota</Text>
                         <RNPickerSelect
                             style={{
                                 ...pickerSelectStyles,

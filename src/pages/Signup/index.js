@@ -281,7 +281,7 @@ const Signup = ({ navigation }) => {
             </View>
 
             <View style={styles.SectionStyle}>
-              <Text>Kota</Text>
+              <Text>Kabupaten/Kota</Text>
               <RNPickerSelect
                 style={{
                   ...pickerSelectStyles,

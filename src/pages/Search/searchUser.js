@@ -351,7 +351,7 @@ const searchUser = ({ navigation, route }) => {
                             </View>
 
                             <View style={styles.SectionStyle}>
-                                <Text style={{ fontSize: 18 }}>Kota</Text>
+                                <Text style={{ fontSize: 18 }}>Kabupaten/Kota</Text>
                                 <RNPickerSelect
                                     style={{
                                         ...pickerSelectStyles,

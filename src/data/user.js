@@ -475,6 +475,83 @@ const User = {
 
     return responseJSON;
   },
+
+  async getRecoveryToken(email) {
+    const response = await fetch(API_ENDPOINT.RECOVERY_TOKEN, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+      }),
+    });
+
+    if (response.status === 500) {
+      throw new Error('Server mengalami kegagalan atau server sedang dalam keadaan maintenance.');
+    }
+
+    const responseJSON = await response.json();
+
+    if (response.status !== 200) throw new Error(responseJSON.message);
+
+    return responseJSON;
+  },
+
+  async sendRecoveryToken(data) {
+    const response = await fetch(API_ENDPOINT.SEND_TOKEN, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Auth': CONFIG.MAIL_SENDER_AUTH,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.status === 500) {
+      throw new Error('Server mengalami kegagalan atau server sedang dalam keadaan maintenance.');
+    }
+
+    const responseJSON = await response.json();
+
+    if (response.status !== 200) throw new Error(responseJSON.message);
+
+    return responseJSON;
+  },
+
+  async verifyRecoveryToken(token) {
+    const response = await fetch(`${API_ENDPOINT.RECOVERY_TOKEN}?token=${token}`);
+
+    if (response.status === 500) {
+      throw new Error('Server mengalami kegagalan atau server sedang dalam keadaan maintenance.');
+    }
+
+    const responseJSON = await response.json();
+
+    if (response.status !== 200) throw new Error(responseJSON.message);
+
+    return responseJSON;
+  },
+
+  async recoveryPassword(inputData) {
+    const response = await fetch(API_ENDPOINT.RECOVERY_PASSWORD, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(inputData),
+    });
+
+    if (response.status === 500) {
+      throw new Error('Server mengalami kegagalan atau server sedang dalam keadaan maintenance.');
+    }
+
+    const responseJSON = await response.json();
+
+    if (response.status !== 200) throw new Error(responseJSON.message);
+
+    return responseJSON;
+  },
 };
 
 export default User;
