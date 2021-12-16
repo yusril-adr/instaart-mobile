@@ -13,16 +13,16 @@ const ForgotPass = ({ navigation }) => {
                 <KeyboardAvoidingView enabled>
                     <View style={styles.container1}>
                         <View style={{ alignItems: 'center' }}>
-                            <Text style={styles.teksSatu}>Lupa Kata Sandi</Text>
+                            <Text style={styles.teksSatu}>Lupa Password</Text>
                         </View>
 
                         <View style={styles.SectionStyle}>
-                            <Text>Surel</Text>
+                            <Text>Email</Text>
                             <TextInput
                                 style={styles.inputStyle}
                                 onChangeText={(UserEmail) => setUserEmail(UserEmail)}
                                 underlineColorAndroid="#f000"
-                                placeholder="Masukkan surel anda"
+                                placeholder="Masukkan email anda"
                                 placeholderTextColor="#000"
                                 keyboardType='email-address'
                                 returnKeyType="next"

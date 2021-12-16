@@ -23,11 +23,11 @@ const editPassword = ({ navigation }) => {
         try {
             setErrortext('');
             if (!userPassword) {
-                alert('Mohon isi Kata Sandi');
+                alert('Mohon isi Password');
                 return;
             }
             if (!userNewPassword) {
-                alert('Mohon Konfirmasi Kata Sandi');
+                alert('Mohon Konfirmasi Password');
                 return;
             }
 
@@ -36,7 +36,7 @@ const editPassword = ({ navigation }) => {
                 current_password: userPassword,
             })
 
-            alert('Kata Sandi berhasil diperbarui')
+            alert('Password berhasil diperbarui')
 
             navigation.navigate('Akun');
         } catch (error) {
@@ -125,17 +125,17 @@ const editPassword = ({ navigation }) => {
                                 borderBottomEndRadius: 10,
                                 borderBottomStartRadius: 10
                             }}>
-                                <Text style={{ fontSize: 15 }}>Kata Sandi</Text>
+                                <Text style={{ fontSize: 15 }}>Password</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
 
                     <View style={styles.container}>
                         <View style={{ alignItems: 'center' }}>
-                            <Text style={styles.teksSatu}>Kata Sandi</Text>
+                            <Text style={styles.teksSatu}>Password</Text>
                         </View>
 
-                        <Text style={{marginLeft: 30}}>Kata Sandi Baru</Text>
+                        <Text style={{marginLeft: 30}}>Password Baru</Text>
                         <View style={{
                             borderWidth: 1,
                             borderColor: '#e5e5e5',
@@ -155,7 +155,7 @@ const editPassword = ({ navigation }) => {
                             />
                         </View>
 
-                        <Text style={{marginLeft: 30, marginTop: 20}}>Kata Sandi Saat Ini</Text>
+                        <Text style={{marginLeft: 30, marginTop: 20}}>Password Saat Ini</Text>
                         <View style={{
                             borderWidth: 1,
                             borderColor: '#e5e5e5',

@@ -39,27 +39,27 @@ const Signup = ({ navigation }) => {
   const handleSubmitButton = async () => {
     setErrortext('');
     if (!userName) {
-      alert('Mohon isi Nama');
+      alert('Mohon isi Username');
       return;
     }
     if (!userEmail) {
-      alert('Mohon isi Surel');
+      alert('Mohon isi Email');
       return;
     }
     if (!userPassword) {
-      alert('Mohon isi Kata Sandi');
+      alert('Mohon isi Password');
       return;
     }
     if (userPassword.length < CONFIG.PASSWORD_MIN_LENGTH) {
-      alert('Kata Sandi terlalu pendek.');
+      alert('Password terlalu pendek.');
       return;
     }
     if (!userConfirm) {
-      alert('Mohon Konfirmasi Kata Sandi');
+      alert('Mohon Konfirmasi Password');
       return;
     }
     if (userPassword !== userConfirm) {
-      alert('Kata Sandi tidak cocok.');
+      alert('Password tidak cocok.');
       return;
     }
     if (!userCompleteName) {
@@ -143,12 +143,12 @@ const Signup = ({ navigation }) => {
             </View>
 
             <View style={styles.SectionStyle}>
-              <Text>Nama Pengguna</Text>
+              <Text>Username</Text>
               <TextInput
                 style={styles.inputStyle}
                 onChangeText={(UserName) => setUserName(UserName)}
                 underlineColorAndroid="#f000"
-                placeholder="Masukkan nama anda"
+                placeholder="Masukkan username anda"
                 placeholderTextColor="#000"
                 autoCapitalize="sentences"
                 returnKeyType="next"
@@ -160,12 +160,12 @@ const Signup = ({ navigation }) => {
             </View>
 
             <View style={styles.SectionStyle}>
-              <Text>Surel</Text>
+              <Text>Email</Text>
               <TextInput
                 style={styles.inputStyle}
                 onChangeText={(UserEmail) => setUserEmail(UserEmail)}
                 underlineColorAndroid="#f000"
-                placeholder="Masukkan surel anda"
+                placeholder="Masukkan email anda"
                 placeholderTextColor="#000"
                 keyboardType='email-address'
                 ref={emailInputRef}
@@ -179,7 +179,7 @@ const Signup = ({ navigation }) => {
             </View>
 
             <View style={styles.SectionStyle}>
-              <Text>Kata Sandi</Text>
+              <Text>Password</Text>
               <View style={{
                 borderWidth: 1,
                 borderColor: '#e5e5e5',
@@ -192,7 +192,7 @@ const Signup = ({ navigation }) => {
                   getRef={(input) => (inputRef = input)}
                   value={userPassword}
                   label=''
-                  placeholder='Masukkan kata sandi anda'
+                  placeholder='Masukkan password anda'
                   placeholderTextColor="#000"
                   onChangeText={(UserPassword) =>
                     setUserPassword(UserPassword)
@@ -203,7 +203,7 @@ const Signup = ({ navigation }) => {
             </View>
 
             <View style={styles.SectionStyle}>
-              <Text>Konfirmasi Kata Sandi</Text>
+              <Text>Konfirmasi Password</Text>
               <View style={{
                 borderWidth: 1,
                 borderColor: '#e5e5e5',
@@ -216,7 +216,7 @@ const Signup = ({ navigation }) => {
                   getRef={(input) => (inputRef = input)}
                   value={userConfirm}
                   label=''
-                  placeholder='Konfirmasi kata sandi anda'
+                  placeholder='Konfirmasi password anda'
                   placeholderTextColor="#000"
                   onChangeText={(UserConfirm) =>
                     setUserConfirm(UserConfirm)

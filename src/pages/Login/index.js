@@ -50,11 +50,11 @@ const Login = ({ navigation }) => {
         try {
             setErrortext('');
             if (!userEmail) {
-                alert('Mohon isi Nama Pengguna atau Surel anda');
+                alert('Mohon isi Username atau Email anda');
                 return;
             }
             if (!userPassword) {
-                alert('Mohon isi Kata Sandi anda');
+                alert('Mohon isi Password anda');
                 return;
             }
             await User.signIn(userEmail, userPassword);
@@ -89,13 +89,13 @@ const Login = ({ navigation }) => {
                                 </View>
 
                                 <View style={styles.SectionStyle}>
-                                    <Text>Nama Pengguna/Surel</Text>
+                                    <Text>Username/Email</Text>
                                     <TextInput
                                         style={styles.inputStyle}
                                         onChangeText={(UserEmail) =>
                                             setUserEmail(UserEmail)
                                         }
-                                        placeholder="Nama Pengguna atau Surel"
+                                        placeholder="Username atau Email"
                                         placeholderTextColor="#000"
                                         autoCapitalize="none"
                                         keyboardType="email-address"
@@ -107,7 +107,7 @@ const Login = ({ navigation }) => {
                                 </View>
 
                                 <View style={styles.SectionStyle}>
-                                    <Text>Kata Sandi</Text>
+                                    <Text>Password</Text>
                                     <View style={{
                                         borderWidth: 1,
                                         borderColor: '#e5e5e5',
@@ -120,7 +120,7 @@ const Login = ({ navigation }) => {
                                             getRef={(input) => (inputRef = input)}
                                             value={password}
                                             label=''
-                                            placeholder='Kata Sandi'
+                                            placeholder='Password'
                                             placeholderTextColor="#000"
                                             onChangeText={(UserPassword) =>
                                                 setUserPassword(UserPassword)

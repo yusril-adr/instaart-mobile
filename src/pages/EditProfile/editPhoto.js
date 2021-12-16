@@ -167,7 +167,7 @@ const editPhoto = ({ navigation }) => {
                                 borderBottomEndRadius: 10,
                                 borderBottomStartRadius: 10
                             }}>
-                                <Text style={{ fontSize: 15 }}>Kata Sandi</Text>
+                                <Text style={{ fontSize: 15 }}>Password</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
