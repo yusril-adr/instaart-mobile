@@ -1,11 +1,47 @@
-import React, { useState, useEffect } from 'react'
-import { StyleSheet, TextInput, View, Text, ScrollView, Keyboard, KeyboardAvoidingView } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, ActivityIndicator, TextInput, View, Text, ScrollView, Keyboard, KeyboardAvoidingView, Alert } from 'react-native'
 import { Button } from 'react-native-elements';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import User from '../../data/user';
 
 const ForgotPass = ({ navigation }) => {
     const [userEmail, setUserEmail] = useState('');
     const [errortext, setErrortext] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmitButton = async () => {
+        try {
+            setErrortext('');
+            if (!userEmail) {
+                alert('Mohon isi Email anda.');
+                return;
+            }
+
+            setLoading(true);
+
+            const { token } = await User.getRecoveryToken(userEmail);
+
+            const userData = {
+                email: userEmail,
+                recovery_token: token,
+              };
+      
+            await User.sendRecoveryToken(userData);
+
+            setLoading(false);
+
+            Alert.alert(
+                'Link Pemulihan Berhasil Dikirim.',
+                'Jangan lupa lihat folder spam, bila email kami tidak masuk.',
+                [
+                    { text: "OK", onPress: () => navigation.navigate('Login') },
+                ]
+            );
+        } catch (error) {
+            setLoading(false);
+            alert(error.message)
+        }
+    }
 
     return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -56,7 +92,7 @@ const ForgotPass = ({ navigation }) => {
                                     borderRadius: 8,
                                     marginTop: 15
                                 }}
-                                onPress={() => console.log('kirim email')}
+                                onPress={handleSubmitButton}
                             />
                             <Button
                                 title={'Kembali'}
@@ -73,6 +109,11 @@ const ForgotPass = ({ navigation }) => {
                         </View>
                     </View>
 
+                    { loading && (
+                        <View style={styles.containerLoading}>
+                            <ActivityIndicator size={90} color="#007bff" />
+                        </View>
+                    ) }
                 </KeyboardAvoidingView>
             </ScrollView>
         </View>
@@ -87,6 +128,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#fff',
         alignContent: 'center',
+    },
+    containerLoading: {
+        display: 'flex',
+        justifyContent: "center",
+        marginTop: hp('15%'),
     },
     container1: {
         borderColor: '#e5e5e5',
@@ -107,6 +153,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.29,
         shadowRadius: 4.65,
         elevation: 7,
+        zIndex: 1,
     },
     teksSatu: {
         color: '#000',

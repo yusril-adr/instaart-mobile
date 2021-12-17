@@ -1,3 +1,4 @@
+import CONFIG from '../global/config';
 import API_ENDPOINT from '../global/api-endpoint';
 import Auth from './auth';
 

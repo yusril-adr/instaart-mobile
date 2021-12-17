@@ -29,7 +29,6 @@ const ImagePicker = () => {
     const handleChoosePhoto = () => {
         setShouldShow(!shouldShow);
         launchImageLibrary({ noData: false }, (response) => {
-            console.log(response);
             if (response) {
                 setImg(response);
             }

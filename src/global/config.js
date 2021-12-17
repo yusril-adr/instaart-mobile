@@ -12,6 +12,7 @@ const CONFIG = {
   AUTH_TOKEN_KEY: 'auth_token',
   HISTORY_KEY: 'instaart_history',
   ENC_KEY: 'instaart123',
+  MAIL_SENDER_AUTH: 'instaartofc',
   PASSWORD_MIN_LENGTH: 8,
   POST_LIST_DEFAULT_LENGTH: 5,
   USER_LIST_DEFAULT_LENGTH: 5,
