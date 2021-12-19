@@ -20,7 +20,7 @@ const SearchContainer = ({ search, setSearch }) => {
             containerStyle={{ backgroundColor: 'transparent', borderTopWidth: 0, borderBottomWidth: 0 }}
             inputContainerStyle={{
                 backgroundColor: '#fff',
-                flexDirection: 'row',
+                flexDirection: 'row-reverse',
                 borderWidth: 1,
                 borderRadius: 10,
                 paddingLeft: 10,
