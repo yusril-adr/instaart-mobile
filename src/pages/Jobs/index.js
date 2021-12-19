@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, ScrollView, Dimensions, Image, TouchableOpacity
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { SearchBar, Icon } from 'react-native-elements'
 import { Button } from 'react-native-elements';
+import RNPickerSelect from 'react-native-picker-select'
+import { Chevron } from 'react-native-shapes'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Job from '../../data/job'
 import User from '../../data/user'
@@ -23,16 +25,8 @@ const SearchContainer = ({ search, setSearch }) => {
                 borderRadius: 10,
                 paddingLeft: 10,
                 borderBottomWidth: 1,
-                marginTop: 30,
-                marginBottom: 10,
-                width: 340,
+                width: 300,
                 alignSelf: 'center',
-                shadowColor: '#000',
-                shadowOffset: { width: 2, height: 5 },
-                shadowOpacity: 0.9,
-                shadowRadius: 5,
-                elevation: 5,
-                borderRadius: 10
             }}
             lightTheme
             onChangeText={(search) => setSearch(search)}
@@ -148,10 +142,10 @@ const JobList = ({ navigation, currentUser, jobs }) => {
     };
 
     useEffect(() => {
-        const showedPost = jobs.length > CONFIG.JOB_LIST_DEFAULT_LENGTH 
+        const showedPost = jobs.length > CONFIG.JOB_LIST_DEFAULT_LENGTH
             ? CONFIG.JOB_LIST_DEFAULT_LENGTH : jobs.length;
 
-        setCurrentShowedJob(showedPost);       
+        setCurrentShowedJob(showedPost);
     }, [jobs]);
 
     return (
@@ -176,7 +170,7 @@ const JobList = ({ navigation, currentUser, jobs }) => {
 
             {jobs.map((job, jobIndex) => {
                 if (jobIndex + 1 > currentShowedJob) return;
-                
+
                 return (
                     <JobItem
                         key={job.id}
@@ -188,7 +182,7 @@ const JobList = ({ navigation, currentUser, jobs }) => {
             })}
 
             {
-                jobs.length !== currentShowedJob && 
+                jobs.length !== currentShowedJob &&
                 <Button
                     title={'Muat Lebih'}
                     buttonStyle={{
@@ -210,6 +204,13 @@ const Jobs = ({ navigation }) => {
     const [jobs, setJobs] = useState([]);
     const [user, setUser] = useState(null);
     const [search, setSearch] = useState('');
+    const [tipePekerjaan, setTipePekerjaan] = useState('');
+
+    const placeholder = {
+        label: 'Pilih masukan',
+        value: null,
+        color: '#007bff',
+    };
 
     useEffect(() => {
         const getUserInfo = async () => {
@@ -268,10 +269,43 @@ const Jobs = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
 
-                    {/* <SearchContainer
-                        search={search}
-                        setSearch={setSearch}
-                     /> */}
+                    <View style={styles.container3}>
+                        <SearchContainer
+                            search={search}
+                            setSearch={setSearch}
+                        />
+                        <View style={styles.SectionStyle}>
+                            <Text>Tipe Pekerjaan</Text>
+                            <RNPickerSelect
+                                style={{
+                                    ...pickerSelectStyles,
+                                    placeholder: {
+                                        color: 'black',
+                                        fontSize: 14,
+                                        fontWeight: 'normal',
+                                        paddingLeft: 15
+                                    },
+                                    iconContainer: {
+                                        top: 23,
+                                        right: 25,
+                                    },
+                                }}
+                                Icon={() => {
+                                    return <Chevron size={1.5} color="gray" />;
+                                }}
+                                useNativeAndroidPickerStyle={false}
+                                placeholder={placeholder}
+                                onValueChange={(tipePekerjaan) => setTipePekerjaan(tipePekerjaan)}
+                                returnKeyType="next"
+                                items={[
+                                    { label: 'Penuh Waktu', value: 'Full Time' },
+                                    { label: 'Paruh Waktu', value: 'Part Time' },
+                                    { label: 'Pekerjaan Lepas', value: 'Freelance' },
+                                    { label: 'Pekerjaan Kontrak', value: 'Contract' },
+                                ]}
+                            />
+                        </View>
+                    </View>
 
                     <View style={{ marginBottom: 50 }}>
                         <JobList currentUser={user} navigation={navigation} jobs={jobs} />
@@ -326,6 +360,24 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         overflow: 'hidden',
     },
+    container3: {
+        borderColor: '#e5e5e5',
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: wp('90%'),
+        padding: 20,
+        marginTop: 30,
+        shadowColor: '#000',
+        shadowOffset: { width: 2, height: 5 },
+        shadowOpacity: 0.9,
+        shadowRadius: 5,
+        elevation: 10,
+        borderRadius: 5,
+        overflow: 'hidden',
+    },
     JobProfile: {
         width: 50,
         height: 50,
@@ -347,5 +399,34 @@ const styles = StyleSheet.create({
         marginTop: 15,
         alignSelf: 'center',
         alignItems: 'flex-start'
-    }
+    },
+    SectionStyle: {
+        flexDirection: 'column',
+        alignSelf: 'center',
+    },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+    },
+    inputAndroid: {
+        fontSize: 18,
+        width: wp('77.5%'),
+        height: 50,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        borderWidth: 3,
+        borderColor: '#e5e5e5',
+        borderRadius: 10,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+    },
 });

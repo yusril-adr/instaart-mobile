@@ -157,7 +157,7 @@ const Login = ({ navigation }) => {
                                     <Text
                                         style={styles.textdaftar}
                                         onPress={() => navigation.navigate('ForgotPass')}>
-                                        Lupa kata sandi ?
+                                        Lupa Password ?
                                     </Text>
                                 </View>
                                 
