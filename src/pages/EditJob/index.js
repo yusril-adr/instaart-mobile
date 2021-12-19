@@ -78,7 +78,7 @@ const EditJob = ({ navigation, route }) => {
     const handleSubmitButton = async () => {
         setErrortext('');
         if (!jobTitle) {
-            alert('Mohon masukkan judul pekerjaan');
+            alert('Mohon masukkan nama pekerjaan');
             return;
         }
         if (!jobDescription) {
@@ -248,10 +248,10 @@ const EditJob = ({ navigation, route }) => {
                                 ref={waktuInputRef}
                                 returnKeyType="next"
                                 items={[
-                                    { label: 'Penuh Waktu', value: 'Full Time' },
-                                    { label: 'Paruh Waktu', value: 'Part Time' },
-                                    { label: 'Pekerjaan Lepas', value: 'Freelance' },
-                                    { label: 'Pekerjaan Kontrak', value: 'Contract' },
+                                    { label: 'Full Time', value: 'Full Time' },
+                                    { label: 'Part Time', value: 'Part Time' },
+                                    { label: 'Freelance', value: 'Freelance' },
+                                    { label: 'Contract', value: 'Contract' },
                                 ]}
                                 value={tipePekerjaan}
                             />

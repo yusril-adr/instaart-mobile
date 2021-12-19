@@ -179,10 +179,10 @@ const PostJob = ({ navigation }) => {
                             ref={waktuInputRef}
                             returnKeyType="next"
                             items={[
-                                { label: 'Penuh Waktu', value: 'Full Time' },
-                                { label: 'Paruh Waktu', value: 'Part Time' },
-                                { label: 'Pekerjaan Lepas', value: 'Freelance' },
-                                { label: 'Pekerjaan Kontrak', value: 'Contract' },
+                                { label: 'Full Time', value: 'Full Time' },
+                                { label: 'Part Time', value: 'Part Time' },
+                                { label: 'Freelance', value: 'Freelance' },
+                                { label: 'Contract', value: 'Contract' },
                             ]}
                         />
                     </View>

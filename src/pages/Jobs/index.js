@@ -11,11 +11,21 @@ import User from '../../data/user'
 import CONFIG from '../../global/config'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-const SearchContainer = ({ search, setSearch }) => {
+const SearchContainer = ({ search, setSearch, setJobs, tipePekerjaan }) => {
     const searchInputRef = createRef();
+
+    const handleSearch = async () => {
+        try {
+            const jobs = await Job.searchJob(search, { work_type: tipePekerjaan });
+            setJobs(jobs);
+        } catch (error) {
+            alert(error.message);
+        }
+    };
 
     return (
         <SearchBar
+            clearIcon={false}
             placeholder="Cari Pekerjaan ..."
             containerStyle={{ backgroundColor: 'transparent', borderTopWidth: 0, borderBottomWidth: 0 }}
             inputContainerStyle={{
@@ -36,6 +46,9 @@ const SearchContainer = ({ search, setSearch }) => {
                 name='search'
                 size={30}
                 color='#007bff'
+                onPress={() => {
+                    handleSearch();
+                }}
             />}
         />
     )
@@ -163,7 +176,7 @@ const JobList = ({ navigation, currentUser, jobs }) => {
                         style={{ alignSelf: 'center' }}
                     />
                     <Text style={{ fontSize: 20, textAlign: 'center', textAlignVertical: 'center' }}>
-                        Belum ada pekerjaan untuk saat ini
+                        Belum ada pekerjaan yang kamu inginkan untuk saat ini
                     </Text>
                 </View>
             )}
@@ -223,6 +236,7 @@ const Jobs = ({ navigation }) => {
                 await getUserInfo();
                 const jobsList = await Job.getJobs();
                 setJobs(jobsList);
+                setTipePekerjaan('');
             } catch (error) {
                 alert(error.message);
                 navigation.goBack();
@@ -269,10 +283,12 @@ const Jobs = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
 
-                    <View style={styles.container3}>
+                    {/* <View style={styles.container3}>
                         <SearchContainer
                             search={search}
                             setSearch={setSearch}
+                            setJobs={setJobs}
+                            tipePekerjaan={tipePekerjaan}
                         />
                         <View style={styles.SectionStyle}>
                             <Text>Tipe Pekerjaan</Text>
@@ -295,17 +311,27 @@ const Jobs = ({ navigation }) => {
                                 }}
                                 useNativeAndroidPickerStyle={false}
                                 placeholder={placeholder}
-                                onValueChange={(tipePekerjaan) => setTipePekerjaan(tipePekerjaan)}
+                                onValueChange={async (tipePekerjaan) => {
+                                    try {
+                                        setTipePekerjaan(tipePekerjaan);
+                                        const jobs = await Job.searchJob(search, { work_type: tipePekerjaan });
+                                        setJobs(jobs);
+                                    } catch (error) {
+                                        alert(error.message);
+                                    }
+                                }}
                                 returnKeyType="next"
                                 items={[
-                                    { label: 'Penuh Waktu', value: 'Full Time' },
-                                    { label: 'Paruh Waktu', value: 'Part Time' },
-                                    { label: 'Pekerjaan Lepas', value: 'Freelance' },
-                                    { label: 'Pekerjaan Kontrak', value: 'Contract' },
+                                    { label: 'Semua', value: '' },
+                                    { label: 'Full Time', value: 'Full Time' },
+                                    { label: 'Part Time', value: 'Part Time' },
+                                    { label: 'Freelance', value: 'Freelance' },
+                                    { label: 'Contract', value: 'Contract' },
                                 ]}
+                                value={tipePekerjaan}
                             />
                         </View>
-                    </View>
+                    </View> */}
 
                     <View style={{ marginBottom: 50 }}>
                         <JobList currentUser={user} navigation={navigation} jobs={jobs} />
