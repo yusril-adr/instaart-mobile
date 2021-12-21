@@ -42,7 +42,7 @@ const CONFIG = {
       TITLE: 25,
     },
     JOB: {
-      TITLE: 100,
+      TITLE: 15,
     },
   },
   IMAGE_PATH: {
