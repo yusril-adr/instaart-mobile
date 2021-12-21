@@ -108,8 +108,8 @@ const PostItem = ({ post, user, onUpdate, navigation }) => (
                             style={styles.UserProfile}
                         />
                         <View style={{ flexDirection: 'column' }}>
+                            <Text style={styles.UserTitle}>{post.title}</Text>
                             <Text style={styles.UserName}>{post.username}</Text>
-                            <Text style={styles.UserName}>{post.title}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -241,6 +241,11 @@ const styles = StyleSheet.create({
     UserName: {
         color: '#000',
         fontSize: 15,
+        marginLeft: 10,
+    },
+    UserTitle: {
+        color: '#000',
+        fontSize: 17,
         marginLeft: 10,
     },
     UserPost: {
