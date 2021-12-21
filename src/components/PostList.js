@@ -6,6 +6,7 @@ import User from '../data/user';
 import CONFIG from '../global/config';
 import DateHelper from '../utils/date-helper';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import SpecialCharParser from '../utils/special-char-parser';
 
 const ButtonLike = ({ post, user, onUpdate }) => {
     const onPress = async () => {
@@ -108,7 +109,11 @@ const PostItem = ({ post, user, onUpdate, navigation }) => (
                             style={styles.UserProfile}
                         />
                         <View style={{ flexDirection: 'column' }}>
-                            <Text style={styles.UserTitle}>{post.title}</Text>
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('detailPost', { postId: post.id, postData: post })}
+                            >
+                                <Text style={styles.UserTitle}>{SpecialCharParser.parse(post.title)}</Text>
+                            </TouchableOpacity>
                             <Text style={styles.UserName}>{post.username}</Text>
                         </View>
                     </TouchableOpacity>

@@ -6,6 +6,7 @@ import CONFIG from '../../global/config';
 import User from '../../data/user';
 import PostList from '../../components/PostList';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import SpecialCharParser from '../../utils/special-char-parser';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -70,8 +71,8 @@ const Akun = ({ navigation }) => {
                                 }
                                 style={styles.mainProfile}
                             />
-                            <Text style={styles.mainUsername}>{currentUser?.username}</Text>
-                            <Text style={{ textAlign: 'center' }}>{currentUser?.display_name}</Text>
+                            <Text style={styles.mainUsername}>{SpecialCharParser.parse(currentUser?.username)}</Text>
+                            <Text style={{ textAlign: 'center' }}>{SpecialCharParser.parse(currentUser?.display_name)}</Text>
                             
                             <TouchableOpacity
                                 onPress={() => navigation.navigate('EditProfile')}
@@ -104,7 +105,7 @@ const Akun = ({ navigation }) => {
                             </TouchableOpacity>
 
                             <Text style={{ paddingHorizontal: 10, marginVertical: 30, fontWeight: '100', fontSize: 20, textAlign: 'center' }}>
-                                {currentUser?.biodata}
+                                {SpecialCharParser.parse(currentUser?.biodata)}
                             </Text>
                         </View>
                     </View>
@@ -159,7 +160,7 @@ const Akun = ({ navigation }) => {
                             justifyContent: 'space-between'
                         }}>
                             <Text style={{ fontSize: 15 }}>Telepon</Text>
-                            <Text style={{ fontSize: 15 }}>{currentUser?.phone_number || 0}</Text>
+                            <Text style={{ fontSize: 15 }}>{SpecialCharParser.parse(currentUser?.phone_number) || 0}</Text>
                         </View>
                         <View style={{
                             flexDirection: 'row',

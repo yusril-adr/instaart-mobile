@@ -19,6 +19,7 @@ import Colors from '../../data/colors';
 import Categories from '../../data/categories';
 import CONFIG from '../../global/config';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import SpecialCharParser from '../../utils/special-char-parser';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -163,7 +164,7 @@ const EditPortfolio = ({ navigation, route }) => {
                                     captionInputRef.current && captionInputRef.current.focus()
                                 }
                                 blurOnSubmit={false}
-                                value={userJudul}
+                                value={SpecialCharParser.parse(userJudul)}
                             />
                         </View>
 
@@ -184,7 +185,7 @@ const EditPortfolio = ({ navigation, route }) => {
                                 returnKeyType="next"
                                 onSubmitEditing={Keyboard.dismiss}
                                 blurOnSubmit={false}
-                                value={userCaption}
+                                value={SpecialCharParser.parse(userCaption)}
                             />
                         </View>
 

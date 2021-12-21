@@ -8,6 +8,7 @@ import User from '../../data/user';
 import DateHelper from '../../utils/date-helper';
 import CONFIG from '../../global/config';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import SpecialCharParser from '../../utils/special-char-parser'
 
 const ButtonLike = ({ post, user, onUpdate }) => {
     const onPress = async () => {
@@ -157,7 +158,7 @@ const CommentItem = ({ currentUser, comment, navigation }) => {
                         {date} {month.slice(0, 3)} {year}
                     </Text>
                 </View>
-                <Text style={{ fontSize: 13 }}>{comment.body}</Text>
+                <Text style={{ fontSize: 13 }}>{SpecialCharParser.parse(comment.body)}</Text>
             </View>
         </View>
     );
@@ -239,7 +240,7 @@ const detailPost = ({ navigation, route }) => {
                                     else navigation.navigate('ProfilePage', { username: post.username });
                                 }}
                             >
-                                {post?.username}
+                                {SpecialCharParser.parse(post?.username)}
                             </Text>
                             <PostDate postDate={post?.date} />
                         </View>
@@ -290,8 +291,8 @@ const detailPost = ({ navigation, route }) => {
                         }} />
 
                         <View style={{ paddingHorizontal: 15, marginBottom: 30 }}>
-                            <Text style={{ fontSize: 25, color: '#000', fontWeight: 'bold', textAlign: 'left' }}>{post?.title}</Text>
-                            <Text style={{ fontSize: 17, color: '#000', textAlign: 'left' }}>{post?.caption}</Text>
+                            <Text style={{ fontSize: 25, color: '#000', fontWeight: 'bold', textAlign: 'left' }}>{SpecialCharParser.parse(post?.title)}</Text>
+                            <Text style={{ fontSize: 17, color: '#000', textAlign: 'left' }}>{SpecialCharParser.parse(post?.caption)}</Text>
                         </View>
 
                         <View style={{ flexDirection: 'column', justifyContent: 'flex-end' }}>

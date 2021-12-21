@@ -4,6 +4,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Button } from 'react-native-elements';
 import CONFIG from '../global/config';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import SpecialCharParser from '../utils/special-char-parser';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -31,7 +32,7 @@ const ResultItem = ({ currentUser, targetUser, navigation }) => (
                     style={styles.UserProfile}
                 />
                 <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
-                    <Text style={styles.UserName}>{targetUser.username} </Text>
+                    <Text style={styles.UserName}>{SpecialCharParser.parse(targetUser.username)} </Text>
                     <Text style={styles.UserKota}>
                         {targetUser.city_name.split(' ').splice(1).join(' ')}
                     </Text>

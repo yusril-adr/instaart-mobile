@@ -6,6 +6,7 @@ import { Chevron } from 'react-native-shapes'
 import User from '../../data/user'
 import Location from '../../data/location'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import SpecialCharParser from '../../utils/special-char-parser'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -60,6 +61,17 @@ const EditProfile = ({ navigation, route }) => {
                 alert('Mohon isi Username');
                 return;
             }
+            const specialChars = ['&', '>', '<', '"'];
+            let exit = false;
+            specialChars.forEach((specialChar) => {
+            if (userName?.includes(specialChar)) {
+                alert('Username tidak boleh mengandung \'&\', \'>\' , \'<\', \'"\'');
+                exit = true;
+                return;
+            }
+            });
+            if (exit) return;
+
             if (!userCompleteName) {
                 alert('Mohon Isi Nama Lengkap');
                 return;
@@ -231,7 +243,7 @@ const EditProfile = ({ navigation, route }) => {
                                     cNameInputRef.current && cNameInputRef.current.focus()
                                 }
                                 blurOnSubmit={false}
-                                value={userName}
+                                value={SpecialCharParser.parse(userName)}
                             />
                         </View>
 
@@ -251,7 +263,7 @@ const EditProfile = ({ navigation, route }) => {
                                     emailInputRef.current && emailInputRef.current.focus()
                                 }
                                 blurOnSubmit={false}
-                                value={userCompleteName}
+                                value={SpecialCharParser.parse(userCompleteName)}
                             />
                         </View>
 
@@ -271,7 +283,7 @@ const EditProfile = ({ navigation, route }) => {
                                     teleponInputRef.current.focus()
                                 }
                                 blurOnSubmit={false}
-                                value={userEmail}
+                                value={SpecialCharParser.parse(userEmail)}
                             />
                         </View>
 
@@ -290,7 +302,7 @@ const EditProfile = ({ navigation, route }) => {
                                 returnKeyType="next"
                                 onSubmitEditing={Keyboard.dismiss}
                                 blurOnSubmit={false}
-                                value={userTelepon}
+                                value={SpecialCharParser.parse(userTelepon)}
                             />
                         </View>
 
@@ -377,7 +389,7 @@ const EditProfile = ({ navigation, route }) => {
                                 returnKeyType="next"
                                 onSubmitEditing={Keyboard.dismiss}
                                 blurOnSubmit={false}
-                                value={userBio}
+                                value={SpecialCharParser.parse(userBio)}
                             />
                         </View>
 

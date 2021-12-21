@@ -10,6 +10,7 @@ import Job from '../../data/job'
 import User from '../../data/user'
 import CONFIG from '../../global/config'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import SpecialCharParser from '../../utils/special-char-parser';
 
 const SearchContainer = ({ search, setSearch, setJobs, tipePekerjaan }) => {
     const searchInputRef = createRef();
@@ -76,12 +77,12 @@ const JobItem = ({ navigation, currentUser, job, }) => {
                         />
                     </View>
                     <View>
-                        <Text style={styles.JobName}> {job.username} </Text>
+                        <Text style={styles.JobName}> {SpecialCharParser.parse(job.username)} </Text>
                     </View>
                 </TouchableOpacity>
                 <View style={styles.JobContainer}>
                     <View>
-                        <Text style={{ fontSize: 25, fontWeight: 'bold' }}> {job.title} </Text>
+                        <Text style={{ fontSize: 25, fontWeight: 'bold' }}> {SpecialCharParser.parse(job.title)} </Text>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
                         <FontAwesome5

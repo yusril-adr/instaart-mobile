@@ -8,6 +8,7 @@ import User from '../../data/user';
 import CONFIG from '../../global/config';
 import PostList from '../../components/PostList';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import SpecialCharParser from '../../utils/special-char-parser';
 
 const ProfilePage = ({ navigation, route }) => {
     const { username = null } = route?.params || {};
@@ -155,14 +156,14 @@ const ProfilePage = ({ navigation, route }) => {
                                 style={styles.mainProfile}
                             />
                             <Text style={styles.mainUsername}>{targetUser?.username}</Text>
-                            <Text style={{ textAlign: 'center' }}>{targetUser?.display_name}</Text>
+                            <Text style={{ textAlign: 'center' }}>{SpecialCharParser.parse(targetUser?.display_name)}</Text>
                             <ProfileButton 
                                 onUpdate={async () => {
                                     await updateTargetUserInfo();
                                 }}
                             />
                             <Text style={{ paddingHorizontal: 10, marginVertical: 30, fontWeight: '100', fontSize: 20, textAlign: 'center' }}>
-                                {targetUser?.biodata}
+                                {SpecialCharParser.parse(targetUser?.biodata)}
                             </Text>
                         </View>
                     </View>

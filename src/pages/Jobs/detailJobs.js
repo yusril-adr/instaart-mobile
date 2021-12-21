@@ -6,6 +6,7 @@ import Job from '../../data/job';
 import User from '../../data/user';
 import CONFIG from '../../global/config';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import SpecialCharParser from '../../utils/special-char-parser';
 
 const detailJobs = ({ navigation, route }) => {
     const { jobId } = route.params;
@@ -71,8 +72,8 @@ const detailJobs = ({ navigation, route }) => {
                         />
                     </View>
                     <View>
-                        <Text style={styles.JobName}>{job?.title}</Text>
-                        <Text style={{ fontSize: 18, textAlign: 'center', marginTop: 10 }}>{job?.username}</Text>
+                        <Text style={styles.JobName}>{SpecialCharParser.parse(job?.title)}</Text>
+                        <Text style={{ fontSize: 18, textAlign: 'center', marginTop: 10 }}>{SpecialCharParser.parse(job?.username)}</Text>
                     </View>
 
                     <View>
@@ -97,7 +98,7 @@ const detailJobs = ({ navigation, route }) => {
                     </View>
                     <View>
                         <Text style={styles.JobInfo}>
-                            {job?.description}
+                            {SpecialCharParser.parse(job?.description)}
                         </Text>
                     </View>
                     

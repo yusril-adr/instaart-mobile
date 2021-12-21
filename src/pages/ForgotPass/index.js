@@ -17,7 +17,7 @@ const ForgotPass = ({ navigation }) => {
                 return;
             }
 
-            setLoading(true);
+            // setLoading(true);
 
             const { token } = await User.getRecoveryToken(userEmail);
 

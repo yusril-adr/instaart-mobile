@@ -42,6 +42,18 @@ const Signup = ({ navigation }) => {
       alert('Mohon isi Username');
       return;
     }
+
+    const specialChars = ['&', '>', '<', '"'];
+    let exit = false;
+    specialChars.forEach((specialChar) => {
+      if (userName?.includes(specialChar)) {
+        alert('Username tidak boleh mengandung \'&\', \'>\' , \'<\', \'"\'');
+        exit = true;
+        return;
+      }
+    });
+    if (exit) return;
+
     if (!userEmail) {
       alert('Mohon isi Email');
       return;

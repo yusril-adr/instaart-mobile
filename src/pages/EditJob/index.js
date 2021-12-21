@@ -8,6 +8,7 @@ import Job from '../../data/job';
 import User from '../../data/user';
 import Location from '../../data/location';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import SpecialCharParser from '../../utils/special-char-parser';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -196,7 +197,7 @@ const EditJob = ({ navigation, route }) => {
                                     jobDescInputRef.current && jobDescInputRef.current.focus()
                                 }
                                 blurOnSubmit={false}
-                                value={jobTitle}
+                                value={SpecialCharParser.parse(jobTitle)}
                             />
                         </View>
 
@@ -219,7 +220,7 @@ const EditJob = ({ navigation, route }) => {
                                 multiline={true}
                                 numberOfLines={4}
                                 blurOnSubmit={false}
-                                value={jobDescription}
+                                value={SpecialCharParser.parse(jobDescription)}
                             />
                         </View>
 
@@ -336,7 +337,7 @@ const EditJob = ({ navigation, route }) => {
                                 returnKeyType="next"
                                 onSubmitEditing={Keyboard.dismiss}
                                 blurOnSubmit={false}
-                                value={jobLink}
+                                value={SpecialCharParser.parse(jobLink)}
                             />
                         </View>
 
