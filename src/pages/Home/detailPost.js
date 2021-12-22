@@ -158,7 +158,7 @@ const CommentItem = ({ currentUser, comment, navigation }) => {
                         {date} {month.slice(0, 3)} {year}
                     </Text>
                 </View>
-                <Text style={{ fontSize: 13 }}>{SpecialCharParser.parse(comment.body)}</Text>
+                <Text style={{ fontSize: 13, width: wp('65%') }}>{SpecialCharParser.parse(comment.body)}</Text>
             </View>
         </View>
     );
