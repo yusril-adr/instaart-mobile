@@ -1,12 +1,12 @@
 import React, { useState, useEffect, createRef } from 'react'
 import { StyleSheet, Dimensions, TextInput, View, Text, ScrollView, Keyboard, KeyboardAvoidingView, Alert } from 'react-native'
-import { Button } from 'react-native-elements'
+import { Button, CheckBox } from 'react-native-elements'
 import RNPickerSelect from 'react-native-picker-select'
 import { Chevron } from 'react-native-shapes'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Job from '../../data/job';
 import Location from '../../data/location';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -22,6 +22,7 @@ const PostJob = ({ navigation }) => {
     const [provincies, setProvincies] = useState([]);
     const [jobLink, setJobLink] = useState('');
     const [errortext, setErrortext] = useState('');
+    const [check1, setCheck1] = useState(false);
 
     const jobDescInputRef = createRef();
     const waktuInputRef = createRef();
@@ -79,7 +80,7 @@ const PostJob = ({ navigation }) => {
             };
 
             await Job.newJob(inputData);
-    
+
             Alert.alert(
                 'Pekerjaan Berhasil Dibuat!',
                 'Pekerjaan kamu akan muncul pada halaman pekerjaan setelah melalui proses validasi.',
@@ -202,36 +203,36 @@ const PostJob = ({ navigation }) => {
                     </View>
 
                     <View style={styles.SectionStyle}>
-                            <Text>Shift</Text>
-                            <RNPickerSelect
-                                style={{
-                                    ...pickerSelectStyles,
-                                    placeholder: {
-                                        color: 'black',
-                                        fontSize: 14,
-                                        fontWeight: 'normal',
-                                        paddingLeft: 15
-                                    },
-                                    iconContainer: {
-                                        top: 15,
-                                        right: 15,
-                                    },
-                                }}
-                                Icon={() => {
-                                    return <Chevron size={1.5} color="gray" />;
-                                }}
-                                useNativeAndroidPickerStyle={false}
-                                placeholder={placeholder}
-                                onValueChange={(shiftPekerjaan) => setShiftPekerjaan(shiftPekerjaan)}
-                                ref={waktuInputRef}
-                                returnKeyType="next"
-                                items={[
-                                    { label: 'WFO-WFH', value: 'WFO-WFH' },
-                                    { label: 'WFO', value: 'WFO' },
-                                    { label: 'WFH', value: 'WFH' },
-                                ]}
-                            />
-                        </View>
+                        <Text>Shift</Text>
+                        <RNPickerSelect
+                            style={{
+                                ...pickerSelectStyles,
+                                placeholder: {
+                                    color: 'black',
+                                    fontSize: 14,
+                                    fontWeight: 'normal',
+                                    paddingLeft: 15
+                                },
+                                iconContainer: {
+                                    top: 15,
+                                    right: 15,
+                                },
+                            }}
+                            Icon={() => {
+                                return <Chevron size={1.5} color="gray" />;
+                            }}
+                            useNativeAndroidPickerStyle={false}
+                            placeholder={placeholder}
+                            onValueChange={(shiftPekerjaan) => setShiftPekerjaan(shiftPekerjaan)}
+                            ref={waktuInputRef}
+                            returnKeyType="next"
+                            items={[
+                                { label: 'WFO-WFH', value: 'WFO-WFH' },
+                                { label: 'WFO', value: 'WFO' },
+                                { label: 'WFH', value: 'WFH' },
+                            ]}
+                        />
+                    </View>
 
                     <View style={styles.SectionStyle}>
                         <Text>Provinsi</Text>
@@ -320,6 +321,14 @@ const PostJob = ({ navigation }) => {
                             {errortext}
                         </Text>
                     ) : null}
+
+                    <CheckBox
+                        containerStyle={{ backgroundColor: "transparent", borderWidth: 0 }}
+                        center
+                        title="Saya telah menyetujui persyaratan pekerjaan dari InstaArt."
+                        checked={check1}
+                        onPress={() => setCheck1(!check1)}
+                    />
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 15, marginBottom: 30 }}>
                         <Button

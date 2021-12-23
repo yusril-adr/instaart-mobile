@@ -431,7 +431,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignContent: 'center',
         width: wp('90%'),
-        height: 300,
+        height: 345,
         marginTop: 30,
         shadowColor: '#000',
         shadowOffset: { width: 2, height: 5 },
@@ -484,6 +484,7 @@ const styles = StyleSheet.create({
     SectionStyle: {
         flexDirection: 'column',
         alignSelf: 'center',
+        marginBottom: 10
     },
 });
 

@@ -5,7 +5,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { launchImageLibrary } from 'react-native-image-picker';
 import CONFIG from '../../global/config'
 import User from '../../data/user'
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -16,12 +16,12 @@ const editPhoto = ({ navigation }) => {
 
     const handleChooseFile = async () => {
         try {
-            launchImageLibrary({mediaType: 'photo'}, (response) => {
+            launchImageLibrary({ mediaType: 'photo' }, (response) => {
                 if (response.errorMessage) {
                     return alert(response.errorMessage);
                 }
 
-                if (response.assets?.length > 0) setUploadImage(response.assets[0]);             
+                if (response.assets?.length > 0) setUploadImage(response.assets[0]);
             });
         } catch (error) {
             alert(error.message);
@@ -37,29 +37,31 @@ const editPhoto = ({ navigation }) => {
                     text: "Tidak",
                     style: "cancel"
                 },
-                { text: "Ya", onPress: async () => {
-                    try {
-                        await User.removePicture();
+                {
+                    text: "Ya", onPress: async () => {
+                        try {
+                            await User.removePicture();
 
-                        setUploadImage(null);
+                            setUploadImage(null);
 
-                        Alert.alert(
-                            'Berhasil !',
-                            'Foto profil berhasil dihapus',
-                            [
-                                { 
-                                    text: "OK", 
-                                    onPress: () => {
-                                        navigation.navigate('Akun');
-                                    },  
-                                }
-                            ],
-                        );
+                            Alert.alert(
+                                'Berhasil !',
+                                'Foto profil berhasil dihapus',
+                                [
+                                    {
+                                        text: "OK",
+                                        onPress: () => {
+                                            navigation.navigate('Akun');
+                                        },
+                                    }
+                                ],
+                            );
 
-                    } catch (error) {
-                        alert(error.message);
+                        } catch (error) {
+                            alert(error.message);
+                        }
                     }
-                } }
+                }
             ]
         );
     }
@@ -71,7 +73,7 @@ const editPhoto = ({ navigation }) => {
                 name: uploadImage.fileName,
                 type: uploadImage.type,
                 uri: Platform.OS === 'ios' ? uploadImage.uri.replace('file://', '') : uploadImage.uri,
-              });
+            });
 
             await User.updatePicture(formImg);
 
@@ -81,11 +83,11 @@ const editPhoto = ({ navigation }) => {
                 'Berhasil !',
                 'Foto profil berhasil dirubah',
                 [
-                    { 
-                        text: "OK", 
+                    {
+                        text: "OK",
                         onPress: () => {
                             navigation.navigate('Akun');
-                        },  
+                        },
                     }
                 ],
             );
@@ -168,6 +170,22 @@ const editPhoto = ({ navigation }) => {
                                 borderBottomStartRadius: 10
                             }}>
                                 <Text style={{ fontSize: 15 }}>Password</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('PekerjaanDibuat')}>
+                            <View style={{
+                                flexDirection: 'row',
+                                borderTopWidth: 1,
+                                borderColor: '#e5e5e5',
+                                width: wp('89.5%'),
+                                alignSelf: 'center',
+                                backgroundColor: 'white',
+                                paddingVertical: 15,
+                                paddingHorizontal: 30,
+                                borderBottomEndRadius: 10,
+                                borderBottomStartRadius: 10
+                            }}>
+                                <Text style={{ fontSize: 15 }}>Daftar Pekerjaan yang Dibuat</Text>
                             </View>
                         </TouchableOpacity>
                     </View>

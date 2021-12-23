@@ -216,6 +216,22 @@ const EditProfile = ({ navigation, route }) => {
                                 <Text style={{ fontSize: 15 }}>Password</Text>
                             </View>
                         </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('PekerjaanDibuat')}>
+                            <View style={{
+                                flexDirection: 'row',
+                                borderTopWidth: 1,
+                                borderColor: '#e5e5e5',
+                                width: wp('89.5%'),
+                                alignSelf: 'center',
+                                backgroundColor: 'white',
+                                paddingVertical: 15,
+                                paddingHorizontal: 30,
+                                borderBottomEndRadius: 10,
+                                borderBottomStartRadius: 10
+                            }}>
+                                <Text style={{ fontSize: 15 }}>Daftar Pekerjaan yang Dibuat</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
 
                     <View style={styles.container}>

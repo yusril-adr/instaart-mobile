@@ -23,5 +23,6 @@ import Activity from './ActivityPage'
 import UserDetailJobs from './Jobs/UserDetailJobs'
 import EditJob from './EditJob'
 import ForgotPass from './ForgotPass'
+import PekerjaanDibuat from './PekerjaanDibuat'
 
-export {Akun, Home, Jobs, Login, Search, Signup, Splash, Upload, detailPost, ProfilePage, LikePages, BookmarkPages, FollowerPages, FollowingPages, EditPortfolio, PostJob, detailJobs, EditProfile, editPhoto, editPassword, searchUser, Activity, UserDetailJobs, EditJob, ForgotPass}
+export {Akun, Home, Jobs, Login, Search, Signup, Splash, Upload, detailPost, ProfilePage, LikePages, BookmarkPages, FollowerPages, FollowingPages, EditPortfolio, PostJob, detailJobs, EditProfile, editPhoto, editPassword, searchUser, Activity, UserDetailJobs, EditJob, ForgotPass, PekerjaanDibuat}
