@@ -18,7 +18,6 @@ const Signup = ({ navigation }) => {
   const [userCompleteName, setUserCompleteName] = useState('');
   const [userProvinsi, setUserProvinsi] = useState('');
   const [userKota, setUserKota] = useState('');
-  const [userTelepon, setUserTelepon] = useState('');
   const [userBio, setUserBio] = useState('');
   const [errortext, setErrortext] = useState('');
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
@@ -33,7 +32,6 @@ const Signup = ({ navigation }) => {
   const cNameInputRef = createRef();
   const provInputRef = createRef();
   const kotaInputRef = createRef();
-  const teleponInputRef = createRef();
   const bioInputRef = createRef();
 
   const handleSubmitButton = async () => {
@@ -86,22 +84,12 @@ const Signup = ({ navigation }) => {
       alert('Mohon Pilih Kota');
       return;
     }
-    if (!userTelepon) {
-      alert('Mohon Isi Nomor Telepon');
-      return;
-    }
-    if (!PhoneNumberValidation.checkPhoneNumberFormat(userTelepon)) {
-      alert('Format Nomor telepon tidak valid.');
-      return;
-    }
-
     try {
       const data = {
         username: userName,
         password: userPassword,
         email: userEmail,
         display_name: userCompleteName,
-        phone_number: userTelepon,
         biodata: userBio,
         province_id: userProvinsi,
         city_id: userKota,
@@ -317,27 +305,6 @@ const Signup = ({ navigation }) => {
                 ref={kotaInputRef}
                 returnKeyType="next"
                 items={kotaList}
-              />
-            </View>
-
-            <View style={styles.SectionStyle}>
-              <Text>Nomor Telepon</Text>
-              <TextInput
-                style={styles.inputStyle}
-                onChangeText={(userTelepon) =>
-                  setUserTelepon(userTelepon)
-                }
-                underlineColorAndroid="#f000"
-                placeholder="Masukkan nomor telepon"
-                placeholderTextColor="#000"
-                keyboardType='number-pad'
-                ref={teleponInputRef}
-                returnKeyType="next"
-                onSubmitEditing={() =>
-                  bioInputRef.current &&
-                  bioInputRef.current.focus()
-                }
-                blurOnSubmit={false}
               />
             </View>
 

@@ -217,20 +217,6 @@ const ProfilePage = ({ navigation, route }) => {
                             paddingHorizontal: 20,
                             justifyContent: 'space-between'
                         }}>
-                            <Text style={{ fontSize: 15 }}>Telepon</Text>
-                            <Text style={{ fontSize: 15 }}>{targetUser?.phone_number || 0}</Text>
-                        </View>
-                        <View style={{
-                            flexDirection: 'row',
-                            borderTopWidth: 1,
-                            borderTopColor: '#7f7f7f',
-                            width: wp('89.5%'),
-                            alignSelf: 'center',
-                            backgroundColor: 'white',
-                            paddingVertical: 6,
-                            paddingHorizontal: 20,
-                            justifyContent: 'space-between'
-                        }}>
                             <Text style={{ fontSize: 15 }}>Provinsi</Text>
                             <Text style={{ fontSize: 15 }}>{targetUser?.province_name}</Text>
                         </View>
