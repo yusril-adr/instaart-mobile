@@ -12,12 +12,12 @@ import CONFIG from '../../global/config'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import SpecialCharParser from '../../utils/special-char-parser';
 
-const SearchContainer = ({ search, setSearch, setJobs, tipePekerjaan }) => {
+const SearchContainer = ({ search, setSearch, setJobs, tipePekerjaan, shiftPekerjaan }) => {
     const searchInputRef = createRef();
 
     const handleSearch = async () => {
         try {
-            const jobs = await Job.searchJob(search, { work_type: tipePekerjaan });
+            const jobs = await Job.searchJob(search, { work_type: tipePekerjaan, shift: shiftPekerjaan });
             setJobs(jobs);
         } catch (error) {
             alert(error.message);
@@ -104,6 +104,16 @@ const JobItem = ({ navigation, currentUser, job, }) => {
                             style={{ marginRight: 10 }}
                         />
                         <Text>{job.work_type}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
+                        <FontAwesome5
+                            name='building'
+                            size={23}
+                            color='#000'
+                            style={{ marginRight: 10 }}
+                            solid
+                        />
+                        <Text>{job.shift}</Text>
                     </View>
                     <View style={{
                         alignSelf: 'center',
@@ -219,6 +229,7 @@ const Jobs = ({ navigation }) => {
     const [user, setUser] = useState(null);
     const [search, setSearch] = useState('');
     const [tipePekerjaan, setTipePekerjaan] = useState('');
+    const [shiftPekerjaan, setShiftPekerjaan] = useState('');
 
     const placeholder = {
         label: 'Pilih masukan',
@@ -238,6 +249,7 @@ const Jobs = ({ navigation }) => {
                 const jobsList = await Job.getJobs();
                 setJobs(jobsList);
                 setTipePekerjaan('');
+                setShiftPekerjaan('');
             } catch (error) {
                 alert(error.message);
                 navigation.goBack();
@@ -284,12 +296,13 @@ const Jobs = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
 
-                    {/* <View style={styles.container3}>
+                    <View style={styles.container3}>
                         <SearchContainer
                             search={search}
                             setSearch={setSearch}
                             setJobs={setJobs}
                             tipePekerjaan={tipePekerjaan}
+                            shiftPekerjaan={shiftPekerjaan}
                         />
                         <View style={styles.SectionStyle}>
                             <Text>Tipe Pekerjaan</Text>
@@ -315,7 +328,7 @@ const Jobs = ({ navigation }) => {
                                 onValueChange={async (tipePekerjaan) => {
                                     try {
                                         setTipePekerjaan(tipePekerjaan);
-                                        const jobs = await Job.searchJob(search, { work_type: tipePekerjaan });
+                                        const jobs = await Job.searchJob(search, { work_type: tipePekerjaan, shift: shiftPekerjaan });
                                         setJobs(jobs);
                                     } catch (error) {
                                         alert(error.message);
@@ -332,7 +345,48 @@ const Jobs = ({ navigation }) => {
                                 value={tipePekerjaan}
                             />
                         </View>
-                    </View> */}
+
+                        <View style={styles.SectionStyle}>
+                            <Text>Shift Pekerjaan</Text>
+                            <RNPickerSelect
+                                style={{
+                                    ...pickerSelectStyles,
+                                    placeholder: {
+                                        color: 'black',
+                                        fontSize: 14,
+                                        fontWeight: 'normal',
+                                        paddingLeft: 15
+                                    },
+                                    iconContainer: {
+                                        top: 23,
+                                        right: 25,
+                                    },
+                                }}
+                                Icon={() => {
+                                    return <Chevron size={1.5} color="gray" />;
+                                }}
+                                useNativeAndroidPickerStyle={false}
+                                placeholder={placeholder}
+                                onValueChange={async (shiftPekerjaan) => {
+                                    try {
+                                        setShiftPekerjaan(shiftPekerjaan);
+                                        const jobs = await Job.searchJob(search, { work_type: tipePekerjaan, shift: shiftPekerjaan });
+                                        setJobs(jobs);
+                                    } catch (error) {
+                                        alert(error.message);
+                                    }
+                                }}
+                                returnKeyType="next"
+                                items={[
+                                    { label: 'Semua', value: '' },
+                                    { label: 'WFO-WFH', value: 'WFO-WFH' },
+                                    { label: 'WFO', value: 'WFO' },
+                                    { label: 'WFH', value: 'WFH' },
+                                ]}
+                                value={shiftPekerjaan}
+                            />
+                        </View>
+                    </View>
 
                     <View style={{ marginBottom: 50 }}>
                         <JobList currentUser={user} navigation={navigation} jobs={jobs} />

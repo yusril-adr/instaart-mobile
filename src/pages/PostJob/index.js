@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createRef } from 'react'
-import { StyleSheet, Dimensions, TextInput, View, Text, ScrollView, Keyboard, KeyboardAvoidingView } from 'react-native'
+import { StyleSheet, Dimensions, TextInput, View, Text, ScrollView, Keyboard, KeyboardAvoidingView, Alert } from 'react-native'
 import { Button } from 'react-native-elements'
 import RNPickerSelect from 'react-native-picker-select'
 import { Chevron } from 'react-native-shapes'
@@ -15,6 +15,7 @@ const PostJob = ({ navigation }) => {
     const [jobTitle, setJobTitle] = useState('');
     const [jobDescription, setJobDescription] = useState('');
     const [tipePekerjaan, setTipePekerjaan] = useState('');
+    const [shiftPekerjaan, setShiftPekerjaan] = useState('');
     const [provinsi, setProvinsi] = useState('');
     const [kota, setKota] = useState('');
     const [cities, setCities] = useState([]);
@@ -40,6 +41,10 @@ const PostJob = ({ navigation }) => {
         }
         if (!tipePekerjaan) {
             alert('Mohon masukkan tipe pekerjaan');
+            return;
+        }
+        if (!shiftPekerjaan) {
+            alert('Mohon masukkan shift pekerjaan');
             return;
         }
         if (!provinsi) {
@@ -70,11 +75,20 @@ const PostJob = ({ navigation }) => {
                 province_name: await Location.getProvince(provinsi),
                 city_name: await Location.getCity(kota),
                 work_type: tipePekerjaan,
+                shift: shiftPekerjaan,
             };
 
             await Job.newJob(inputData);
     
-            alert('Pekerjaan berhasil dibuat.');
+            Alert.alert(
+                'Pekerjaan Berhasil Dibuat!',
+                'Pekerjaan kamu akan muncul pada halaman pekerjaan setelah melalui proses validasi.',
+                [
+                    {
+                        text: "Mengerti",
+                    }
+                ]
+            )
             navigation.navigate('Jobs');
         } catch (error) {
             alert(error.message);
@@ -186,6 +200,38 @@ const PostJob = ({ navigation }) => {
                             ]}
                         />
                     </View>
+
+                    <View style={styles.SectionStyle}>
+                            <Text>Shift</Text>
+                            <RNPickerSelect
+                                style={{
+                                    ...pickerSelectStyles,
+                                    placeholder: {
+                                        color: 'black',
+                                        fontSize: 14,
+                                        fontWeight: 'normal',
+                                        paddingLeft: 15
+                                    },
+                                    iconContainer: {
+                                        top: 15,
+                                        right: 15,
+                                    },
+                                }}
+                                Icon={() => {
+                                    return <Chevron size={1.5} color="gray" />;
+                                }}
+                                useNativeAndroidPickerStyle={false}
+                                placeholder={placeholder}
+                                onValueChange={(shiftPekerjaan) => setShiftPekerjaan(shiftPekerjaan)}
+                                ref={waktuInputRef}
+                                returnKeyType="next"
+                                items={[
+                                    { label: 'WFO-WFH', value: 'WFO-WFH' },
+                                    { label: 'WFO', value: 'WFO' },
+                                    { label: 'WFH', value: 'WFH' },
+                                ]}
+                            />
+                        </View>
 
                     <View style={styles.SectionStyle}>
                         <Text>Provinsi</Text>

@@ -17,6 +17,7 @@ const EditJob = ({ navigation, route }) => {
     const [jobTitle, setJobTitle] = useState('');
     const [jobDescription, setJobDescription] = useState('');
     const [tipePekerjaan, setTipePekerjaan] = useState('');
+    const [shiftPekerjaan, setShiftPekerjaan] = useState('');
     const [provinsi, setProvinsi] = useState('');
     const [kota, setKota] = useState('');
     const [jobLink, setJobLink] = useState('');
@@ -59,6 +60,7 @@ const EditJob = ({ navigation, route }) => {
             setJobTitle(jobData.title);
             setJobDescription(jobData.description);
             setTipePekerjaan(jobData.work_type);
+            setShiftPekerjaan(jobData.shift);
             setProvinsi(parseInt(jobData.province_id));
             setKota(parseInt(jobData.city_id));
             setJobLink(jobData.form_link);
@@ -90,6 +92,10 @@ const EditJob = ({ navigation, route }) => {
             alert('Mohon masukkan tipe pekerjaan');
             return;
         }
+        if (!shiftPekerjaan) {
+            alert('Mohon masukkan shift pekerjaan');
+            return;
+        }
         if (!provinsi) {
             alert('Mohon masukkan lokasi provinsi');
             return;
@@ -118,6 +124,7 @@ const EditJob = ({ navigation, route }) => {
                 province_name: await Location.getProvince(provinsi),
                 city_name: await Location.getCity(kota),
                 work_type: tipePekerjaan,
+                shift: shiftPekerjaan,
             };
 
             await Job.updateJob(inputData);
@@ -148,6 +155,7 @@ const EditJob = ({ navigation, route }) => {
                             setJobTitle('');
                             setJobDescription('');
                             setTipePekerjaan('');
+                            setShiftPekerjaan('');
                             setProvinsi('');
                             setKota('');
                             setJobLink('');
@@ -259,6 +267,39 @@ const EditJob = ({ navigation, route }) => {
                         </View>
 
                         <View style={styles.SectionStyle}>
+                            <Text>Shift</Text>
+                            <RNPickerSelect
+                                style={{
+                                    ...pickerSelectStyles,
+                                    placeholder: {
+                                        color: 'black',
+                                        fontSize: 14,
+                                        fontWeight: 'normal',
+                                        paddingLeft: 15
+                                    },
+                                    iconContainer: {
+                                        top: 15,
+                                        right: 15,
+                                    },
+                                }}
+                                Icon={() => {
+                                    return <Chevron size={1.5} color="gray" />;
+                                }}
+                                useNativeAndroidPickerStyle={false}
+                                placeholder={placeholder}
+                                onValueChange={(shiftPekerjaan) => setShiftPekerjaan(shiftPekerjaan)}
+                                ref={waktuInputRef}
+                                returnKeyType="next"
+                                items={[
+                                    { label: 'WFO-WFH', value: 'WFO-WFH' },
+                                    { label: 'WFO', value: 'WFO' },
+                                    { label: 'WFH', value: 'WFH' },
+                                ]}
+                                value={shiftPekerjaan}
+                            />
+                        </View>
+
+                        <View style={styles.SectionStyle}>
                             <Text>Provinsi</Text>
                             <RNPickerSelect
                                 style={{
@@ -323,6 +364,7 @@ const EditJob = ({ navigation, route }) => {
                                 items={cities}
                             />
                         </View>
+                        
 
                         <View style={styles.SectionStyle}>
                             <Text>Tautan Formulir</Text>
