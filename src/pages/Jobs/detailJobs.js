@@ -95,6 +95,16 @@ const detailJobs = ({ navigation, route }) => {
                             />
                             <Text>{job?.work_type}</Text>
                         </View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
+                            <FontAwesome5
+                                name='building'
+                                size={23}
+                                color='#000'
+                                style={{ marginRight: 10 }}
+                                solid
+                            />
+                            <Text>{job?.shift}</Text>
+                        </View>
                     </View>
                     <View>
                         <Text style={styles.JobInfo}>
