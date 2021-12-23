@@ -6,6 +6,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { useNavigation } from '@react-navigation/native'
 import RNPickerSelect from 'react-native-picker-select'
 import { Chevron } from 'react-native-shapes'
+import AwesomeAlert from 'react-native-awesome-alerts';
 import UserList from '../../components/UserList'
 import Location from '../../data/location';
 import User from '../../data/user';
@@ -128,6 +129,8 @@ const searchUser = ({ navigation, route }) => {
     const [cities, setCities] = useState([]);
     const [provincies, setProvincies] = useState([]);
     const [resultUser, setResultUser] = useState([]);
+    const [loading, setLoading] = useState(false);
+
     const provInputRef = createRef();
     const kotaInputRef = createRef();
 
@@ -255,24 +258,30 @@ const searchUser = ({ navigation, route }) => {
 
             const unsubscribe = navigation.addListener('focus', async (e) => {
                 try {
+                    setLoading(true);
                     setSearch(keyword);
                     setShouldKeyShow(false);
                     setShouldShow(false)
                     await getUserInfo();
                     await initValue();
+                    setLoading(false);
                 } catch (error) {
+                    setLoading(false);
                     alert(error.message);
                     navigation.goBack();
                 }
             });
 
             try {
+                setLoading(true);
                 setSearch(keyword);
                 setShouldKeyShow(false);
                 setShouldShow(false)
                 await getUserInfo();
                 await initValue();
-            } catch (error) {
+                setLoading(false);
+                } catch (error) {
+                setLoading(false);
                 alert(error.message);
                 navigation.goBack();
             }
@@ -417,6 +426,14 @@ const searchUser = ({ navigation, route }) => {
 
                 </View>
             </ScrollView>
+
+            <AwesomeAlert
+                show={loading}
+                showProgress={true}
+                overlayStyle={{
+                    backgroundColor: 'transparent',
+                }}
+            />
         </SafeAreaView>
     )
 }

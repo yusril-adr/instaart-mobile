@@ -4,6 +4,7 @@ import { Button } from 'react-native-elements'
 import RNPickerSelect from 'react-native-picker-select'
 import { Chevron } from 'react-native-shapes'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import AwesomeAlert from 'react-native-awesome-alerts';
 import Job from '../../data/job';
 import User from '../../data/user';
 import Location from '../../data/location';
@@ -26,6 +27,7 @@ const EditJob = ({ navigation, route }) => {
     const [user, setUser] = useState(null);
     const [cities, setCities] = useState([]);
     const [provincies, setProvincies] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const jobDescInputRef = createRef();
     const waktuInputRef = createRef();
@@ -68,8 +70,11 @@ const EditJob = ({ navigation, route }) => {
 
         const unsubscribe = navigation.addListener('focus', async (e) => {
             try {
+                setLoading(true);
                 await setDefaultValue();
+                setLoading(false);
             } catch (error) {
+                setLoading(false);
                 alert(error.message);
                 navigation.goBack();
             }
@@ -80,36 +85,45 @@ const EditJob = ({ navigation, route }) => {
 
     const handleSubmitButton = async () => {
         setErrortext('');
+        setLoading(true);
         if (!jobTitle) {
             alert('Mohon masukkan nama pekerjaan');
+            setLoading(false);
             return;
         }
         if (!jobDescription) {
             alert('Mohon masukkan deskripsi');
+            setLoading(false);
             return;
         }
         if (!tipePekerjaan) {
             alert('Mohon masukkan tipe pekerjaan');
+            setLoading(false);
             return;
         }
         if (!shiftPekerjaan) {
             alert('Mohon masukkan shift pekerjaan');
+            setLoading(false);
             return;
         }
         if (!provinsi) {
             alert('Mohon masukkan lokasi provinsi');
+            setLoading(false);
             return;
         }
         if (!kota) {
             alert('Mohon masukkan lokasi kabupaten/kota');
+            setLoading(false);
             return;
         }
         if (!jobLink) {
             alert('Mohon masukkan tautan pekerjaan');
+            setLoading(false);
             return;
         }
         if (!jobLink.startsWith('https://')) {
             alert('Tautan tidak valid, tautan harus diawali dengan "https://"');
+            setLoading(false);
             return;
         }
 
@@ -128,6 +142,7 @@ const EditJob = ({ navigation, route }) => {
             };
 
             await Job.updateJob(inputData);
+            setLoading(false);
             setJobTitle('');
             setJobDescription('');
             setTipePekerjaan('');
@@ -137,6 +152,7 @@ const EditJob = ({ navigation, route }) => {
 
             navigation.navigate('Jobs');
         } catch (error) {
+            setLoading(false);
             alert(error.message);   
         }
     };
@@ -151,6 +167,7 @@ const EditJob = ({ navigation, route }) => {
                     text: "OK", 
                     onPress: async () => {
                         try {
+                            setLoading(true);
                             await Job.deleteJob(jobId);
                             setJobTitle('');
                             setJobDescription('');
@@ -159,9 +176,11 @@ const EditJob = ({ navigation, route }) => {
                             setProvinsi('');
                             setKota('');
                             setJobLink('');
+                            setLoading(false);
 
                             navigation.navigate('Jobs');
                         } catch (error) {
+                            setLoading(false);
                             alert(error.message);
                         }
                     },
@@ -416,6 +435,14 @@ const EditJob = ({ navigation, route }) => {
                     </View>
                 </KeyboardAvoidingView>
             </ScrollView>
+
+            <AwesomeAlert
+                show={loading}
+                showProgress={true}
+                overlayStyle={{
+                    backgroundColor: 'transparent',
+                }}
+            />
         </View>
     )
 }

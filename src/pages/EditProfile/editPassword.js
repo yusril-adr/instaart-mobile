@@ -2,6 +2,7 @@ import React, { useState, useEffect, createRef } from 'react';
 import { StyleSheet, Dimensions, TextInput, View, Text, ScrollView, TouchableOpacity, Keyboard, KeyboardAvoidingView } from 'react-native';
 import { Button } from 'react-native-elements';
 import PasswordInputText from 'react-native-hide-show-password-input';
+import AwesomeAlert from 'react-native-awesome-alerts';
 import User from '../../data/user';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
@@ -15,19 +16,23 @@ const editPassword = ({ navigation }) => {
     const [user, setUser] = useState(null);
     const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
     const [selectedValue, setSelectedValue] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const passwordInputRef = createRef();
     const newPasswordInputRef = createRef();
 
     const handleSubmitButton = async () => {
         try {
+            setLoading(true);
             setErrortext('');
             if (!userPassword) {
                 alert('Mohon isi Password');
+                setLoading(false);
                 return;
             }
             if (!userNewPassword) {
                 alert('Mohon Konfirmasi Password');
+                setLoading(false);
                 return;
             }
 
@@ -35,11 +40,13 @@ const editPassword = ({ navigation }) => {
                 new_password: userNewPassword,
                 current_password: userPassword,
             })
+            setLoading(false);
 
             alert('Password berhasil diperbarui')
 
             navigation.navigate('Akun');
         } catch (error) {
+            setLoading(false);
             alert(error.message)
         }
     }
@@ -52,8 +59,11 @@ const editPassword = ({ navigation }) => {
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async (e) => {
             try {
+                setLoading(true);
                 await getUserInfo();
+                setLoading(false);
             } catch (error) {
+                setLoading(false);
                 alert(error.message);
                 navigation.goBack();
             }
@@ -211,6 +221,14 @@ const editPassword = ({ navigation }) => {
 
                 </KeyboardAvoidingView>
             </ScrollView>
+
+            <AwesomeAlert
+                show={loading}
+                showProgress={true}
+                overlayStyle={{
+                    backgroundColor: 'transparent',
+                }}
+            />
         </View>
 
     );

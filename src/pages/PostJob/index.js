@@ -23,6 +23,7 @@ const PostJob = ({ navigation }) => {
     const [jobLink, setJobLink] = useState('');
     const [errortext, setErrortext] = useState('');
     const [check1, setCheck1] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const jobDescInputRef = createRef();
     const waktuInputRef = createRef();
@@ -31,43 +32,53 @@ const PostJob = ({ navigation }) => {
     const jobLinkInputRef = createRef();
 
     const handleSubmitButton = async () => {
+        setLoading(true);
         setErrortext('');
         if (!jobTitle) {
             alert('Mohon masukkan judul pekerjaan');
+            setLoading(false);
             return;
         }
         if (!jobDescription) {
             alert('Mohon masukkan deskripsi');
+            setLoading(false);
             return;
         }
         if (!tipePekerjaan) {
             alert('Mohon masukkan tipe pekerjaan');
+            setLoading(false);
             return;
         }
         if (!shiftPekerjaan) {
             alert('Mohon masukkan shift pekerjaan');
+            setLoading(false);
             return;
         }
         if (!provinsi) {
             alert('Mohon masukkan lokasi provinsi');
+            setLoading(false);
             return;
         }
         if (!kota) {
             alert('Mohon masukkan lokasi kabupaten/kota');
+            setLoading(false);
             return;
         }
         if (!jobLink) {
             alert('Mohon masukkan tautan pekerjaan');
+            setLoading(false);
             return;
         }
 
         if (!jobLink.startsWith('https://')) {
             alert('Tautan tidak valid, tautan harus diawali dengan "https://"');
+            setLoading(false);
             return;
         }
 
         if (!check1) {
             alert('Silakan setujui persyaratan kami untuk memposting pekerjaan baru.');
+            setLoading(false);
             return;
         }
 
@@ -85,6 +96,7 @@ const PostJob = ({ navigation }) => {
             };
 
             await Job.newJob(inputData);
+            setLoading(false);
 
             Alert.alert(
                 'Pekerjaan Berhasil Dibuat!',
@@ -97,6 +109,7 @@ const PostJob = ({ navigation }) => {
             )
             navigation.navigate('Jobs');
         } catch (error) {
+            setLoading(false);
             alert(error.message);
         }
     };
@@ -117,8 +130,11 @@ const PostJob = ({ navigation }) => {
 
         const unsubscribe = navigation.addListener('focus', async (e) => {
             try {
+                setLoading(true);
                 await initValue();
+                setLoading(false);
             } catch (error) {
+                setLoading(false);
                 alert(error.message);
                 navigation.goBack();
             }
@@ -351,6 +367,14 @@ const PostJob = ({ navigation }) => {
                 </View>
 
             </KeyboardAvoidingView>
+
+            <AwesomeAlert
+                show={loading}
+                showProgress={true}
+                overlayStyle={{
+                    backgroundColor: 'transparent',
+                }}
+            />
         </ScrollView>
     )
 }

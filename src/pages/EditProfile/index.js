@@ -3,6 +3,7 @@ import { Alert, StyleSheet, Dimensions, TextInput, View, Text, ScrollView, Touch
 import { Button } from 'react-native-elements'
 import RNPickerSelect from 'react-native-picker-select'
 import { Chevron } from 'react-native-shapes'
+import AwesomeAlert from 'react-native-awesome-alerts';
 import User from '../../data/user'
 import Location from '../../data/location'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -23,6 +24,7 @@ const EditProfile = ({ navigation, route }) => {
     const [user, setUser] = useState(null);
     const [cities, setCities] = useState([]);
     const [provincies, setProvincies] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const emailInputRef = createRef();
     const passwordInputRef = createRef();
@@ -56,9 +58,11 @@ const EditProfile = ({ navigation, route }) => {
 
     const handleSubmitButton = async () => {
         try {
+            setLoading(true);
             setErrortext('');
             if (!userName) {
                 alert('Mohon isi Username');
+                setLoading(false);
                 return;
             }
             const specialChars = ['&', '>', '<', '"'];
@@ -70,28 +74,31 @@ const EditProfile = ({ navigation, route }) => {
                 return;
             }
             });
-            if (exit) return;
+            if (exit) {
+                setLoading(false);
+                return;
+            }
 
             if (!userCompleteName) {
                 alert('Mohon Isi Nama Lengkap');
+                setLoading(false);
                 return;
             }
             if (!userEmail) {
                 alert('Mohon isi Email');
+                setLoading(false);
                 return;
             }
             if (!userProvinsi) {
                 alert('Mohon Pilih Provinsi');
+                setLoading(false);
                 return;
             }
             if (!userKota) {
                 alert('Mohon Pilih Kabupaten/Kota');
+                setLoading(false);
                 return;
             }
-            // if (!userBio) {
-            //     alert('Mohon Isi Bio');
-            //     return;
-            // }
 
             const inputData = {
                 username: userName,
@@ -105,9 +112,10 @@ const EditProfile = ({ navigation, route }) => {
             };
 
             await User.update(inputData);
-
+            setLoading(false);
             navigation.navigate('Akun');
         } catch (error) {
+            setLoading(false);
             alert(error.message)
         }
     }
@@ -146,10 +154,13 @@ const EditProfile = ({ navigation, route }) => {
     useEffect(useCallback(() => {
         const unsubscribe = navigation.addListener('focus', async (e) => {
             try {
+                setLoading(true);
                 const data = await User.getUser();
                 setUser(data);
                 await setDefaultValue(data);
+                setLoading(false);
             } catch (error) {
+                setLoading(false);
                 alert(error.message);
                 navigation.goBack();
             }
@@ -416,6 +427,14 @@ const EditProfile = ({ navigation, route }) => {
 
                 </KeyboardAvoidingView>
             </ScrollView>
+
+            <AwesomeAlert
+                show={loading}
+                showProgress={true}
+                overlayStyle={{
+                    backgroundColor: 'transparent',
+                }}
+            />
         </View>
 
     );

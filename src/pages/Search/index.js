@@ -6,6 +6,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
+import AwesomeAlert from 'react-native-awesome-alerts';
 import PostList from '../../components/PostList';
 import Colors from '../../data/colors';
 import Categories from '../../data/categories';
@@ -131,6 +132,8 @@ const Search = ({ navigation, route }) => {
     const [user, setUser] = useState(null);
     const [popularPost, setPopularPost] = useState([]);
     const [resultPost, setResultPost] = useState([]);
+    const [loading, setLoading] = useState(false);
+
     const provInputRef = createRef();
     const kotaInputRef = createRef();
 
@@ -260,22 +263,28 @@ const Search = ({ navigation, route }) => {
 
             const unsubscribe = navigation.addListener('focus', async (e) => {
                 try {
+                    setLoading(true);
                     setSearch(keyword);
                     setShouldKeyShow(false);
                     setShouldShow(false)
                     await getUserInfo();
                     await initValue();
+                    setLoading(false);
                 } catch (error) {
+                    setLoading(false);
                     alert(error.message);
                     navigation.goBack();
                 }
             });
 
             try {
+                setLoading(true);
                 setSearch(keyword);
                 await getUserInfo();
                 await initValue();
+                setLoading(false);
             } catch (error) {
+                setLoading(false);
                 alert(error.message);
             }
 
@@ -451,6 +460,14 @@ const Search = ({ navigation, route }) => {
 
                 </View>
             </ScrollView>
+
+            <AwesomeAlert
+                show={loading}
+                showProgress={true}
+                overlayStyle={{
+                    backgroundColor: 'transparent',
+                }}
+            />
         </SafeAreaView>
     )
 }

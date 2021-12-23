@@ -13,6 +13,7 @@ import {
 import { Button } from 'react-native-elements'
 import RNPickerSelect from 'react-native-picker-select'
 import { Chevron } from 'react-native-shapes'
+import AwesomeAlert from 'react-native-awesome-alerts';
 import Post from '../../data/post';
 import User from '../../data/user';
 import Colors from '../../data/colors';
@@ -35,6 +36,7 @@ const EditPortfolio = ({ navigation, route }) => {
     const [categories, setCategories] = useState([]);
     const [colors, setColors] = useState([]);
     const [errortext, setErrortext] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const judulInputRef = createRef();
     const captionInputRef = createRef();
@@ -43,20 +45,25 @@ const EditPortfolio = ({ navigation, route }) => {
 
     const handleSubmitButton = async () => {
         try {
+            setLoading(true);
             if (!userJudul) {
                 alert('Mohon isi Judul');
+                setLoading(false);
                 return;
             }
             if (!userCaption) {
                 alert('Mohon isi Deskripsi');
+                setLoading(false);
                 return;
             }
             if (!userKategori) {
                 alert('Mohon pilih Kategori');
+                setLoading(false);
                 return;
             }
             if (!userWarna) {
                 alert('Mohon Pilih Warna');
+                setLoading(false);
                 return;
             }
 
@@ -67,9 +74,11 @@ const EditPortfolio = ({ navigation, route }) => {
                 color_id: userWarna,
                 category_id: userKategori,
             });
+            setLoading(false);
 
             navigation.navigate('detailPost', { postId, postData: post });
         } catch (error) {
+            setLoading(false);
             alert(error.message); 
         }
     };
@@ -84,10 +93,13 @@ const EditPortfolio = ({ navigation, route }) => {
                     text: "OK", 
                     onPress: async () => {
                         try {
+                            setLoading(true);
                             await Post.deletePost(postId);
                             await alert('Desain berhasil dihapus.');
+                            setLoading(false);
                             navigation.navigate('Home');
                         } catch (error) {
+                            setLoading(false);
                             alert(error.message);
                         }
                     },
@@ -132,8 +144,11 @@ const EditPortfolio = ({ navigation, route }) => {
 
         const unsubscribe = navigation.addListener('focus', async (e) => {
             try {
+                setLoading(true);
                 await setDefaultValue();
+                setLoading(false);
             } catch (error) {
+                setLoading(false);
                 alert(error.message);
                 navigation.goBack();
             }
@@ -277,6 +292,13 @@ const EditPortfolio = ({ navigation, route }) => {
                         </View>
                     </View>
 
+                    <AwesomeAlert
+                        show={loading}
+                        showProgress={true}
+                        overlayStyle={{
+                            backgroundColor: 'transparent',
+                        }}
+                    />
                 </KeyboardAvoidingView>
             </ScrollView>
     )

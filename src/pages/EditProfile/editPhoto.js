@@ -2,6 +2,7 @@ import React, { useState, useEffect, createRef } from 'react'
 import { Alert, StyleSheet, Dimensions, TextInput, View, Text, ScrollView, TouchableOpacity, Keyboard, KeyboardAvoidingView, Image } from 'react-native'
 import { Button, SearchBar } from 'react-native-elements'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import AwesomeAlert from 'react-native-awesome-alerts';
 import { launchImageLibrary } from 'react-native-image-picker';
 import CONFIG from '../../global/config'
 import User from '../../data/user'
@@ -13,6 +14,7 @@ const windowHeight = Dimensions.get('window').height;
 const editPhoto = ({ navigation }) => {
     const [user, setUser] = useState(null);
     const [uploadImage, setUploadImage] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const handleChooseFile = async () => {
         try {
@@ -40,9 +42,11 @@ const editPhoto = ({ navigation }) => {
                 {
                     text: "Ya", onPress: async () => {
                         try {
+                            setLoading(true);
                             await User.removePicture();
 
                             setUploadImage(null);
+                            setLoading(false);
 
                             Alert.alert(
                                 'Berhasil !',
@@ -58,6 +62,7 @@ const editPhoto = ({ navigation }) => {
                             );
 
                         } catch (error) {
+                            setLoading(false);
                             alert(error.message);
                         }
                     }
@@ -68,6 +73,7 @@ const editPhoto = ({ navigation }) => {
 
     const handleSubmitButton = async () => {
         try {
+            setLoading(true);
             const formImg = new FormData();
             formImg.append('profile_image', {
                 name: uploadImage.fileName,
@@ -78,6 +84,7 @@ const editPhoto = ({ navigation }) => {
             await User.updatePicture(formImg);
 
             setUploadImage(null);
+            setLoading(false);
 
             Alert.alert(
                 'Berhasil !',
@@ -92,6 +99,7 @@ const editPhoto = ({ navigation }) => {
                 ],
             );
         } catch (error) {
+            setLoading(false);
             alert(error.message);
         }
     }
@@ -104,8 +112,11 @@ const editPhoto = ({ navigation }) => {
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async (e) => {
             try {
+                setLoading(true);
                 await getUserInfo();
+                setLoading(false);
             } catch (error) {
+                setLoading(false);
                 alert(error.message);
                 navigation.goBack();
             }
@@ -253,6 +264,14 @@ const editPhoto = ({ navigation }) => {
 
                 </KeyboardAvoidingView>
             </ScrollView>
+
+            <AwesomeAlert
+                show={loading}
+                showProgress={true}
+                overlayStyle={{
+                    backgroundColor: 'transparent',
+                }}
+            />
         </View>
 
     );

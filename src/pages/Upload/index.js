@@ -4,6 +4,7 @@ import { Button } from 'react-native-elements'
 import RNPickerSelect from 'react-native-picker-select'
 import { Chevron } from 'react-native-shapes'
 import { launchImageLibrary } from 'react-native-image-picker';
+import AwesomeAlert from 'react-native-awesome-alerts';
 import Post from '../../data/post'
 import Colors from '../../data/colors'
 import Categories from '../../data/categories'
@@ -23,6 +24,7 @@ const Upload = ({ navigation }) => {
     const [postImageOne, setPostImageOne] = useState(null);
     const [postImageTwo, setPostImageTwo] = useState(null);
     const [postImageThree, setPostImageThree] = useState(null);
+    const [loading, setLoading] = useState(false);
 
 
     const judulInputRef = createRef();
@@ -41,25 +43,31 @@ const Upload = ({ navigation }) => {
     };
 
     const handleSubmitButton = async () => {
+        setLoading(true);
         setErrortext('');
         if (!userJudul) {
             alert('Mohon isi Judul');
+            setLoading(false);
             return;
         }
         if (!userCaption) {
             alert('Mohon isi Deskripsi');
+            setLoading(false);
             return;
         }
         if (!userKategori) {
             alert('Mohon pilih Kategori');
+            setLoading(false);
             return;
         }
         if (!userWarna) {
             alert('Mohon Pilih Warna');
+            setLoading(false);
             return;
         }
         if (!postImageOne) {
             alert('Anda belum memilih desain yang ingin diunggah.');
+            setLoading(false);
             return;
         }
 
@@ -102,6 +110,7 @@ const Upload = ({ navigation }) => {
             }
 
             const newPost = await Post.newPost(inputData, formImages);
+            setLoading(false);
 
             Alert.alert(
                 'Berhasil !',
@@ -117,6 +126,7 @@ const Upload = ({ navigation }) => {
                 ],
             );
         } catch (error) {
+            setLoading(false);
             alert(error.message);
         }
     }
@@ -156,8 +166,11 @@ const Upload = ({ navigation }) => {
 
         const unsubscribe = navigation.addListener('focus', async (e) => {
             try {
+                setLoading(true);
                 await initValue();
+                setLoading(false);
             } catch (error) {
+                setLoading(false);
                 alert(error.message);
                 navigation.goBack();
             }
@@ -428,6 +441,14 @@ const Upload = ({ navigation }) => {
 
                 </KeyboardAvoidingView>
             </ScrollView>
+
+            <AwesomeAlert
+                show={loading}
+                showProgress={true}
+                overlayStyle={{
+                    backgroundColor: 'transparent',
+                }}
+            />
         </View>
     )
 }
