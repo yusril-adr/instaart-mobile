@@ -244,7 +244,7 @@ const Search = ({ navigation, route }) => {
 
                 await updateHistory();
 
-                if (keyword.trim() === '') {
+                if (keyword.trim() === '' && warnaParam === '' && kategoriParam === '') {
                     const popular = await Post.getMostLikes();
                     setPopularPost(popular);
                 } else {
@@ -390,7 +390,7 @@ const Search = ({ navigation, route }) => {
                         </View>
                     )}
 
-                    {keyword.trim() === '' && (
+                    {keyword.trim() === '' && warnaParam === '' && kategoriParam === '' && (
                         <>
                             <Text
                                 style={{
@@ -418,7 +418,7 @@ const Search = ({ navigation, route }) => {
                         </>
                     )}
 
-                    {resultPost.length < 1 && keyword.trim() !== '' && (
+                    {resultPost.length < 1 && (keyword.trim() !== '' || warnaParam !== '' || kategoriParam !== '') && (
                         <View style={{
                             width: wp('80%'),
                             alignSelf: 'center',
@@ -434,7 +434,7 @@ const Search = ({ navigation, route }) => {
                         </View>
                     )}
 
-                    {resultPost.length > 0 && keyword.trim() !== '' && (
+                    {resultPost.length > 0 && (keyword.trim() !== '' || warnaParam !== '' || kategoriParam !== '') && (
                         <PostList
                             navigation={navigation}
                             posts={resultPost}

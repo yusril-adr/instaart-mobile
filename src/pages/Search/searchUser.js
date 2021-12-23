@@ -391,7 +391,7 @@ const searchUser = ({ navigation, route }) => {
                         </View>
                     )}
 
-                    {resultUser.length > 0 && keyword !== '' && (
+                    {resultUser.length > 0 && (
                         <UserList
                             navigation={navigation}
                             users={resultUser}
@@ -399,7 +399,7 @@ const searchUser = ({ navigation, route }) => {
                         />
                     )}
 
-                    {(resultUser.length < 1 || keyword === '') && (
+                    {(resultUser.length < 1) && (
                         <View style={{
                             width: wp('80%'),
                             alignSelf: 'center',
