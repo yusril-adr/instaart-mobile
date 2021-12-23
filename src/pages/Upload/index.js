@@ -20,7 +20,9 @@ const Upload = ({ navigation }) => {
     const [errortext, setErrortext] = useState('');
     const [categories, setCategories] = useState([]);
     const [colors, setColors] = useState([]);
-    const [postImage, setPostImage] = useState(null);    
+    const [postImageOne, setPostImageOne] = useState(null);
+    const [postImageTwo, setPostImageTwo] = useState(null);
+    const [postImageThree, setPostImageThree] = useState(null);
 
 
     const judulInputRef = createRef();
@@ -33,7 +35,9 @@ const Upload = ({ navigation }) => {
         setUserCaption('');
         setUserWarna(0);
         setUserKategori(0);
-        setPostImage(null);
+        setPostImageOne(null);
+        setPostImageTwo(null);
+        setPostImageThree(null);
     };
 
     const handleSubmitButton = async () => {
@@ -54,7 +58,7 @@ const Upload = ({ navigation }) => {
             alert('Mohon Pilih Warna');
             return;
         }
-        if (!postImage) {
+        if (!postImageOne) {
             alert('Anda belum memilih desain yang ingin diunggah.');
             return;
         }
@@ -67,14 +71,37 @@ const Upload = ({ navigation }) => {
                 category_id: userKategori,
             };
 
-            const formImg = new FormData();
-            formImg.append('image', {
-                name: postImage.fileName,
-                type: postImage.type,
-                uri: Platform.OS === 'ios' ? postImage.uri.replace('file://', '') : postImage.uri,
-              });
+            const formImages = [];
 
-            const newPost = await Post.newPost(inputData, formImg);
+            const formImgOne = new FormData();
+            formImgOne.append('image', {
+                name: postImageOne.fileName,
+                type: postImageOne.type,
+                uri: Platform.OS === 'ios' ? postImageOne.uri.replace('file://', '') : postImageOne.uri,
+            });
+            formImages.push(formImgOne);
+
+            if (postImageTwo) {
+                const formImgTwo = new FormData();
+                formImgTwo.append('image', {
+                    name: postImageTwo.fileName,
+                    type: postImageTwo.type,
+                    uri: Platform.OS === 'ios' ? postImageTwo.uri.replace('file://', '') : postImageTwo.uri,
+                });
+                formImages.push(formImgTwo);
+            }
+
+            if (postImageThree) {
+                const formImgThree = new FormData();
+                formImgThree.append('image', {
+                    name: postImageThree.fileName,
+                    type: postImageThree.type,
+                    uri: Platform.OS === 'ios' ? postImageThree.uri.replace('file://', '') : postImageThree.uri,
+                });
+                formImages.push(formImgThree);
+            }
+
+            const newPost = await Post.newPost(inputData, formImages);
 
             Alert.alert(
                 'Berhasil !',
@@ -94,14 +121,14 @@ const Upload = ({ navigation }) => {
         }
     }
 
-    const handleChooseFile = async () => {
+    const handleChooseFile = async (setPhostImageFunc) => {
         try {
             launchImageLibrary({mediaType: 'photo'}, (response) => {
                 if (response.errorMessage) {
                     return alert(response.errorMessage);
                 }
 
-                if (response.assets?.length > 0) setPostImage(response.assets[0]);             
+                if (response.assets?.length > 0) setPhostImageFunc(response.assets[0]);             
             });
         } catch (error) {
             alert(error.message);
@@ -256,10 +283,9 @@ const Upload = ({ navigation }) => {
                                 marginTop: 5,
                                 alignSelf: 'center',
                                 margin: 10,
-                                height: postImage?.uri ? 400 : 60,
+                                height: postImageOne?.uri ? 400 : 60,
                             }}
                         >
-                            {postImage && <Text>Upload File</Text>}
                             <View 
                                 style={{
                                     flex: 1,
@@ -271,23 +297,8 @@ const Upload = ({ navigation }) => {
                                     justifyContent: 'space-evenly',
                                 }}
                             >
-                                {postImage && (
-                                    <Image 
-                                        source={{ uri: postImage.uri }}
-                                        style={{
-                                            flex: 1,
-                                            width: 310,
-                                            minHeight: 120,
-                                            maxHeight: 310,
-                                            overflow: 'hidden',
-                                            borderRadius: 10,
-                                            borderWidth: 1,
-                                        }}
-                                    />
-                                )}
-
                                 <Button
-                                    title="Pilih File"
+                                    title="Pilih File 1 (Wajib)"
                                     titleStyle={{
                                         color: '#007bff',
                                     }}
@@ -295,12 +306,97 @@ const Upload = ({ navigation }) => {
                                         backgroundColor: 'transparent',
                                         borderColor: '#007bff',
                                         borderWidth: 1,
-                                        width: 90,
+                                        width: 150,
                                         height: 40,
                                         borderRadius: 8,
                                     }}
-                                    onPress={handleChooseFile}
+                                    onPress={async () => {
+                                        await handleChooseFile(setPostImageOne)
+                                    }}
                                 />
+
+                                <Button
+                                    title="Pilih File 2 (Optional)"
+                                    titleStyle={{
+                                        color: '#007bff',
+                                    }}
+                                    buttonStyle={{
+                                        backgroundColor: 'transparent',
+                                        borderColor: '#007bff',
+                                        borderWidth: 1,
+                                        width: 150,
+                                        height: 40,
+                                        borderRadius: 8,
+                                        marginTop: 32,
+                                    }}
+                                    onPress={async () => {
+                                        await handleChooseFile(setPostImageTwo)
+                                    }}
+                                />
+
+                                <Button
+                                    title="Pilih File 3 (Optional)"
+                                    titleStyle={{
+                                        color: '#007bff',
+                                    }}
+                                    buttonStyle={{
+                                        backgroundColor: 'transparent',
+                                        borderColor: '#007bff',
+                                        borderWidth: 1,
+                                        width: 150,
+                                        height: 40,
+                                        borderRadius: 8,
+                                        marginTop: 32,
+                                    }}
+                                    onPress={async () => {
+                                        await handleChooseFile(setPostImageThree)
+                                    }}
+                                />
+
+                                {postImageOne && (
+                                    <Image 
+                                        source={{ uri: postImageOne.uri }}
+                                        style={{
+                                            flex: 1,
+                                            width: 310,
+                                            minHeight: 120,
+                                            maxHeight: 310,
+                                            overflow: 'hidden',
+                                            // borderRadius: 10,
+                                            borderWidth: 1,
+                                        }}
+                                    />
+                                )}
+
+                                {postImageTwo && (
+                                    <Image 
+                                        source={{ uri: postImageTwo.uri }}
+                                        style={{
+                                            flex: 1,
+                                            width: 310,
+                                            minHeight: 120,
+                                            maxHeight: 310,
+                                            overflow: 'hidden',
+                                            // borderRadius: 10,
+                                            borderWidth: 1,
+                                        }}
+                                    />
+                                )}
+
+                                {postImageThree && (
+                                    <Image 
+                                        source={{ uri: postImageThree.uri }}
+                                        style={{
+                                            flex: 1,
+                                            width: 310,
+                                            minHeight: 120,
+                                            maxHeight: 310,
+                                            overflow: 'hidden',
+                                            // borderRadius: 10,
+                                            borderWidth: 1,
+                                        }}
+                                    />
+                                )}
                             </View>
                         </View>
                         

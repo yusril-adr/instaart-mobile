@@ -273,12 +273,50 @@ const detailPost = ({ navigation, route }) => {
 
                     <View style={styles.container1}>
                         <View>
-                            <Image
+                            {post?.images.length === 1 && <Image
                                 source={
                                     { uri: `${CONFIG.IMAGE_PATH.POST}/${post?.image}` }
                                 }
                                 style={styles.UserPost}
-                            />
+                            />}
+                            
+                            {post?.images.length === 2 && <>
+                                <Image
+                                source={
+                                    { uri: `${CONFIG.IMAGE_PATH.POST}/${post?.image}` }
+                                }
+                                style={{...styles.UserPost, borderRadius: 0, borderTopLeftRadius: 10, borderTopRightRadius: 10,}} />
+
+                                <Image
+                                source={
+                                    { uri: `${CONFIG.IMAGE_PATH.POST}/${post?.images[1]}` }
+                                }
+                                style={{ ...styles.UserPost, borderRadius: 0, borderBottomLeftRadius: 10, borderBottomRightRadius: 10,}}
+                                />
+                            </>}
+
+                            {post?.images.length === 3 && <>
+                                <Image
+                                    source={
+                                        { uri: `${CONFIG.IMAGE_PATH.POST}/${post?.image}` }
+                                    }
+                                    style={{...styles.UserPost, borderRadius: 0, borderTopLeftRadius: 10, borderTopRightRadius: 10,}} 
+                                />
+
+                                <Image
+                                    source={
+                                        { uri: `${CONFIG.IMAGE_PATH.POST}/${post?.images[1]}` }
+                                    }
+                                    style={{...styles.UserPost, borderRadius: 0}}
+                                />
+
+                                <Image
+                                source={
+                                    { uri: `${CONFIG.IMAGE_PATH.POST}/${post?.images[2]}` }
+                                }
+                                style={{ ...styles.UserPost, borderRadius: 0, borderBottomLeftRadius: 10, borderBottomRightRadius: 10,}}
+                                />
+                            </>}
                         </View>
 
                         <ButtonLike post={post} user={user} onUpdate={async () => {
@@ -490,7 +528,7 @@ const styles = StyleSheet.create({
         width: wp('87.5%'),
         height: 400,
         alignSelf: 'center',
-        borderRadius: 10
+        borderRadius: 10,
     },
     UserName: {
         fontSize: 18,
