@@ -80,10 +80,6 @@ const EditProfile = ({ navigation, route }) => {
                 alert('Mohon isi Email');
                 return;
             }
-            if (!userTelepon) {
-                alert('Mohon Isi Nomor Telepon');
-                return;
-            }
             if (!userProvinsi) {
                 alert('Mohon Pilih Provinsi');
                 return;
@@ -101,7 +97,6 @@ const EditProfile = ({ navigation, route }) => {
                 username: userName,
                 email: userEmail,
                 display_name: userCompleteName,
-                phone_number: userTelepon,
                 province_id: userProvinsi,
                 city_id: userKota,
                 province_name: await Location.getProvince(userProvinsi),
@@ -143,7 +138,6 @@ const EditProfile = ({ navigation, route }) => {
         setUserName(user?.username);
         setUserCompleteName(user?.display_name);
         setUserEmail(user?.email);
-        setUserTelepon(user?.phone_number);
         setUserProvinsi(parseInt(user?.province_id));
         setUserKota(parseInt(user?.city_id));
         setUserBio(user?.biodata);
@@ -284,25 +278,6 @@ const EditProfile = ({ navigation, route }) => {
                                 }
                                 blurOnSubmit={false}
                                 value={SpecialCharParser.parse(userEmail)}
-                            />
-                        </View>
-
-                        <View style={styles.SectionStyle}>
-                            <Text>Nomor Telepon</Text>
-                            <TextInput
-                                style={styles.inputStyle}
-                                onChangeText={(userTelepon) =>
-                                    setUserTelepon(userTelepon)
-                                }
-                                underlineColorAndroid="#f000"
-                                placeholder="Masukkan nomor telepon"
-                                placeholderTextColor="#000"
-                                keyboardType='number-pad'
-                                ref={teleponInputRef}
-                                returnKeyType="next"
-                                onSubmitEditing={Keyboard.dismiss}
-                                blurOnSubmit={false}
-                                value={SpecialCharParser.parse(userTelepon)}
                             />
                         </View>
 
