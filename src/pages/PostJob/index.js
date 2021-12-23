@@ -66,6 +66,11 @@ const PostJob = ({ navigation }) => {
             return;
         }
 
+        if (!check1) {
+            alert('Silakan setujui persyaratan kami untuk memposting pekerjaan baru.');
+            return;
+        }
+
         try {
             const inputData = {
                 title: jobTitle,
