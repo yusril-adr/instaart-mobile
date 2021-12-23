@@ -7,7 +7,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import Post from '../../data/post'
 import Colors from '../../data/colors'
 import Categories from '../../data/categories'
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -107,12 +107,12 @@ const Upload = ({ navigation }) => {
                 'Berhasil !',
                 'Desain berhasil diunggah',
                 [
-                    { 
-                        text: "OK", 
+                    {
+                        text: "OK",
                         onPress: () => {
                             setEmptyValue();
                             navigation.navigate('detailPost', { postId: newPost.id });
-                        },  
+                        },
                     }
                 ],
             );
@@ -123,12 +123,12 @@ const Upload = ({ navigation }) => {
 
     const handleChooseFile = async (setPhostImageFunc) => {
         try {
-            launchImageLibrary({mediaType: 'photo'}, (response) => {
+            launchImageLibrary({ mediaType: 'photo' }, (response) => {
                 if (response.errorMessage) {
                     return alert(response.errorMessage);
                 }
 
-                if (response.assets?.length > 0) setPhostImageFunc(response.assets[0]);             
+                if (response.assets?.length > 0) setPhostImageFunc(response.assets[0]);
             });
         } catch (error) {
             alert(error.message);
@@ -207,7 +207,7 @@ const Upload = ({ navigation }) => {
                                     setUserCaption(userCaption)
                                 }
                                 multiline={true}
-                                numberOfLines={4}                                
+                                numberOfLines={4}
                                 underlineColorAndroid="#f000"
                                 placeholder="Masukkan deskripsi anda"
                                 placeholderTextColor="#000"
@@ -278,128 +278,80 @@ const Upload = ({ navigation }) => {
                             />
                         </View>
 
-                        <View style={{
+                        <View
+                            style={{
+                                flex: 1,
+                                backgroundColor: '#fff',
+                                width: 310,
+                                borderColor: '#000',
+                                padding: 0,
+                                alignItems: 'center',
                                 flexDirection: 'column',
-                                marginTop: 5,
+                                justifyContent: 'space-around',
                                 alignSelf: 'center',
-                                margin: 10,
-                                height: postImageOne?.uri ? 400 : 60,
+                                marginVertical: 10
                             }}
                         >
-                            <View 
-                                style={{
-                                    flex: 1,
-                                    backgroundColor: '#fff',
-                                    width: 310,
-                                    borderColor: '#000',
-                                    padding: 0,
-                                    alignItems: 'center',
-                                    justifyContent: 'space-evenly',
+                            <Button
+                                title="Pilih File 1 (Wajib)"
+                                titleStyle={{
+                                    color: '#007bff',
+                                    fontSize: 14
                                 }}
-                            >
-                                <Button
-                                    title="Pilih File 1 (Wajib)"
-                                    titleStyle={{
-                                        color: '#007bff',
-                                    }}
-                                    buttonStyle={{
-                                        backgroundColor: 'transparent',
-                                        borderColor: '#007bff',
-                                        borderWidth: 1,
-                                        width: 150,
-                                        height: 40,
-                                        borderRadius: 8,
-                                    }}
-                                    onPress={async () => {
-                                        await handleChooseFile(setPostImageOne)
-                                    }}
-                                />
+                                buttonStyle={{
+                                    backgroundColor: 'transparent',
+                                    borderColor: '#007bff',
+                                    borderWidth: 1,
+                                    width: 150,
+                                    height: 40,
+                                    borderRadius: 8,
+                                }}
+                                onPress={async () => {
+                                    await handleChooseFile(setPostImageOne)
+                                }}
+                            />
 
-                                <Button
-                                    title="Pilih File 2 (Optional)"
-                                    titleStyle={{
-                                        color: '#007bff',
-                                    }}
-                                    buttonStyle={{
-                                        backgroundColor: 'transparent',
-                                        borderColor: '#007bff',
-                                        borderWidth: 1,
-                                        width: 150,
-                                        height: 40,
-                                        borderRadius: 8,
-                                        marginTop: 32,
-                                    }}
-                                    onPress={async () => {
-                                        await handleChooseFile(setPostImageTwo)
-                                    }}
-                                />
+                            <Button
+                                title="Pilih File 2 (Optional)"
+                                titleStyle={{
+                                    color: '#007bff',
+                                    fontSize: 14
+                                }}
+                                buttonStyle={{
+                                    backgroundColor: 'transparent',
+                                    borderColor: '#007bff',
+                                    borderWidth: 1,
+                                    // width: 150,
+                                    height: 40,
+                                    borderRadius: 8,
+                                    marginTop: 15,
+                                }}
+                                onPress={async () => {
+                                    await handleChooseFile(setPostImageTwo)
+                                }}
+                            />
 
-                                <Button
-                                    title="Pilih File 3 (Optional)"
-                                    titleStyle={{
-                                        color: '#007bff',
-                                    }}
-                                    buttonStyle={{
-                                        backgroundColor: 'transparent',
-                                        borderColor: '#007bff',
-                                        borderWidth: 1,
-                                        width: 150,
-                                        height: 40,
-                                        borderRadius: 8,
-                                        marginTop: 32,
-                                    }}
-                                    onPress={async () => {
-                                        await handleChooseFile(setPostImageThree)
-                                    }}
-                                />
-
-                                {postImageOne && (
-                                    <Image 
-                                        source={{ uri: postImageOne.uri }}
-                                        style={{
-                                            flex: 1,
-                                            width: 310,
-                                            minHeight: 120,
-                                            maxHeight: 310,
-                                            overflow: 'hidden',
-                                            // borderRadius: 10,
-                                            borderWidth: 1,
-                                        }}
-                                    />
-                                )}
-
-                                {postImageTwo && (
-                                    <Image 
-                                        source={{ uri: postImageTwo.uri }}
-                                        style={{
-                                            flex: 1,
-                                            width: 310,
-                                            minHeight: 120,
-                                            maxHeight: 310,
-                                            overflow: 'hidden',
-                                            // borderRadius: 10,
-                                            borderWidth: 1,
-                                        }}
-                                    />
-                                )}
-
-                                {postImageThree && (
-                                    <Image 
-                                        source={{ uri: postImageThree.uri }}
-                                        style={{
-                                            flex: 1,
-                                            width: 310,
-                                            minHeight: 120,
-                                            maxHeight: 310,
-                                            overflow: 'hidden',
-                                            // borderRadius: 10,
-                                            borderWidth: 1,
-                                        }}
-                                    />
-                                )}
-                            </View>
+                            <Button
+                                title="Pilih File 3 (Optional)"
+                                titleStyle={{
+                                    color: '#007bff',
+                                    fontSize: 14
+                                }}
+                                buttonStyle={{
+                                    backgroundColor: 'transparent',
+                                    borderColor: '#007bff',
+                                    borderWidth: 1,
+                                    // width: 150,
+                                    height: 40,
+                                    borderRadius: 8,
+                                    marginTop: 15,
+                                }}
+                                onPress={async () => {
+                                    await handleChooseFile(setPostImageThree)
+                                }}
+                            />
                         </View>
-                        
+
 
                         {errortext != '' ? (
                             <Text style={styles.errorTextStyle}>
@@ -407,7 +359,7 @@ const Upload = ({ navigation }) => {
                             </Text>
                         ) : null}
 
-                        <View style={{flexDirection:'row-reverse', justifyContent: 'space-around', marginBottom: 30}}>
+                        <View style={{ flexDirection: 'row-reverse', justifyContent: 'space-around', marginTop: 10 }}>
                             <Button
                                 title={'Buat'}
                                 buttonStyle={{
@@ -418,6 +370,59 @@ const Upload = ({ navigation }) => {
                                 }}
                                 onPress={handleSubmitButton}
                             />
+                        </View>
+
+                        <View style={{
+                            flexDirection: 'column',
+                            alignSelf: 'center',
+                            marginVertical: postImageOne?.uri || postImageTwo?.uri || postImageThree?.uri ? 20 : 0,
+                            height: 
+                            postImageOne?.uri && postImageTwo?.uri && postImageThree?.uri ? 960 : 
+                            postImageOne?.uri && postImageTwo?.uri ? 620 : 
+                            postImageOne?.uri ? 310 : 0,
+                        }}
+                        >
+                            {postImageOne && (
+                                <Image
+                                    source={{ uri: postImageOne.uri }}
+                                    style={{
+                                        flex: 1,
+                                        width: 310,
+                                        height: 310,
+                                        overflow: 'hidden',
+                                        // borderRadius: 10,
+                                        borderWidth: 1,
+                                    }}
+                                />
+                            )}
+
+                            {postImageTwo && (
+                                <Image
+                                    source={{ uri: postImageTwo.uri }}
+                                    style={{
+                                        flex: 1,
+                                        width: 310,
+                                        height: 310,
+                                        overflow: 'hidden',
+                                        // borderRadius: 10,
+                                        borderWidth: 1,
+                                    }}
+                                />
+                            )}
+
+                            {postImageThree && (
+                                <Image
+                                    source={{ uri: postImageThree.uri }}
+                                    style={{
+                                        flex: 1,
+                                        width: 310,
+                                        height: 310,
+                                        overflow: 'hidden',
+                                        // borderRadius: 10,
+                                        borderWidth: 1,
+                                    }}
+                                />
+                            )}
                         </View>
                     </View>
 
@@ -451,6 +456,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowRadius: 1,
         elevation: 10,
+        paddingBottom: 15
     },
     teksSatu: {
         color: '#000',
