@@ -1,8 +1,9 @@
 import React, { useState, useEffect, createRef } from 'react'
-import { StyleSheet, Dimensions, TextInput, View, Text, ScrollView, Keyboard, KeyboardAvoidingView, Alert } from 'react-native'
+import { StyleSheet, Dimensions, TextInput, View, Text, ScrollView, Keyboard, KeyboardAvoidingView, Alert, Linking } from 'react-native'
 import { Button, CheckBox } from 'react-native-elements'
 import RNPickerSelect from 'react-native-picker-select'
 import { Chevron } from 'react-native-shapes'
+import AwesomeAlert from 'react-native-awesome-alerts';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Job from '../../data/job';
 import Location from '../../data/location';
@@ -350,8 +351,23 @@ const PostJob = ({ navigation }) => {
                         checked={check1}
                         onPress={() => setCheck1(!check1)}
                     />
+                    
+                    <View
+                        style={{...styles.SectionStyle, marginBottom: 0}}
+                    >
+                        <Text style={{ color: '#007bff', fontSize: 16 }}
+                        onPress={async () => {
+                            try {
+                                // const supported = await Linking.canOpenURL(job?.form_link);
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 15, marginBottom: 30 }}>
+                                await Linking.openURL('http://instaart.expectron.tech/public/terms.html');
+                            } catch (error) {
+                                alert(error.message);
+                            }
+                        }}>Lihat Persyaratan</Text>
+                    </View>
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10, marginBottom: 30 }}>
                         <Button
                             title={'Buat'}
                             buttonStyle={{
